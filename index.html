@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethereum Nodes Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-polylinedecorator/dist/leaflet.polylineDecorator.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+        #controls {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #f8f8f8;
+            border-bottom: 1px solid #ccc;
+        }
+        #countryFilter, #osFilter, #clientFilter {
+            width: 200px;
+        }
+        #map {
+            flex-grow: 1;
+        }
+        .label {
+            background: transparent;
+            border: none;
+            font-size: 12px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <label for="countryFilter">Country:</label>
+        <select id="countryFilter">
+            <option value="all">All</option>
+        </select>
+        <label for="osFilter">OS:</label>
+        <select id="osFilter">
+            <option value="all">All</option>
+        </select>
+        <label for="clientFilter">Client:</label>
+        <select id="clientFilter">
+            <option value="all">All</option>
+        </select>
+    </div>
+    <div id="map"></div>
+    <script src="App.js"></script>
+</body>
+</html>
