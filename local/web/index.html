@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethereum Node Haritası</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" type="image/svg+xml" href="https://a7j7s5k4wcx3bgviln5wabf757f6udeizfv4ahxztpljxxqr36eq.arweave.net/B9P5dVywr7CaqFt7YAS_78vqDIjJa8Ae-ZvWm94R34k">
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+    <script src="https://unpkg.com/d3/dist/d3.min.js"></script>
+    <script src="App.js"></script>
+</head>
+<body>
+    <header>
+        <div id="logo-container">
+            <img src="https://a7j7s5k4wcx3bgviln5wabf757f6udeizfv4ahxztpljxxqr36eq.arweave.net/B9P5dVywr7CaqFt7YAS_78vqDIjJa8Ae-ZvWm94R34k" alt="Logo" class="logo">
+            <div class="header-title">EthNodeMaP</div>
+        </div>
+        <p class="nav-link">Ağ Programlama dersinin projesidir.</p>
+    </header>
+    <div id="filters">
+        <select id="country-filter">
+            <option value="all">Tüm Ülkeler</option>
+        </select>
+        <select id="os-filter">
+            <option value="all">Tüm İşletim Sistemleri</option>
+        </select>
+        <select id="client-filter">
+            <option value="all">Tüm İstemci Türleri</option>
+        </select>
+        <select id="isp-filter">
+            <option value="all">Tüm İSS'ler</option>
+        </select>
+        <select id="relationship-filter">
+            <option value="all">Tüm İlişkiler</option>
+        </select>
+        <button id="apply-filters">Filtreleri Uygula</button>
+    </div>
+    <div id="content">
+        <div id="dynamic-data">
+            <h3>Dinamik Veriler</h3>
+            <p>Toplam Node Sayısı: 6592</p>
+        </div>
+        <div id="map-container">
+            <div id="map"></div>
+        </div>
+        <div id="statistics">
+            <div class="statistics-table" id="os-statistics">
+                <ul class="list-group">
+                    <!-- veriler buraya gelecek -->
+                </ul>
+            </div>
+            <div class="statistics-table" id="client-statistics">
+                <ul class="list-group">
+                    <!-- veriler buraya gelecek -->
+                </ul>
+            </div>
+            <div class="statistics-table" id="isp-statistics">
+                <ul class="list-group">
+                    <!-- veriler buraya gelecek -->
+                </ul>
+            </div>
+            <div class="statistics-table" id="country-statistics">
+                <ul class="list-group">
+                    <!-- veriler buraya gelecek -->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="node-details">
+        <h3>Node Detayları</h3>
+        <!-- veriler buraya gelecek -->
+    </div>
+    <footer>
+        <span>© Mulosbron</span>
+        <a href="https://github.com/mulosbron">
+            <img id="github-logo" src="https://uoepgj37trvajg4a3aqv4daprlnr3azyq47o6iu76qlttssagj3a.arweave.net/o4jzJ3-cagSbgNghXgwPitsdgziHPu8in_QXOcpAMnY" alt="GitHub" class="github-logo">
+        </a>
+    </footer>
+</body>
+</html>
