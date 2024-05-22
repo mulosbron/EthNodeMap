@@ -1,6 +1,6 @@
 import asyncio
 import socket
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor
 from neo4j import GraphDatabase
 import requests
 from bs4 import BeautifulSoup
@@ -13,7 +13,6 @@ HEADERS = {
 }
 URL = "https://etherscan.io/nodetracker/nodes"
 API_KEY = "88c913c742244d049c03aa976e993704"
-
 
 uri = "bolt://localhost:7687"
 driver = GraphDatabase.driver(uri, auth=("neo4j", "1597536842"))
@@ -31,29 +30,20 @@ def check_port(host, port, timeout=3):
 
 
 def add_node(tx, node_id, host, port, client, os, status, latitude=None, longitude=None, isp=None, country_name=None):
-    query = (
-        "CREATE (n:Node {id: $node_id, host: $host, port: $port, "
-        "client: $client, os: $os, status: $status, latitude: $latitude, "
-        "longitude: $longitude, isp: $isp, country_name: $country_name})"
-    )
-    tx.run(query, node_id=node_id, host=host, port=port, client=client, os=os, status=status,
-           latitude=latitude, longitude=longitude, isp=isp, country_name=country_name)
+    query_check = "MATCH (n:Node {id: $node_id}) RETURN n"
+    result = tx.run(query_check, node_id=node_id)
 
-
-def delete_duplicate_nodes(tx):
-    tx.run("""
-        MATCH (n)
-        WITH n.id AS id, COLLECT(n) AS nodes, COUNT(n) AS count
-        WHERE count > 1
-        CALL {
-            WITH nodes
-            UNWIND nodes AS node
-            RETURN node
-            ORDER BY node.id DESC
-            LIMIT 1
-        }
-        FOREACH (node in tail(nodes) | DELETE node)
-    """)
+    if result.peek():
+        print(f"Node {node_id} zaten veritabanında mevcut.")
+    else:
+        query_create = (
+            "CREATE (n:Node {id: $node_id, host: $host, port: $port, "
+            "client: $client, os: $os, status: $status, latitude: $latitude, "
+            "longitude: $longitude, isp: $isp, country_name: $country_name})"
+        )
+        tx.run(query_create, node_id=node_id, host=host, port=port, client=client, os=os, status=status,
+               latitude=latitude, longitude=longitude, isp=isp, country_name=country_name)
+        print(f"Node {node_id} veritabanına eklendi.")
 
 
 def fetch_geo_info(ip):
@@ -130,9 +120,6 @@ async def scrape_and_check_nodes(executor):
             tasks.append(task)
 
         await asyncio.gather(*tasks)
-
-        with driver.session() as session:
-            session.execute_write(delete_duplicate_nodes)
 
     else:
         print("Sayfa içeriği alınamadı.")

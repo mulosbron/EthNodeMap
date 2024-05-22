@@ -10,7 +10,7 @@ driver = GraphDatabase.driver(uri, auth=(username, password))
 
 
 def fetch_countries_from_api():
-    api_url = "http://127.0.0.1:5001/get_countries"
+    api_url = "http://127.0.0.1:5001/get-countries"
     try:
         response = requests.get(api_url)
         response.raise_for_status()
@@ -34,10 +34,10 @@ def create_country_relationships(tx, country, cleaned_country):
     WITH collect(n) AS nodes
     UNWIND range(0, size(nodes) - 2) AS i
     WITH nodes, nodes[i] AS n1, nodes[i + 1] AS n2
-    MERGE (n1)-[:{cleaned_country}]->(n2)
+    MERGE (n1)-[:COUNTRY_{cleaned_country}]->(n2)
     WITH nodes
     WITH nodes[size(nodes)-1] AS last, nodes[0] AS first
-    MERGE (last)-[:{cleaned_country}]->(first)
+    MERGE (last)-[:COUNTRY_{cleaned_country}]->(first)
     RETURN count(*)
     """
     tx.run(query)

@@ -11,7 +11,7 @@ driver = GraphDatabase.driver(uri, auth=(username, password))
 
 
 def fetch_os_types_from_api():
-    api_url = "http://127.0.0.1:5001/get_os_types"
+    api_url = "http://127.0.0.1:5001/get-os-types"
     try:
         response = requests.get(api_url)
         response.raise_for_status()
@@ -48,10 +48,10 @@ def create_relationships(tx, os_type):
     WITH collect(n) AS nodes
     UNWIND range(0, size(nodes) - 2) AS i
     WITH nodes, nodes[i] AS n1, nodes[i + 1] AS n2
-    MERGE (n1)-[:{classify_os(os_type)}]->(n2)
+    MERGE (n1)-[:OS_{classify_os(os_type)}]->(n2)
     WITH nodes
     WITH nodes[size(nodes)-1] AS last, nodes[0] AS first
-    MERGE (last)-[:{classify_os(os_type)}]->(first)
+    MERGE (last)-[:OS_{classify_os(os_type)}]->(first)
     """
     tx.run(query)
 

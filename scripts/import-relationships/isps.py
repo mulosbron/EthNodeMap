@@ -9,7 +9,7 @@ driver = GraphDatabase.driver(uri, auth=(username, password))
 
 
 def fetch_isps_from_api():
-    api_url = "http://127.0.0.1:5001/get_isps"
+    api_url = "http://127.0.0.1:5001/get-isps"
     try:
         response = requests.get(api_url)
         response.raise_for_status()
@@ -82,10 +82,10 @@ def create_isps_relationships(tx, isp):
     WITH collect(n) AS nodes
     UNWIND range(0, size(nodes) - 2) AS i
     WITH nodes, nodes[i] AS n1, nodes[i + 1] AS n2
-    MERGE (n1)-[:{isp_type}]->(n2)
+    MERGE (n1)-[:ISP_{isp_type}]->(n2)
     WITH nodes
     WITH nodes[size(nodes)-1] AS last, nodes[0] AS first
-    MERGE (last)-[:{isp_type}]->(first)
+    MERGE (last)-[:ISP_{isp_type}]->(first)
     RETURN count(*)
     """
     tx.run(query)

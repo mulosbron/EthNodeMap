@@ -18,10 +18,13 @@ def check_port(host, port, timeout=3):
         return False
 
 
-def update_node_status(node_id, status):
+def update_node_status(node_id, increment):
     with driver.session() as session:
-        query = "MATCH (n:Node {id: $node_id}) SET n.status = $status"
-        session.run(query, node_id=node_id, status=status)
+        query = """
+        MATCH (n:Node {id: $node_id})
+        SET n.status = coalesce(n.status, 0) + $increment
+        """
+        session.run(query, node_id=node_id, increment=increment)
 
 
 async def check_nodes(executor):
@@ -40,13 +43,19 @@ async def check_nodes(executor):
 
 def check_and_update(node_id, host, port):
     if check_port(host, port):
-        update_node_status(node_id, "online")
+        update_node_status(node_id, 0)
         print(f"{host}:{port} adresindeki {node_id} düğümü çevrimiçi.")
     else:
-        update_node_status(node_id, "offline")
+        update_node_status(node_id, 1)
         print(f"{host}:{port} adresindeki {node_id} düğümü çevrimdışı.")
+
+
+def delete_offline_nodes():
+    with driver.session() as session:
+        session.run("MATCH (n:Node) WHERE n.status >= 100 DELETE n")
 
 
 if __name__ == "__main__":
     executor = ThreadPoolExecutor()
     asyncio.run(check_nodes(executor))
+    delete_offline_nodes()
