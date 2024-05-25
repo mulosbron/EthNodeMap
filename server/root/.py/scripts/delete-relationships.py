@@ -9,7 +9,7 @@ def delete_all_relationships():
     MATCH (n)-[r]->(m)
     DELETE r
     """
-
+    
     with GraphDatabase.driver(uri, auth=(username, password)) as driver:
         with driver.session() as session:
             session.run(query)

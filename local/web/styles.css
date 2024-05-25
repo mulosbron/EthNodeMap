@@ -11,7 +11,7 @@ body {
     flex-direction: column;
     font-family: 'Arial', sans-serif;
     background-color: #434976;
-    color: #00AAE5;
+    color: #EDEDED;
     margin: 0;
     padding: 0;
     min-height: 100vh;
@@ -45,12 +45,12 @@ header {
 .header-title {
     font-size: 24px;
     font-weight: bold;
-    color: #00AAE5;
+    color: #EDEDED;
     font-family: 'Arial Black', sans-serif;
 }
 
 .nav-link {
-    color: #00AAE5;
+    color: #EDEDED;
     text-decoration: none;
     font-size: 18px;
     background-color: #434976;
@@ -99,8 +99,8 @@ footer span, footer a {
 
 #filters select, #filters button {
     background-color: #434976;
-    color: #00AAE5;
-    border: 1px solid #00AAE5;
+    color: #EDEDED;
+    border: 1px solid #EDEDED;
     padding: 5px 10px;
     margin: 5px;
     border-radius: 5px;
@@ -146,17 +146,33 @@ footer span, footer a {
     padding: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #8B93B3;
-    color: #00AAE5;
-    overflow-y: auto;
-    margin-right: 10px;
+    color: #EDEDED;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
     box-sizing: border-box;
     border-radius: 5px;
+    overflow-y: auto;
+    margin-right: 10px;
 }
 
-#dynamic-data h3, #dynamic-data p {
+#dynamic-data p {
     background-color: #434976;
     padding: 5px;
     border-radius: 10px;
+}
+
+.dynamic-table {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #626890;
+    box-sizing: border-box;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    flex-grow: 1;
 }
 
 #statistics {
@@ -164,14 +180,13 @@ footer span, footer a {
     padding: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #8B93B3;
-    color: #00AAE5;
+    color: #EDEDED;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     box-sizing: border-box;
     border-radius: 5px;
     overflow-y: auto;
-    margin-top: 10px;
 }
 
 .statistics-table {
@@ -192,7 +207,7 @@ footer span, footer a {
     margin: 0;
     width: 100%;
     background-color: #626890;
-    color: #00AAE5;
+    color: #EDEDED;
     border-radius: 5px;
 }
 
@@ -206,7 +221,7 @@ footer span, footer a {
 }
 
 .list-group-item span {
-    color: #00AAE5;
+    color: #EDEDED;
 }
 
 .list-group-progress {
@@ -220,4 +235,45 @@ footer span, footer a {
 
 .float-right {
     float: right;
+}
+
+#latest-nodes {
+    background-color: #8B93B3;
+    color: #EDEDED;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+    border-radius: 5px;
+    overflow-y: auto;
+}
+
+#latest-nodes h3 {
+    background-color: #434976;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+#latest-nodes table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#latest-nodes th, #latest-nodes td {
+    border: 1px solid #8B93B3;
+    padding: 5px;
+    text-align: left;
+}
+
+.copy-button {
+    background-color: #434976;
+    color: #EDEDED;
+    border: 1px solid #EDEDED;
+    padding: 5px;
+    margin: 0;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.copy-button:hover {
+    background-color: #626890;
 }

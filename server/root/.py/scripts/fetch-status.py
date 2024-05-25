@@ -53,9 +53,20 @@ def check_and_update(node_id, host, port):
         print(f"{host}:{port} adresindeki {node_id} düğümü çevrimdışı.")
 
 
+def delete_nodes_with_empty_lat_lon():
+    with driver.session() as session:
+        query = """
+        MATCH (n:Node)
+        WHERE n.latitude IS NULL OR n.longitude IS NULL
+        DETACH DELETE n
+        """
+        session.run(query)
+        print("Latitude veya Longitude değeri boş olan düğümler silindi.")
+
+
 def delete_offline_nodes():
     with driver.session() as session:
-        session.run("MATCH (n:Node) WHERE n.status >= 100 DELETE n")
+        session.run("MATCH (n:Node) WHERE n.status >= 24 DELETE n")
 
 
 def delete_all_relationships():
@@ -73,15 +84,17 @@ def import_relationships():
 def job():
     executor = ThreadPoolExecutor()
     asyncio.run(check_nodes(executor))
-    delete_offline_nodes()
     delete_all_relationships()
+    delete_nodes_with_empty_lat_lon()
+    delete_offline_nodes()
     import_relationships()
 
 
-schedule.every(30).minutes.do(job)
+schedule.every(60).minutes.do(job)
 
 
 if __name__ == "__main__":
     while True:
         schedule.run_pending()
-        time.sleep(1)
+        time.sleep(5)
+

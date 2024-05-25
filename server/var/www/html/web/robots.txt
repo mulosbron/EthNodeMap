@@ -1,0 +1,17 @@
+User-agent: bs4
+Disallow: /
+
+User-agent: python-requests
+Disallow: /
+
+User-agent: Scrapy
+Disallow: /
+
+User-agent: *
+Allow: /
+Disallow: /downloads/
+Disallow: /uploads/
+Disallow: /private/
+Disallow: /secret/
+
+Sitemap: https://eth-node-map.xyz/sitemap.xml

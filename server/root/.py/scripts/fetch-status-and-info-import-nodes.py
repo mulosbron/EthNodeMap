@@ -139,10 +139,11 @@ def job():
     asyncio.run(scrape_and_check_nodes(executor))
 
 
-schedule.every(15).minutes.do(job)
+schedule.every(24).minutes.do(job)
 
 
 if __name__ == "__main__":
     while True:
         schedule.run_pending()
         time.sleep(5)
+

@@ -4,20 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ethereum Node Haritası</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
-    <link rel="stylesheet" href="styles.css" />
+    <meta name="description" content="Ethereum node'larını dünya haritası üzerinde görüntüleyin. Harita üzerinde farklı ülkelerdeki ve bölgelerdeki Ethereum nodelerini keşfedin.">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.Default.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.Default.css" />
+        <link rel="stylesheet" href="styles.css" />
+    </noscript>
     <link rel="icon" type="image/svg+xml" href="https://a7j7s5k4wcx3bgviln5wabf757f6udeizfv4ahxztpljxxqr36eq.arweave.net/B9P5dVywr7CaqFt7YAS_78vqDIjJa8Ae-ZvWm94R34k">
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
-    <script src="https://unpkg.com/d3/dist/d3.min.js"></script>
-    <script src="App.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.1.1/d3.min.js" defer></script>
+    <script src="App.js" defer></script>
 </head>
 <body>
     <header>
         <div id="logo-container">
-            <img src="https://a7j7s5k4wcx3bgviln5wabf757f6udeizfv4ahxztpljxxqr36eq.arweave.net/B9P5dVywr7CaqFt7YAS_78vqDIjJa8Ae-ZvWm94R34k" alt="Logo" class="logo">
+            <img src="https://a7j7s5k4wcx3bgviln5wabf757f6udeizfv4ahxztpljxxqr36eq.arweave.net/B9P5dVywr7CaqFt7YAS_78vqDIjJa8Ae-ZvWm94R34k" alt="Logo" class="logo" loading="lazy">
             <div class="header-title">EthNodeMaP</div>
         </div>
         <p class="nav-link">Ağ Programlama dersinin projesidir.</p>
@@ -42,8 +49,17 @@
     </div>
     <div id="content">
         <div id="dynamic-data">
-            <h3>Dinamik Veriler</h3>
-            <p>Toplam Node Sayısı: 6592</p>
+            <div class="dynamic-table" id="node-count">
+                <ul class="list-group">
+                    <p><br>Toplam Node Sayısı: 0<br><br></p>
+                    <!-- veriler buraya gelecek -->
+                </ul>
+            </div>
+            <div class="dynamic-table" id="latest-node">
+                <ul class="list-group">
+                    <!-- veriler buraya gelecek -->
+                </ul>
+            </div>
         </div>
         <div id="map-container">
             <div id="map"></div>
@@ -51,34 +67,34 @@
         <div id="statistics">
             <div class="statistics-table" id="os-statistics">
                 <ul class="list-group">
-                    <!-- Dinamik veriler burada doldurulacak -->
+                    <!-- veriler buraya gelecek -->
                 </ul>
             </div>
             <div class="statistics-table" id="client-statistics">
                 <ul class="list-group">
-                    <!-- Dinamik veriler burada doldurulacak -->
+                    <!-- veriler buraya gelecek -->
                 </ul>
             </div>
             <div class="statistics-table" id="isp-statistics">
                 <ul class="list-group">
-                    <!-- Dinamik veriler burada doldurulacak -->
+                    <!-- veriler buraya gelecek -->
                 </ul>
             </div>
             <div class="statistics-table" id="country-statistics">
                 <ul class="list-group">
-                    <!-- Dinamik veriler burada doldurulacak -->
+                    <!-- veriler buraya gelecek -->
                 </ul>
             </div>
         </div>
     </div>
     <div id="node-details">
         <h3>Node Detayları</h3>
-        <!-- Node detayları burada görüntülenecek -->
+        <!-- veriler buraya gelecek -->
     </div>
     <footer>
         <span>© Mulosbron</span>
         <a href="https://github.com/mulosbron">
-            <img id="github-logo" src="https://uoepgj37trvajg4a3aqv4daprlnr3azyq47o6iu76qlttssagj3a.arweave.net/o4jzJ3-cagSbgNghXgwPitsdgziHPu8in_QXOcpAMnY" alt="GitHub" class="github-logo">
+            <img id="github-logo" src="https://uoepgj37trvajg4a3aqv4daprlnr3azyq47o6iu76qlttssagj3a.arweave.net/o4jzJ3-cagSbgNghXgwPitsdgziHPu8in_QXOcpAMnY" alt="GitHub" class="github-logo" loading="lazy">
         </a>
     </footer>
 </body>

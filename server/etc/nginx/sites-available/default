@@ -1,10 +1,13 @@
+# Ana domain için HTTP'den HTTPS'e yönlendirme
 server {
     listen 80;
     server_name eth-node-map.xyz;
 
+    # Tüm HTTP isteklerini HTTPS'e yönlendir
     return 301 https://$host$request_uri;
 }
 
+# Ana domain için HTTPS ayarları
 server {
     listen 443 ssl;
     server_name eth-node-map.xyz;
@@ -14,22 +17,65 @@ server {
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
-    root /var/www/html/web;
-    index index.html;       
+    root /var/www/html/web; # Web dosyalarının konumu
+    index index.html;       # Ana sayfa dosyası
+
+    set $mobile_rewrite $is_mobile;
 
     location / {
+        if ($mobile_rewrite) {
+            return 403; # 403 Forbidden status code
+        }
         try_files $uri $uri/ =404;
+    }
+
+    error_page 403 /error.html;
+    location = /error.html {
+        root /var/www/html/web;
+        internal;
+    }
+    
+    location /robots.txt {
+        allow all;
+        log_not_found off;
+        access_log off;
+    }
+
+    location /sitemap.xml {
+        allow all;
+        log_not_found off;
+        access_log off;
+    }
+
+    # CSS dosyaları için Expires headers
+    location ~* \.css$ {
+        expires 1y;
+        add_header Cache-Control "public";
+    }
+
+    # JS dosyaları için Expires headers
+    location ~* \.js$ {
+        expires 1y;
+        add_header Cache-Control "public";
+    }
+
+    # Görüntü dosyaları için Expires headers
+    location ~* \.(png|jpg|jpeg|gif|ico)$ {
+        expires 1y;
+        add_header Cache-Control "public";
     }
 }
 
-
+# Subdomain için HTTP'den HTTPS'e yönlendirme
 server {
     listen 80;
     server_name api.eth-node-map.xyz;
 
+    # Tüm HTTP isteklerini HTTPS'e yönlendir
     return 301 https://$host$request_uri;
 }
 
+# Subdomain için HTTPS ayarları
 server {
     listen 443 ssl;
     server_name api.eth-node-map.xyz;
@@ -39,13 +85,32 @@ server {
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
-    root /var/www/html;
-    index index.html;
+    root /var/www/html; # Subdomain için kök dizin
+    index index.html;   # Ana sayfa dosyası
 
     location / {
-        try_files $uri $uri/ =404;
+        try_files $uri $uri/ =404; # Dosyaları doğrudan bulamazsa 404 döner
     }
 
+    # CSS dosyaları için Expires headers
+    location ~* \.css$ {
+        expires 1y;
+        add_header Cache-Control "public";
+    }
+
+    # JS dosyaları için Expires headers
+    location ~* \.js$ {
+        expires 1y;
+        add_header Cache-Control "public";
+    }
+
+    # Görüntü dosyaları için Expires headers
+    location ~* \.(png|jpg|jpeg|gif|ico)$ {
+        expires 1y;
+        add_header Cache-Control "public";
+    }
+
+    # API yönlendirmeleri
     location /get-nodes {
         proxy_pass http://127.0.0.1:5001/get-nodes;
         proxy_set_header Host $host;
@@ -126,14 +191,6 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
-    location /get-relationship-types/countries {
-        proxy_pass http://127.0.0.1:5001/get-relationship-types/countries;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-
     location /get-relationship-types/os-types {
         proxy_pass http://127.0.0.1:5001/get-relationship-types/os-types;
         proxy_set_header Host $host;
@@ -160,6 +217,14 @@ server {
 
     location /get-relationship-percentage {
         proxy_pass http://127.0.0.1:5001/get-relationship-percentage;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /get-latest-nodes {
+        proxy_pass http://127.0.0.1:5001/get-latest-nodes;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

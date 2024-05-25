@@ -2,6 +2,7 @@ import asyncio
 import socket
 from neo4j import GraphDatabase
 from concurrent.futures import ThreadPoolExecutor
+import subprocess
 
 uri = "bolt://localhost:7687"
 driver = GraphDatabase.driver(uri, auth=("neo4j", "1597536842"))
@@ -50,12 +51,42 @@ def check_and_update(node_id, host, port):
         print(f"{host}:{port} adresindeki {node_id} düğümü çevrimdışı.")
 
 
+def delete_nodes_with_empty_lat_lon():
+    with driver.session() as session:
+        query = """
+        MATCH (n:Node)
+        WHERE n.latitude IS NULL OR n.longitude IS NULL
+        DETACH DELETE n
+        """
+        session.run(query)
+        print("Latitude veya Longitude değeri boş olan düğümler silindi.")
+
+
 def delete_offline_nodes():
     with driver.session() as session:
-        session.run("MATCH (n:Node) WHERE n.status >= 100 DELETE n")
+        session.run("MATCH (n:Node) WHERE n.status >= 24 DELETE n")
+
+
+def delete_all_relationships():
+    with driver.session() as session:
+        session.run("MATCH ()-[r]->() DELETE r")
+
+
+def import_relationships():
+    scripts = [
+        "import-relationships/clients.py",
+        "import-relationships/countries.py",
+        "import-relationships/isps.py",
+        "import-relationships/os_types.py"
+    ]
+    for script in scripts:
+        subprocess.run(["python", script], shell=True)
 
 
 if __name__ == "__main__":
     executor = ThreadPoolExecutor()
     asyncio.run(check_nodes(executor))
+    delete_all_relationships()
+    delete_nodes_with_empty_lat_lon()
     delete_offline_nodes()
+    import_relationships()

@@ -9,66 +9,75 @@ document.addEventListener('DOMContentLoaded', function () {
     var allMarkers = [];
 
     function fetchAndPopulateData() {
-        fetch('https://api.eth-node-map.xyz/get-nodes')
+        fetch('http://127.0.0.1:5001/get-nodes')
             .then(response => response.json())
             .then(data => {
                 data.forEach(node => {
-                    var marker = L.marker([node.Latitude, node.Longitude], {
+                    var circle = L.circle([node.Latitude, node.Longitude], {
+                        color: 'blue',
+                        weight: 2,
+                        opacity: 0.8,
+                        fillColor: '#0000FF',
+                        fillOpacity: 0.5,
+                        radius: getDynamicRadius(map.getZoom()),
                         os: node.OS,
                         client: node.Client,
                         country: node.Country,
                         isp: node.ISP,
-                        nodeId: node.NodeId,
-                        relationships: node.Relationships || []
+                        nodeId: node.NodeId
                     }).bindPopup(`<b>${node.Client}</b><br>${node.Country}<br>${node.Host}<br>${node.ISP}<br>${node.OS}<br>${node.Port}`);
-                    marker.on('click', function() {
+                    circle.on('click', function() {
                         fetchNodeDetails(node.NodeId);
                     });
-                    allMarkers.push(marker);
-                    markers.addLayer(marker);
+                    allMarkers.push({ circle, nodeId: node.NodeId });
+                    markers.addLayer(circle);
                 });
                 map.addLayer(markers);
             });
     }
 
     function fetchFilters() {
-        fetch('https://api.eth-node-map.xyz/get-os-types')
+        fetch('http://127.0.0.1:5001/get-os-types')
             .then(response => response.json())
             .then(data => {
                 const osFilter = document.getElementById('os-filter');
-                data.forEach(osType => {
+                const osOptions = ['Linux', 'Windows', 'MacOS', 'Android', 'FreeBSD', 'Darwin', 'Others'];
+                osOptions.forEach(osType => {
                     let option = document.createElement('option');
                     option.value = osType;
                     option.text = osType;
                     osFilter.add(option);
                 });
             });
-
-        fetch('https://api.eth-node-map.xyz/get-isps')
+    
+        fetch('http://127.0.0.1:5001/get-isps')
             .then(response => response.json())
             .then(data => {
                 const ispFilter = document.getElementById('isp-filter');
-                data.forEach(ispType => {
+                const ispOptions = ['Contabo', 'AWS', 'Azure', 'Google', 'Alibaba', 'Oracle', 'IBM', 'Tencent', 
+                'OVHCloud', 'DO', 'Linode', 'Salesforce', 'Huawei', 'Dell', 'Vultr', 'Heroku', 'Hetzner', 'Scaleway', 'Upcloud', 'Kamatera', 'Others'];
+                ispOptions.forEach(ispType => {
                     let option = document.createElement('option');
                     option.value = ispType;
                     option.text = ispType;
                     ispFilter.add(option);
                 });
             });
-
-        fetch('https://api.eth-node-map.xyz/get-client-types')
+    
+        fetch('http://127.0.0.1:5001/get-client-types')
             .then(response => response.json())
             .then(data => {
                 const clientFilter = document.getElementById('client-filter');
-                data.forEach(clientType => {
+                const clientOptions = ['Geth', 'Nethermind', 'Besu', 'Erigon', 'Reth', 'EthereumJS', 'Others'];
+                clientOptions.forEach(clientType => {
                     let option = document.createElement('option');
                     option.value = clientType;
                     option.text = clientType;
                     clientFilter.add(option);
                 });
             });
-
-        fetch('https://api.eth-node-map.xyz/get-countries')
+    
+        fetch('http://127.0.0.1:5001/get-countries')
             .then(response => response.json())
             .then(data => {
                 const countryFilter = document.getElementById('country-filter');
@@ -79,61 +88,51 @@ document.addEventListener('DOMContentLoaded', function () {
                     countryFilter.add(option);
                 });
             });
-
-        fetch('https://api.eth-node-map.xyz/get-relationship-types/clients')
-            .then(response => response.json())
-            .then(data => {
-                const relationshipFilter = document.getElementById('relationship-filter');
-                data.forEach(relationship => {
-                    let option = document.createElement('option');
-                    option.value = relationship;
-                    option.text = relationship;
-                    relationshipFilter.add(option);
-                });
-            });
-
-        fetch('https://api.eth-node-map.xyz/get-relationship-types/countries')
-            .then(response => response.json())
-            .then(data => {
-                const relationshipFilter = document.getElementById('relationship-filter');
-                data.forEach(relationship => {
-                    let option = document.createElement('option');
-                    option.value = relationship;
-                    option.text = relationship;
-                    relationshipFilter.add(option);
-                });
-            });
-
-        fetch('https://api.eth-node-map.xyz/get-relationship-types/os-types')
-            .then(response => response.json())
-            .then(data => {
-                const relationshipFilter = document.getElementById('relationship-filter');
-                data.forEach(relationship => {
-                    let option = document.createElement('option');
-                    option.value = relationship;
-                    option.text = relationship;
-                    relationshipFilter.add(option);
-                });
-            });
-
-        fetch('https://api.eth-node-map.xyz/get-relationship-types/isps')
-            .then(response => response.json())
-            .then(data => {
-                const relationshipFilter = document.getElementById('relationship-filter');
-                data.forEach(relationship => {
-                    let option = document.createElement('option');
-                    option.value = relationship;
-                    option.text = relationship;
-                    relationshipFilter.add(option);
-                });
-            });
     }
 
     function fetchDynamicData() {
-        fetch('https://api.eth-node-map.xyz/get-node-count')
+        fetch('http://127.0.0.1:5001/get-node-count')
             .then(response => response.json())
             .then(data => {
-                document.getElementById('dynamic-data').innerHTML = `<h3>Dinamik Veriler</h3><p>Toplam Node Sayısı: ${data.NumberOfNodes}</p>`;
+                document.getElementById('node-count').innerHTML = `
+                <ul class="list-group">
+                    <p><br>Toplam Node Sayısı: ${data.NumberOfNodes}<br><br></p>
+                </ul>`;
+                fetchLatestNodes();
+            });
+    }
+
+    function fetchLatestNodes() {
+        fetch('http://127.0.0.1:5001/get-latest-nodes')
+            .then(response => response.json())
+            .then(data => {
+                const listGroup = document.querySelector('#latest-node .list-group');
+                listGroup.innerHTML = '';
+                data.forEach(node => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'list-group-item';
+                    listItem.innerHTML = `
+                        <span>Country: ${node.Country}<br>Client: ${node.Client}<br>OS: ${node.OS}</span><br>
+                        <span>Enode: <button class="copy-button" data-enode="${node.Enode}">Kopyala</button></span><br><br>
+                        <span>${node.MinutesAgo} dakika önce eklendi</span><br><br>
+                    `;
+                    listGroup.appendChild(listItem);
+                });
+
+                document.querySelectorAll('.copy-button').forEach(button => {
+                    button.addEventListener('click', function () {
+                        const enode = this.getAttribute('data-enode');
+                        navigator.clipboard.writeText(enode).then(() => {
+                            this.textContent = 'Kopyalandı';
+                            this.disabled = true;
+
+                            setTimeout(() => {
+                                this.textContent = 'Kopyala';
+                                this.disabled = false;
+                            }, 2000);
+                        });
+                    });
+                });
             });
     }
 
@@ -157,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function fetchNodeDetails(nodeId) {
-        fetch(`https://api.eth-node-map.xyz/get-node-details/${nodeId}`)
+        fetch(`http://127.0.0.1:5001/get-node-details/${nodeId}`)
             .then(response => response.json())
             .then(data => {
                 const nodeDetailsDiv = document.getElementById('node-details');
@@ -173,6 +172,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <p><b>OS:</b> ${data.OS}</p>
                     <p><b>Port:</b> ${data.Port}</p>
                     <p><b>Status:</b> ${data.Status}</p>
+                    <p><b>Created at:</b> ${data.CreatedAt}</p>
                 `;
             });
     }
@@ -182,45 +182,194 @@ document.addEventListener('DOMContentLoaded', function () {
         var ispFilterValue = document.getElementById('isp-filter').value;
         var clientFilterValue = document.getElementById('client-filter').value;
         var countryFilterValue = document.getElementById('country-filter').value;
-        var relationshipFilterValue = document.getElementById('relationship-filter').value;
-
+    
         markers.clearLayers();
-
-        allMarkers.forEach(marker => {
-            var markerOS = marker.options.os;
-            var markerISP = marker.options.isp;
-            var markerClient = marker.options.client;
+    
+        allMarkers.forEach(markerObj => {
+            var marker = markerObj.circle;
+            var markerOS = marker.options.os.toLowerCase();
+            var markerISP = marker.options.isp.toLowerCase();
+            var markerClient = marker.options.client.toLowerCase();
             var markerCountry = marker.options.country;
-            var markerRelationships = marker.options.relationships;
-
-            var relationshipMatch = markerRelationships.includes(relationshipFilterValue) || relationshipFilterValue === 'all';
-
-            if ((osFilterValue === 'all' || markerOS === osFilterValue) &&
-                (ispFilterValue === 'all' || markerISP === ispFilterValue) &&
-                (clientFilterValue === 'all' || markerClient === clientFilterValue) &&
-                (countryFilterValue === 'all' || markerCountry === countryFilterValue) &&
-                relationshipMatch) {
+    
+            var osMatch = false;
+            switch (osFilterValue) {
+                case 'Linux':
+                    osMatch = markerOS.includes('linux');
+                    break;
+                case 'Windows':
+                    osMatch = markerOS.includes('windows');
+                    break;
+                case 'MacOS':
+                    osMatch = markerOS.includes('macos');
+                    break;
+                case 'Android':
+                    osMatch = markerOS.includes('android');
+                    break;
+                case 'FreeBSD':
+                    osMatch = markerOS.includes('freebsd');
+                    break;
+                case 'Darwin':
+                    osMatch = markerOS.includes('darwin');
+                    break;
+                case 'Others':
+                    osMatch = !markerOS.includes('linux') && !markerOS.includes('windows') &&
+                        !markerOS.includes('macos') && !markerOS.includes('android') &&
+                        !markerOS.includes('freebsd') && !markerOS.includes('darwin');
+                    break;
+                default:
+                    osMatch = true;
+            }
+    
+            var clientMatch = false;
+            switch (clientFilterValue) {
+                case 'Geth':
+                    clientMatch = markerClient.includes('geth');
+                    break;
+                case 'Nethermind':
+                    clientMatch = markerClient.includes('nethermind');
+                    break;
+                case 'Besu':
+                    clientMatch = markerClient.includes('besu');
+                    break;
+                case 'Erigon':
+                    clientMatch = markerClient.includes('erigon');
+                    break;
+                case 'Reth':
+                    clientMatch = markerClient.includes('reth');
+                    break;
+                case 'EthereumJS':
+                    clientMatch = markerClient.includes('ethereumjs');
+                    break;
+                case 'Others':
+                    clientMatch = !markerClient.includes('geth') && !markerClient.includes('nethermind') &&
+                        !markerClient.includes('besu') && !markerClient.includes('erigon') &&
+                        !markerClient.includes('reth') && !markerClient.includes('ethereumjs');
+                    break;
+                default:
+                    clientMatch = true;
+            }
+    
+            var ispMatch = false;
+            switch (ispFilterValue) {
+                case 'Contabo':
+                    ispMatch = markerISP.includes('contabo');
+                    break;
+                case 'AWS':
+                    ispMatch = markerISP.includes('amazon') || markerISP.includes('aws');
+                    break;
+                case 'Azure':
+                    ispMatch = markerISP.includes('microsoft') || markerISP.includes('azure');
+                    break;
+                case 'Google':
+                    ispMatch = markerISP.includes('google');
+                    break;
+                case 'Alibaba':
+                    ispMatch = markerISP.includes('alibaba');
+                    break;
+                case 'Oracle':
+                    ispMatch = markerISP.includes('oracle');
+                    break;
+                case 'IBM':
+                    ispMatch = markerISP.includes('ibm');
+                    break;
+                case 'Tencent':
+                    ispMatch = markerISP.includes('tencent');
+                    break;
+                case 'OVHCloud':
+                    ispMatch = markerISP.includes('ovh');
+                    break;
+                case 'DO':
+                    ispMatch = markerISP.includes('digitalocean');
+                    break;
+                case 'Linode':
+                    ispMatch = markerISP.includes('linode') || markerISP.includes('akamai');
+                    break;
+                case 'Salesforce':
+                    ispMatch = markerISP.includes('salesforce');
+                    break;
+                case 'Huawei':
+                    ispMatch = markerISP.includes('huawei') && markerISP.includes('cloud');
+                    break;
+                case 'Dell':
+                    ispMatch = markerISP.includes('dell') && markerISP.includes('cloud');
+                    break;
+                case 'Vultr':
+                    ispMatch = markerISP.includes('vultr');
+                    break;
+                case 'Heroku':
+                    ispMatch = markerISP.includes('heroku');
+                    break;
+                case 'Hetzner':
+                    ispMatch = markerISP.includes('hetzner');
+                    break;
+                case 'Scaleway':
+                    ispMatch = markerISP.includes('scaleway');
+                    break;
+                case 'Upcloud':
+                    ispMatch = markerISP.includes('upcloud');
+                    break;
+                case 'Kamatera':
+                    ispMatch = markerISP.includes('kamatera');
+                    break;
+                case 'Others':
+                    ispMatch = !markerISP.includes('contabo') && !markerISP.includes('amazon') &&
+                        !markerISP.includes('aws') && !markerISP.includes('microsoft') &&
+                        !markerISP.includes('azure') && !markerISP.includes('google') &&
+                        !markerISP.includes('alibaba') && !markerISP.includes('oracle') &&
+                        !markerISP.includes('ibm') && !markerISP.includes('tencent') &&
+                        !markerISP.includes('ovh') && !markerISP.includes('digitalocean') &&
+                        !markerISP.includes('linode') && !markerISP.includes('akamai') &&
+                        !markerISP.includes('salesforce') && !(markerISP.includes('huawei') && markerISP.includes('cloud')) &&
+                        !(markerISP.includes('dell') && markerISP.includes('cloud')) && !markerISP.includes('vultr') &&
+                        !markerISP.includes('heroku') && !markerISP.includes('hetzner') &&
+                        !markerISP.includes('scaleway') && !markerISP.includes('upcloud') &&
+                        !markerISP.includes('kamatera');
+                    break;
+                default:
+                    ispMatch = true;
+            }
+    
+            if (osMatch &&
+                clientMatch &&
+                ispMatch &&
+                (countryFilterValue === 'all' || markerCountry === countryFilterValue)) {
                 markers.addLayer(marker);
             }
         });
-
+    
         map.addLayer(markers);
     }
+    
 
+    function getDynamicRadius(zoom) {
+        return Math.min(250000 * Math.pow(2, 2 - zoom), 50000);
+    }
+
+    function updateCircleRadius() {
+        allMarkers.forEach(markerObj => {
+            const radius = getDynamicRadius(map.getZoom());
+            markerObj.circle.setRadius(radius);
+        });
+    }
+
+    map.on('zoomend', updateCircleRadius);
+    
     fetchAndPopulateData();
     fetchFilters();
     fetchDynamicData();
 
-    fetchStatistics('https://api.eth-node-map.xyz/get-relationship-percentage/OS_', 'os-statistics');
-    fetchStatistics('https://api.eth-node-map.xyz/get-relationship-percentage/CLIENT_', 'client-statistics');
-    fetchStatistics('https://api.eth-node-map.xyz/get-relationship-percentage/ISP_', 'isp-statistics');
-    fetchStatistics('https://api.eth-node-map.xyz/get-relationship-percentage/COUNTRY_', 'country-statistics');
+    fetchStatistics('http://127.0.0.1:5001/get-relationship-percentage/OS_', 'os-statistics');
+    fetchStatistics('http://127.0.0.1:5001/get-relationship-percentage/CLIENT_', 'client-statistics');
+    fetchStatistics('http://127.0.0.1:5001/get-relationship-percentage/ISP_', 'isp-statistics');
+    fetchStatistics('http://127.0.0.1:5001/get-relationship-percentage/COUNTRY_', 'country-statistics');
 
     document.getElementById('apply-filters').addEventListener('click', applyFilters);
 
     setInterval(fetchDynamicData, 30000);
-    setInterval(() => fetchStatistics('https://api.eth-node-map.xyz/get-relationship-percentage/OS_', 'os-statistics'), 30000);
-    setInterval(() => fetchStatistics('https://api.eth-node-map.xyz/get-relationship-percentage/CLIENT_', 'client-statistics'), 30000);
-    setInterval(() => fetchStatistics('https://api.eth-node-map.xyz/get-relationship-percentage/ISP_', 'isp-statistics'), 30000);
-    setInterval(() => fetchStatistics('https://api.eth-node-map.xyz/get-relationship-percentage/COUNTRY_', 'country-statistics'), 30000);
+    setInterval(fetchLatestNodes, 30000);
+    setInterval(() => fetchStatistics('http://127.0.0.1:5001/get-relationship-percentage/OS_', 'os-statistics'), 30000);
+    setInterval(() => fetchStatistics('http://127.0.0.1:5001/get-relationship-percentage/CLIENT_', 'client-statistics'), 30000);
+    setInterval(() => fetchStatistics('http://127.0.0.1:5001/get-relationship-percentage/ISP_', 'isp-statistics'), 30000);
+    setInterval(() => fetchStatistics('http://127.0.0.1:5001/get-relationship-percentage/COUNTRY_', 'country-statistics'), 30000);
 });
