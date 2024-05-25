@@ -8,180 +8,173 @@ document.addEventListener('DOMContentLoaded', function () {
     var markers = L.markerClusterGroup();
     var allMarkers = [];
 
-    async function fetchAndPopulateData() {
-        try {
-            const response = await fetch('http://127.0.0.1:5001/get-nodes');
-            const data = await response.json();
-
-            data.forEach(node => {
-                var circle = L.circle([node.Latitude, node.Longitude], {
-                    color: 'blue',
-                    weight: 2,
-                    opacity: 0.8,
-                    fillColor: '#0000FF',
-                    fillOpacity: 0.5,
-                    radius: getDynamicRadius(map.getZoom()),
-                    os: node.OS,
-                    client: node.Client,
-                    country: node.Country,
-                    isp: node.ISP,
-                    nodeId: node.NodeId
-                }).bindPopup(`<b>${node.Client}</b><br>${node.Country}<br>${node.Host}<br>${node.ISP}<br>${node.OS}<br>${node.Port}`);
-                circle.on('click', function() {
-                    fetchNodeDetails(node.NodeId);
+    function fetchAndPopulateData() {
+        fetch('https://api.eth-node-map.xyz/get-nodes')
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(node => {
+                    var circle = L.circle([node.Latitude, node.Longitude], {
+                        color: 'blue',
+                        weight: 2,
+                        opacity: 0.8,
+                        fillColor: '#0000FF',
+                        fillOpacity: 0.5,
+                        radius: getDynamicRadius(map.getZoom()),
+                        os: node.OS,
+                        client: node.Client,
+                        country: node.Country,
+                        isp: node.ISP,
+                        nodeId: node.NodeId
+                    }).bindPopup(`<b>${node.Client}</b><br>${node.Country}<br>${node.Host}<br>${node.ISP}<br>${node.OS}<br>${node.Port}`);
+                    circle.on('click', function() {
+                        fetchNodeDetails(node.NodeId);
+                    });
+                    allMarkers.push({ circle, nodeId: node.NodeId });
+                    markers.addLayer(circle);
                 });
-                allMarkers.push({ circle, nodeId: node.NodeId });
-                markers.addLayer(circle);
+                map.addLayer(markers);
             });
-            map.addLayer(markers);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
     }
 
-    async function fetchFilters() {
-        try {
-            let response = await fetch('http://127.0.0.1:5001/get-os-types');
-            let data = await response.json();
-            const osFilter = document.getElementById('os-filter');
-            const osOptions = ['Linux', 'Windows', 'MacOS', 'Android', 'FreeBSD', 'Darwin', 'Others'];
-            osOptions.forEach(osType => {
-                let option = document.createElement('option');
-                option.value = osType;
-                option.text = osType;
-                osFilter.add(option);
+    function fetchFilters() {
+        fetch('https://api.eth-node-map.xyz/get-os-types')
+            .then(response => response.json())
+            .then(data => {
+                const osFilter = document.getElementById('os-filter');
+                const osOptions = ['Linux', 'Windows', 'MacOS', 'Android', 'FreeBSD', 'Darwin', 'Others'];
+                osOptions.forEach(osType => {
+                    let option = document.createElement('option');
+                    option.value = osType;
+                    option.text = osType;
+                    osFilter.add(option);
+                });
             });
-
-            response = await fetch('http://127.0.0.1:5001/get-isps');
-            data = await response.json();
-            const ispFilter = document.getElementById('isp-filter');
-            const ispOptions = ['Contabo', 'AWS', 'Azure', 'Google', 'Alibaba', 'Oracle', 'IBM', 'Tencent',
+    
+        fetch('https://api.eth-node-map.xyz/get-isps')
+            .then(response => response.json())
+            .then(data => {
+                const ispFilter = document.getElementById('isp-filter');
+                const ispOptions = ['Contabo', 'AWS', 'Azure', 'Google', 'Alibaba', 'Oracle', 'IBM', 'Tencent', 
                 'OVHCloud', 'DO', 'Linode', 'Salesforce', 'Huawei', 'Dell', 'Vultr', 'Heroku', 'Hetzner', 'Scaleway', 'Upcloud', 'Kamatera', 'Others'];
-            ispOptions.forEach(ispType => {
-                let option = document.createElement('option');
-                option.value = ispType;
-                option.text = ispType;
-                ispFilter.add(option);
+                ispOptions.forEach(ispType => {
+                    let option = document.createElement('option');
+                    option.value = ispType;
+                    option.text = ispType;
+                    ispFilter.add(option);
+                });
             });
-
-            response = await fetch('http://127.0.0.1:5001/get-client-types');
-            data = await response.json();
-            const clientFilter = document.getElementById('client-filter');
-            const clientOptions = ['Geth', 'Nethermind', 'Besu', 'Erigon', 'Reth', 'EthereumJS', 'Others'];
-            clientOptions.forEach(clientType => {
-                let option = document.createElement('option');
-                option.value = clientType;
-                option.text = clientType;
-                clientFilter.add(option);
+    
+        fetch('https://api.eth-node-map.xyz/get-client-types')
+            .then(response => response.json())
+            .then(data => {
+                const clientFilter = document.getElementById('client-filter');
+                const clientOptions = ['Geth', 'Nethermind', 'Besu', 'Erigon', 'Reth', 'EthereumJS', 'Others'];
+                clientOptions.forEach(clientType => {
+                    let option = document.createElement('option');
+                    option.value = clientType;
+                    option.text = clientType;
+                    clientFilter.add(option);
+                });
             });
-
-            response = await fetch('http://127.0.0.1:5001/get-countries');
-            data = await response.json();
-            const countryFilter = document.getElementById('country-filter');
-            data.forEach(country => {
-                let option = document.createElement('option');
-                option.value = country;
-                option.text = country;
-                countryFilter.add(option);
+    
+        fetch('https://api.eth-node-map.xyz/get-countries')
+            .then(response => response.json())
+            .then(data => {
+                const countryFilter = document.getElementById('country-filter');
+                data.forEach(country => {
+                    let option = document.createElement('option');
+                    option.value = country;
+                    option.text = country;
+                    countryFilter.add(option);
+                });
             });
-        } catch (error) {
-            console.error('Error fetching filters:', error);
-        }
     }
 
-    async function fetchDynamicData() {
-        try {
-            const response = await fetch('http://127.0.0.1:5001/get-node-count');
-            const data = await response.json();
-            document.getElementById('node-count').innerHTML = `
+    function fetchDynamicData() {
+        fetch('https://api.eth-node-map.xyz/get-node-count')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('node-count').innerHTML = `
                 <ul class="list-group">
                     <p><br>Toplam Node Sayısı: ${data.NumberOfNodes}<br><br></p>
                 </ul>`;
-            await fetchLatestNodes();
-        } catch (error) {
-            console.error('Error fetching dynamic data:', error);
-        }
+                fetchLatestNodes();
+            });
     }
 
-    async function fetchLatestNodes() {
-        try {
-            const response = await fetch('http://127.0.0.1:5001/get-latest-nodes');
-            const data = await response.json();
-            const listGroup = document.querySelector('#latest-node .list-group');
-            listGroup.innerHTML = '';
-            data.forEach(node => {
-                const listItem = document.createElement('li');
-                listItem.className = 'list-group-item';
-                listItem.innerHTML = `
-                    <span>Country: ${node.Country}<br>Client: ${node.Client}<br>OS: ${node.OS}</span><br>
-                    <span>Enode: <button class="copy-button" data-enode="${node.Enode}">Kopyala</button></span><br><br>
-                    <span>${node.MinutesAgo} dakika önce eklendi</span><br><br>
-                `;
-                listGroup.appendChild(listItem);
-            });
+    function fetchLatestNodes() {
+        fetch('https://api.eth-node-map.xyz/get-latest-nodes')
+            .then(response => response.json())
+            .then(data => {
+                const listGroup = document.querySelector('#latest-node .list-group');
+                listGroup.innerHTML = '';
+                data.forEach(node => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'list-group-item';
+                    listItem.innerHTML = `
+                        <span>Country: ${node.Country}<br>Client: ${node.Client}<br>OS: ${node.OS}</span><br>
+                        <span>Enode: <button class="copy-button" data-enode="${node.Enode}">Kopyala</button></span><br><br>
+                        <span>${node.MinutesAgo} dakika önce eklendi</span><br><br>
+                    `;
+                    listGroup.appendChild(listItem);
+                });
 
-            document.querySelectorAll('.copy-button').forEach(button => {
-                button.addEventListener('click', function () {
-                    const enode = this.getAttribute('data-enode');
-                    navigator.clipboard.writeText(enode).then(() => {
-                        this.textContent = 'Kopyalandı';
-                        this.disabled = true;
+                document.querySelectorAll('.copy-button').forEach(button => {
+                    button.addEventListener('click', function () {
+                        const enode = this.getAttribute('data-enode');
+                        navigator.clipboard.writeText(enode).then(() => {
+                            this.textContent = 'Kopyalandı';
+                            this.disabled = true;
 
-                        setTimeout(() => {
-                            this.textContent = 'Kopyala';
-                            this.disabled = false;
-                        }, 2000);
+                            setTimeout(() => {
+                                this.textContent = 'Kopyala';
+                                this.disabled = false;
+                            }, 2000);
+                        });
                     });
                 });
             });
-        } catch (error) {
-            console.error('Error fetching latest nodes:', error);
-        }
     }
 
-    async function fetchStatistics(endpoint, tableId) {
-        try {
-            const response = await fetch(endpoint);
-            const data = await response.json();
-            const listGroup = document.querySelector(`#${tableId} .list-group`);
-            listGroup.innerHTML = '';
-            const sortedData = Object.entries(data).sort((a, b) => b[1] - a[1]);
-            sortedData.forEach(([key, value]) => {
-                const percentage = value.toFixed(2);
-                const listItem = document.createElement('li');
-                listItem.className = 'list-group-item';
-                listItem.innerHTML = `<span>${key.split('_')[1]}</span>
-                    <span class="list-group-progress" style="width: ${percentage}%"></span>
-                    <span class="float-right text-muted">${percentage}%</span>`;
-                listGroup.appendChild(listItem);
+    function fetchStatistics(endpoint, tableId) {
+        fetch(endpoint)
+            .then(response => response.json())
+            .then(data => {
+                const listGroup = document.querySelector(`#${tableId} .list-group`);
+                listGroup.innerHTML = '';
+                const sortedData = Object.entries(data).sort((a, b) => b[1] - a[1]);
+                sortedData.forEach(([key, value]) => {
+                    const percentage = value.toFixed(2);
+                    const listItem = document.createElement('li');
+                    listItem.className = 'list-group-item';
+                    listItem.innerHTML = `<span>${key.split('_')[1]}</span>
+                        <span class="list-group-progress" style="width: ${percentage}%"></span>
+                        <span class="float-right text-muted">${percentage}%</span>`;
+                    listGroup.appendChild(listItem);
+                });
             });
-        } catch (error) {
-            console.error('Error fetching statistics:', error);
-        }
     }
 
-    async function fetchNodeDetails(nodeId) {
-        try {
-            const response = await fetch(`http://127.0.0.1:5001/get-node-details/${nodeId}`);
-            const data = await response.json();
-            const nodeDetailsDiv = document.getElementById('node-details');
-            nodeDetailsDiv.innerHTML = `
-                <h3>Node Detayları</h3>
-                <p><b>Client:</b> ${data.Client}</p>
-                <p><b>Country:</b> ${data.Country}</p>
-                <p><b>Host:</b> ${data.Host}</p>
-                <p><b>ISP:</b> ${data.ISP}</p>
-                <p><b>Latitude:</b> ${data.Latitude}</p>
-                <p><b>Longitude:</b> ${data.Longitude}</p>
-                <p><b>NodeId:</b> ${data.NodeId}</p>
-                <p><b>OS:</b> ${data.OS}</p>
-                <p><b>Port:</b> ${data.Port}</p>
-                <p><b>Status:</b> ${data.Status}</p>
-                <p><b>Created at:</b> ${data.CreatedAt}</p>
-            `;
-        } catch (error) {
-            console.error('Error fetching node details:', error);
-        }
+    function fetchNodeDetails(nodeId) {
+        fetch(`https://api.eth-node-map.xyz/get-node-details/${nodeId}`)
+            .then(response => response.json())
+            .then(data => {
+                const nodeDetailsDiv = document.getElementById('node-details');
+                nodeDetailsDiv.innerHTML = `
+                    <h3>Node Detayları</h3>
+                    <p><b>Client:</b> ${data.Client}</p>
+                    <p><b>Country:</b> ${data.Country}</p>
+                    <p><b>Host:</b> ${data.Host}</p>
+                    <p><b>ISP:</b> ${data.ISP}</p>
+                    <p><b>Latitude:</b> ${data.Latitude}</p>
+                    <p><b>Longitude:</b> ${data.Longitude}</p>
+                    <p><b>NodeId:</b> ${data.NodeId}</p>
+                    <p><b>OS:</b> ${data.OS}</p>
+                    <p><b>Port:</b> ${data.Port}</p>
+                    <p><b>Status:</b> ${data.Status}</p>
+                    <p><b>Created at:</b> ${data.CreatedAt}</p>
+                `;
+            });
     }
 
     function applyFilters() {
@@ -347,6 +340,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
         map.addLayer(markers);
     }
+    
 
     function getDynamicRadius(zoom) {
         return Math.min(250000 * Math.pow(2, 2 - zoom), 50000);
@@ -360,22 +354,22 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     map.on('zoomend', updateCircleRadius);
-
+    
     fetchAndPopulateData();
     fetchFilters();
     fetchDynamicData();
 
-    fetchStatistics('http://127.0.0.1:5001/get-relationship-percentage/OS_', 'os-statistics');
-    fetchStatistics('http://127.0.0.1:5001/get-relationship-percentage/CLIENT_', 'client-statistics');
-    fetchStatistics('http://127.0.0.1:5001/get-relationship-percentage/ISP_', 'isp-statistics');
-    fetchStatistics('http://127.0.0.1:5001/get-relationship-percentage/COUNTRY_', 'country-statistics');
+    fetchStatistics('https://api.eth-node-map.xyz/get-relationship-percentage/OS_', 'os-statistics');
+    fetchStatistics('https://api.eth-node-map.xyz/get-relationship-percentage/CLIENT_', 'client-statistics');
+    fetchStatistics('https://api.eth-node-map.xyz/get-relationship-percentage/ISP_', 'isp-statistics');
+    fetchStatistics('https://api.eth-node-map.xyz/get-relationship-percentage/COUNTRY_', 'country-statistics');
 
     document.getElementById('apply-filters').addEventListener('click', applyFilters);
 
     setInterval(fetchDynamicData, 30000);
     setInterval(fetchLatestNodes, 30000);
-    setInterval(() => fetchStatistics('http://127.0.0.1:5001/get-relationship-percentage/OS_', 'os-statistics'), 30000);
-    setInterval(() => fetchStatistics('http://127.0.0.1:5001/get-relationship-percentage/CLIENT_', 'client-statistics'), 30000);
-    setInterval(() => fetchStatistics('http://127.0.0.1:5001/get-relationship-percentage/ISP_', 'isp-statistics'), 30000);
-    setInterval(() => fetchStatistics('http://127.0.0.1:5001/get-relationship-percentage/COUNTRY_', 'country-statistics'), 30000);
+    setInterval(() => fetchStatistics('https://api.eth-node-map.xyz/get-relationship-percentage/OS_', 'os-statistics'), 30000);
+    setInterval(() => fetchStatistics('https://api.eth-node-map.xyz/get-relationship-percentage/CLIENT_', 'client-statistics'), 30000);
+    setInterval(() => fetchStatistics('https://api.eth-node-map.xyz/get-relationship-percentage/ISP_', 'isp-statistics'), 30000);
+    setInterval(() => fetchStatistics('https://api.eth-node-map.xyz/get-relationship-percentage/COUNTRY_', 'country-statistics'), 30000);
 });

@@ -36,18 +36,20 @@ def add_node(tx, node_id, host, port, client, os, status, latitude=None, longitu
     query = (
         "CREATE (n:Node {id: $node_id, host: $host, port: $port, "
         "client: $client, os: $os, status: $status, latitude: $latitude, "
-        "longitude: $longitude, isp: $isp, country_name: $country_name})"
+        "longitude: $longitude, isp: $isp, country_name: $country_name, created_at: $created_at})"
     )
+    created_at = datetime.now().isoformat()
     tx.run(query, node_id=node_id, host=host, port=port, client=client, os=os, status=status,
-           latitude=latitude, longitude=longitude, isp=isp, country_name=country_name)
+           latitude=latitude, longitude=longitude, isp=isp, country_name=country_name, created_at=created_at)
 
 
 def update_node_status(tx, node_id, status):
     query = (
         "MATCH (n:Node {id: $node_id}) "
-        "SET n.status = $status"
+        "SET n.status = $status, n.updated_at = $updated_at"
     )
-    tx.run(query, node_id=node_id, status=status)
+    updated_at = datetime.now().isoformat()
+    tx.run(query, node_id=node_id, status=status, updated_at=updated_at)
 
 
 def fetch_geo_info(ip):
@@ -77,15 +79,15 @@ def check_and_update(node):
     geo_info = fetch_geo_info(host) if status == 0 else None
 
     with driver.session() as session:
-        if not session.read_transaction(node_exists, node_id):
-            session.write_transaction(add_node, node_id, host, port, client, os, status,
-                                      geo_info['latitude'] if geo_info else None,
-                                      geo_info['longitude'] if geo_info else None,
-                                      geo_info['isp'] if geo_info else None,
-                                      geo_info['country_name'] if geo_info else None)
+        if not session.execute_read(node_exists, node_id):
+            session.execute_write(add_node, node_id, host, port, client, os, status,
+                                  geo_info['latitude'] if geo_info else None,
+                                  geo_info['longitude'] if geo_info else None,
+                                  geo_info['isp'] if geo_info else None,
+                                  geo_info['country_name'] if geo_info else None)
             print(f"{host}:{port} adresindeki {node_id} düğümü eklendi.")
         else:
-            session.write_transaction(update_node_status, node_id, status)
+            session.execute_write(update_node_status, node_id, status)
             print(f"{host}:{port} adresindeki {node_id} düğümü güncellendi.")
 
 

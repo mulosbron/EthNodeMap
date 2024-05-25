@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from neo4j import GraphDatabase
+from datetime import datetime
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -131,16 +132,21 @@ def get_latest_nodes(tx, limit):
     """
     result = tx.run(query, limit=limit)
     nodes = []
+    current_time = datetime.now()
     for record in result:
         enode = f"enode://{record['NodeId']}@{record['Host']}:{record['Port']}"
-        node_data = {
-            "Country": record["Country"],
-            "Client": record["Client"],
-            "OS": record["OS"],
-            "Enode": enode,
-            "CreatedAt": record["CreatedAt"]
-        }
-        nodes.append(node_data)
+        created_at_str = record["CreatedAt"]
+        if isinstance(created_at_str, str):
+            created_at = datetime.fromisoformat(created_at_str)
+            minutes_ago = int((current_time - created_at).total_seconds() / 60)
+            node_data = {
+                "Country": record["Country"],
+                "Client": record["Client"],
+                "OS": record["OS"],
+                "Enode": enode,
+                "MinutesAgo": minutes_ago
+            }
+            nodes.append(node_data)
     return nodes
 
 
@@ -203,14 +209,14 @@ def get_node_count_endpoint():
 @app.route('/get-relationship-types', methods=['GET'])
 def get_all_relationship_types_endpoint():
     with driver.session() as session:
-        relationship_types = session.read_transaction(get_all_relationship_types)
+        relationship_types = session.execute_read(get_all_relationship_types)
     return jsonify(relationship_types)
 
 
 @app.route('/get-relationship-types/clients', methods=['GET'])
 def get_clients_relationship_types_endpoint():
     with driver.session() as session:
-        relationship_types = session.read_transaction(get_all_relationship_types)
+        relationship_types = session.execute_read(get_all_relationship_types)
     filtered_relationship_types = filter_relationship_types_by_prefix(relationship_types, "CLIENT_")
     return jsonify(filtered_relationship_types)
 
@@ -218,7 +224,7 @@ def get_clients_relationship_types_endpoint():
 @app.route('/get-relationship-types/countries', methods=['GET'])
 def get_countries_relationship_types_endpoint():
     with driver.session() as session:
-        relationship_types = session.read_transaction(get_all_relationship_types)
+        relationship_types = session.execute_read(get_all_relationship_types)
     filtered_relationship_types = filter_relationship_types_by_prefix(relationship_types, "COUNTRY_")
     return jsonify(filtered_relationship_types)
 
@@ -226,7 +232,7 @@ def get_countries_relationship_types_endpoint():
 @app.route('/get-relationship-types/os-types', methods=['GET'])
 def get_os_types_relationship_types_endpoint():
     with driver.session() as session:
-        relationship_types = session.read_transaction(get_all_relationship_types)
+        relationship_types = session.execute_read(get_all_relationship_types)
     filtered_relationship_types = filter_relationship_types_by_prefix(relationship_types, "OS_")
     return jsonify(filtered_relationship_types)
 
@@ -234,7 +240,7 @@ def get_os_types_relationship_types_endpoint():
 @app.route('/get-relationship-types/isps', methods=['GET'])
 def get_isps_relationship_types_endpoint():
     with driver.session() as session:
-        relationship_types = session.read_transaction(get_all_relationship_types)
+        relationship_types = session.execute_read(get_all_relationship_types)
     filtered_relationship_types = filter_relationship_types_by_prefix(relationship_types, "ISP_")
     return jsonify(filtered_relationship_types)
 
@@ -249,7 +255,7 @@ def get_node_details_endpoint(node_id):
 @app.route('/get-relationship-percentage/<relationship_prefix>', methods=['GET'])
 def get_relationship_percentage_endpoint(relationship_prefix):
     with driver.session() as session:
-        percentage_distribution = session.read_transaction(get_percentage_distribution, relationship_prefix)
+        percentage_distribution = session.execute_read(get_percentage_distribution, relationship_prefix)
     return jsonify(percentage_distribution)
 
 
