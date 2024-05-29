@@ -17,13 +17,14 @@ EthNodeMap, Ethereum düğümlerinin bilgilerini Neo4j veritabanında yönetmek 
 
 - Python 3.7+
 - HTML, CSS ve JavaScript
-- Flask: Web sunucusu ve API'yi oluşturmak için.
+- Flask: API'yi oluşturmak için.
 - Flask-CORS: API'ye çapraz kaynak isteği (CORS) desteği eklemek için.
 - Neo4j: Düğümleri depolayıp, ilişkiler kurmak için.
 - BeautifulSoup4: Etherscan sitesinden düğüm verilerini çekmek için.
 - Requests: HTTP istekleri yapmak için.
-- D3.js (frontend): Grafı görselleştirmek için.
-- Leaflet.js (frontend): Harita üzerinde düğümlerin konumunu göstermek için.
+- D3.js: Grafı görselleştirmek için.
+- Leaflet.js: Harita üzerinde düğümlerin konumunu göstermek için.
+- (Server) Nginx: Sunucumu web sunucusu olarak kullanmak için.
 
 ### Yükleme
 
