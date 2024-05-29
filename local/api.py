@@ -65,15 +65,6 @@ def get_node_ids(tx):
     return [record["NodeID"] for record in result]
 
 
-def get_relationships(tx):
-    query = """
-    MATCH (n:Node)-[r]->(m:Node)
-    RETURN n.id AS StartNodeId, type(r) AS RelationshipType, m.id AS EndNodeId
-    """
-    result = tx.run(query)
-    return [record.data() for record in result]
-
-
 def get_node_count(tx):
     query = """
     MATCH (n:Node)
@@ -84,16 +75,6 @@ def get_node_count(tx):
     return record["NumberOfNodes"]
 
 
-def get_all_relationship_types(tx):
-    query = "CALL db.relationshipTypes() YIELD relationshipType RETURN relationshipType"
-    result = tx.run(query)
-    return [record["relationshipType"] for record in result]
-
-
-def filter_relationship_types_by_prefix(types, prefix):
-    return [rtype for rtype in types if rtype.startswith(prefix)]
-
-
 def get_node_details(tx, node_id):
     query = """
     MATCH (n:Node {id: $node_id})
@@ -102,24 +83,6 @@ def get_node_details(tx, node_id):
     """
     result = tx.run(query, node_id=node_id)
     return result.single().data()
-
-
-def count_relationships(tx, relationship_prefix):
-    query = f"""
-    MATCH ()-[r]->()
-    WHERE type(r) STARTS WITH $prefix
-    RETURN type(r) AS RelationshipType, COUNT(r) AS Count
-    """
-    result = tx.run(query, prefix=relationship_prefix)
-    return {record["RelationshipType"]: record["Count"] for record in result}
-
-
-def get_percentage_distribution(tx, relationship_prefix):
-    relationships = count_relationships(tx, relationship_prefix)
-    total_count = sum(relationships.values())
-    if total_count == 0:
-        return {k: 0 for k in relationships.keys()}
-    return {k: (v / total_count) * 100 for k, v in relationships.items()}
 
 
 def get_latest_nodes(tx, limit):
@@ -192,57 +155,11 @@ def get_node_ids_endpoint():
     return jsonify(node_ids)
 
 
-@app.route('/get-relationships', methods=['GET'])
-def get_relationships_endpoint():
-    with driver.session() as session:
-        relationships = session.execute_read(get_relationships)
-    return jsonify(relationships)
-
-
 @app.route('/get-node-count', methods=['GET'])
 def get_node_count_endpoint():
     with driver.session() as session:
         node_count = session.execute_read(get_node_count)
     return jsonify({"NumberOfNodes": node_count})
-
-
-@app.route('/get-relationship-types', methods=['GET'])
-def get_all_relationship_types_endpoint():
-    with driver.session() as session:
-        relationship_types = session.execute_read(get_all_relationship_types)
-    return jsonify(relationship_types)
-
-
-@app.route('/get-relationship-types/clients', methods=['GET'])
-def get_clients_relationship_types_endpoint():
-    with driver.session() as session:
-        relationship_types = session.execute_read(get_all_relationship_types)
-    filtered_relationship_types = filter_relationship_types_by_prefix(relationship_types, "CLIENT_")
-    return jsonify(filtered_relationship_types)
-
-
-@app.route('/get-relationship-types/countries', methods=['GET'])
-def get_countries_relationship_types_endpoint():
-    with driver.session() as session:
-        relationship_types = session.execute_read(get_all_relationship_types)
-    filtered_relationship_types = filter_relationship_types_by_prefix(relationship_types, "COUNTRY_")
-    return jsonify(filtered_relationship_types)
-
-
-@app.route('/get-relationship-types/os-types', methods=['GET'])
-def get_os_types_relationship_types_endpoint():
-    with driver.session() as session:
-        relationship_types = session.execute_read(get_all_relationship_types)
-    filtered_relationship_types = filter_relationship_types_by_prefix(relationship_types, "OS_")
-    return jsonify(filtered_relationship_types)
-
-
-@app.route('/get-relationship-types/isps', methods=['GET'])
-def get_isps_relationship_types_endpoint():
-    with driver.session() as session:
-        relationship_types = session.execute_read(get_all_relationship_types)
-    filtered_relationship_types = filter_relationship_types_by_prefix(relationship_types, "ISP_")
-    return jsonify(filtered_relationship_types)
 
 
 @app.route('/get-node-details/<node_id>', methods=['GET'])
@@ -252,19 +169,221 @@ def get_node_details_endpoint(node_id):
     return jsonify(node_details)
 
 
-@app.route('/get-relationship-percentage/<relationship_prefix>', methods=['GET'])
-def get_relationship_percentage_endpoint(relationship_prefix):
-    with driver.session() as session:
-        percentage_distribution = session.execute_read(get_percentage_distribution, relationship_prefix)
-    return jsonify(percentage_distribution)
-
-
 @app.route('/get-latest-nodes', methods=['GET'])
 def get_latest_nodes_endpoint():
     limit = request.args.get('limit', default=50, type=int)
     with driver.session() as session:
         latest_nodes = session.execute_read(get_latest_nodes, limit)
     return jsonify(latest_nodes)
+
+
+@app.route('/nodes/<country_name>', methods=['GET'])
+def get_relationships(country_name):
+    with driver.session() as session:
+        query = """
+        MATCH (root:Root {name: 'Countries'})-[:HAS_COUNTRY]->(c:Country {name: $country_name})-[:HAS_ISP]->(isp:ISP)
+        -[:HAS_OS]->(os:OS)-[:HAS_CLIENT]->(client:Client)-[:HAS_NODE]->(n:Node) 
+        RETURN root, c, isp, os, client, n
+        """
+        result = session.run(query, {"country_name": country_name})
+        data = [record.data() for record in result]
+        return jsonify(data)
+
+
+def calculate_percentage(count, total):
+    return (count / total) * 100 if total > 0 else 0
+
+def get_statistics(tx, data_type):
+    stats = {}
+
+    total_nodes_query = """
+    MATCH (n:Node)
+    RETURN count(n) AS total_nodes
+    """
+    total_nodes_result = tx.run(total_nodes_query)
+    total_nodes = total_nodes_result.single()["total_nodes"]
+
+    queries = {
+        "os": """
+            MATCH (n:Node)
+            RETURN n.os AS type, count(n) AS count
+        """,
+        "client": """
+            MATCH (n:Node)
+            RETURN n.client AS type, count(n) AS count
+        """,
+        "isp": """
+            MATCH (n:Node)
+            RETURN n.isp AS type, count(n) AS count
+        """,
+        "country": """
+            MATCH (n:Node)
+            RETURN n.country_name AS type, count(n) AS count
+        """
+    }
+
+    if data_type in queries:
+        query = queries[data_type]
+        result = tx.run(query)
+        type_counts = process_and_aggregate_data(result, data_type, total_nodes)
+        stats[data_type] = type_counts
+    else:
+        stats["error"] = "Invalid data type requested"
+
+    return stats
+
+def process_and_aggregate_data(result, data_type, total_nodes):
+    filtered_data = []
+    categories = {
+        "os": ['linux', 'windows', 'macos', 'android', 'freebsd', 'darwin'],
+        "client": ['geth', 'nethermind', 'besu', 'erigon', 'reth', 'ethereumjs'],
+        "isp": ['contabo', 'aws', 'azure', 'google', 'alibaba', 'oracle', 'ibm', 'tencent', 'ovh', 'digitalocean',
+                'linode', 'akamai', 'salesforce', 'huawei', 'cloud', 'dell', 'cloud', 'vultr', 'heroku', 'hetzner',
+                'scaleway', 'upcloud', 'kamatera']
+    }
+
+    if data_type == "country":
+        for record in result:
+            filtered_data.append({
+                "type": record["type"],
+                "count": record["count"],
+                "percentage": calculate_percentage(record["count"], total_nodes)
+            })
+        return filtered_data
+
+    counts = {category: 0 for category in categories[data_type]}
+    counts["others"] = 0
+    percentages = {category: 0 for category in categories[data_type]}
+    percentages["others"] = 0
+
+    for record in result:
+        item_type = record["type"].lower()
+        matched = False
+        if data_type == "client":
+            matched = any(client_match(category, item_type) for category in categories[data_type])
+        elif data_type == "os":
+            matched = any(os_match(category, item_type) for category in categories[data_type])
+        elif data_type == "isp":
+            matched = any(isp_match(category, item_type) for category in categories[data_type])
+
+        if matched:
+            for category in categories[data_type]:
+                if client_match(category, item_type) or os_match(category, item_type) or isp_match(category, item_type):
+                    counts[category] += record["count"]
+                    percentages[category] += calculate_percentage(record["count"], total_nodes)
+                    break
+        else:
+            counts["others"] += record["count"]
+            percentages["others"] += calculate_percentage(record["count"], total_nodes)
+
+    for category in categories[data_type]:
+        if counts[category] > 0:
+            filtered_data.append({
+                "type": category.capitalize(),
+                "count": counts[category],
+                "percentage": percentages[category]
+            })
+
+    if counts["others"] > 0:
+        filtered_data.append({
+            "type": "Others",
+            "count": counts["others"],
+            "percentage": percentages["others"]
+        })
+
+    return filtered_data
+
+def client_match(clientFilterValue, markerClient):
+    match clientFilterValue:
+        case 'geth':
+            return 'geth' in markerClient
+        case 'nethermind':
+            return 'nethermind' in markerClient
+        case 'besu':
+            return 'besu' in markerClient
+        case 'erigon':
+            return 'erigon' in markerClient
+        case 'reth':
+            return 'reth' in markerClient
+        case 'ethereumjs':
+            return 'ethereumjs' in markerClient
+        case 'others':
+            return all(keyword not in markerClient for keyword in ['geth', 'nethermind', 'besu', 'erigon', 'reth', 'ethereumjs'])
+        case _:
+            return False
+
+def os_match(osFilterValue, markerOS):
+    match osFilterValue:
+        case 'linux':
+            return 'linux' in markerOS
+        case 'windows':
+            return 'windows' in markerOS
+        case 'macos':
+            return 'macos' in markerOS
+        case 'android':
+            return 'android' in markerOS
+        case 'freebsd':
+            return 'freebsd' in markerOS
+        case 'darwin':
+            return 'darwin' in markerOS
+        case 'others':
+            return all(keyword not in markerOS for keyword in ['linux', 'windows', 'macos', 'android', 'freebsd', 'darwin'])
+        case _:
+            return False
+
+def isp_match(ispFilterValue, markerISP):
+    match ispFilterValue:
+        case 'contabo':
+            return 'contabo' in markerISP
+        case 'aws':
+            return any(keyword in markerISP for keyword in ['amazon', 'aws'])
+        case 'azure':
+            return any(keyword in markerISP for keyword in ['microsoft', 'azure'])
+        case 'google':
+            return 'google' in markerISP
+        case 'alibaba':
+            return 'alibaba' in markerISP
+        case 'oracle':
+            return 'oracle' in markerISP
+        case 'ibm':
+            return 'ibm' in markerISP
+        case 'tencent':
+            return 'tencent' in markerISP
+        case 'ovh':
+            return 'ovh' in markerISP
+        case 'digitalocean':
+            return 'digitalocean' in markerISP
+        case 'linode':
+            return any(keyword in markerISP for keyword in ['linode', 'akamai'])
+        case 'salesforce':
+            return 'salesforce' in markerISP
+        case 'huawei':
+            return 'huawei' in markerISP and 'cloud' in markerISP
+        case 'dell':
+            return 'dell' in markerISP and 'cloud' in markerISP
+        case 'vultr':
+            return 'vultr' in markerISP
+        case 'heroku':
+            return 'heroku' in markerISP
+        case 'hetzner':
+            return 'hetzner' in markerISP
+        case 'scaleway':
+            return 'scaleway' in markerISP
+        case 'upcloud':
+            return 'upcloud' in markerISP
+        case 'kamatera':
+            return 'kamatera' in markerISP
+        case 'others':
+            return all(keyword not in markerISP for keyword in ['contabo', 'amazon', 'aws', 'microsoft', 'azure', 'google', 'alibaba', 'oracle', 'ibm', 'tencent', 'ovh', 'digitalocean', 'linode', 'akamai', 'salesforce', 'huawei', 'cloud', 'dell', 'cloud', 'vultr', 'heroku', 'hetzner', 'scaleway', 'upcloud', 'kamatera'])
+        case _:
+            return False
+
+@app.route('/get-statistics/<data_type>', methods=['GET'])
+def get_statistics_endpoint(data_type):
+    with driver.session() as session:
+        statistics = session.execute_read(get_statistics, data_type)
+    return jsonify(statistics)
+
 
 
 if __name__ == '__main__':

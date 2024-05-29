@@ -5,6 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 from neo4j import GraphDatabase
 from datetime import datetime
+import subprocess
 
 # Define the headers and URL for web scraping
 HEADERS = {
@@ -95,6 +96,29 @@ def node_exists(tx, node_id):
     return result.single() is not None
 
 
+def delete_nodes_with_empty_lat_lon():
+    with driver.session() as session:
+        query = """
+        MATCH (n:Node)
+        WHERE n.latitude IS NULL OR n.longitude IS NULL
+        DETACH DELETE n
+        """
+        session.run(query)
+        print("Latitude veya Longitude değeri boş olan düğümler silindi.")
+
+
+def delete_all_relationships():
+    with driver.session() as session:
+        session.run("MATCH ()-[r]->() DELETE r")
+
+
+def import_relationships():
+    scripts = [
+    ]
+    for script in scripts:
+        subprocess.run(["python", script], shell=True)
+
+
 async def scrape_and_check_nodes(executor):
     response = requests.get(URL, headers=HEADERS)
     print("Sayfa durumu:", response.status_code)
@@ -137,6 +161,9 @@ async def scrape_and_check_nodes(executor):
 async def main():
     executor = ThreadPoolExecutor()
     await scrape_and_check_nodes(executor)
+    delete_all_relationships()
+    delete_nodes_with_empty_lat_lon()
+    import_relationships()
 
 
 if __name__ == "__main__":
