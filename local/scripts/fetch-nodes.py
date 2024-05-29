@@ -7,7 +7,6 @@ from neo4j import GraphDatabase
 from datetime import datetime
 import subprocess
 
-# Define the headers and URL for web scraping
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
                   "AppleWebKit/537.36 (KHTML, Gecko) "
@@ -114,6 +113,7 @@ def delete_all_relationships():
 
 def import_relationships():
     scripts = [
+        "import-relationships.py"
     ]
     for script in scripts:
         subprocess.run(["python", script], shell=True)
@@ -161,7 +161,7 @@ async def scrape_and_check_nodes(executor):
 async def main():
     executor = ThreadPoolExecutor()
     await scrape_and_check_nodes(executor)
-    delete_all_relationships()
+    # delete_all_relationships()
     delete_nodes_with_empty_lat_lon()
     import_relationships()
 

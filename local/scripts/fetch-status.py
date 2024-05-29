@@ -74,10 +74,7 @@ def delete_all_relationships():
 
 def import_relationships():
     scripts = [
-        "import-relationships/clients.py",
-        "import-relationships/countries.py",
-        "import-relationships/isps.py",
-        "import-relationships/os_types.py"
+        "import-relationships.py"
     ]
     for script in scripts:
         subprocess.run(["python", script], shell=True)

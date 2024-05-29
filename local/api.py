@@ -193,6 +193,7 @@ def get_relationships(country_name):
 def calculate_percentage(count, total):
     return (count / total) * 100 if total > 0 else 0
 
+
 def get_statistics(tx, data_type):
     stats = {}
 
@@ -231,6 +232,7 @@ def get_statistics(tx, data_type):
         stats["error"] = "Invalid data type requested"
 
     return stats
+
 
 def process_and_aggregate_data(result, data_type, total_nodes):
     filtered_data = []
@@ -293,6 +295,7 @@ def process_and_aggregate_data(result, data_type, total_nodes):
 
     return filtered_data
 
+
 def client_match(clientFilterValue, markerClient):
     match clientFilterValue:
         case 'geth':
@@ -308,9 +311,11 @@ def client_match(clientFilterValue, markerClient):
         case 'ethereumjs':
             return 'ethereumjs' in markerClient
         case 'others':
-            return all(keyword not in markerClient for keyword in ['geth', 'nethermind', 'besu', 'erigon', 'reth', 'ethereumjs'])
+            return all(keyword not in markerClient for keyword in
+                       ['geth', 'nethermind', 'besu', 'erigon', 'reth', 'ethereumjs'])
         case _:
             return False
+
 
 def os_match(osFilterValue, markerOS):
     match osFilterValue:
@@ -327,9 +332,11 @@ def os_match(osFilterValue, markerOS):
         case 'darwin':
             return 'darwin' in markerOS
         case 'others':
-            return all(keyword not in markerOS for keyword in ['linux', 'windows', 'macos', 'android', 'freebsd', 'darwin'])
+            return all(
+                keyword not in markerOS for keyword in ['linux', 'windows', 'macos', 'android', 'freebsd', 'darwin'])
         case _:
             return False
+
 
 def isp_match(ispFilterValue, markerISP):
     match ispFilterValue:
@@ -374,16 +381,19 @@ def isp_match(ispFilterValue, markerISP):
         case 'kamatera':
             return 'kamatera' in markerISP
         case 'others':
-            return all(keyword not in markerISP for keyword in ['contabo', 'amazon', 'aws', 'microsoft', 'azure', 'google', 'alibaba', 'oracle', 'ibm', 'tencent', 'ovh', 'digitalocean', 'linode', 'akamai', 'salesforce', 'huawei', 'cloud', 'dell', 'cloud', 'vultr', 'heroku', 'hetzner', 'scaleway', 'upcloud', 'kamatera'])
+            return all(keyword not in markerISP for keyword in
+                       ['contabo', 'amazon', 'aws', 'microsoft', 'azure', 'google', 'alibaba', 'oracle', 'ibm',
+                        'tencent', 'ovh', 'digitalocean', 'linode', 'akamai', 'salesforce', 'huawei', 'cloud', 'dell',
+                        'cloud', 'vultr', 'heroku', 'hetzner', 'scaleway', 'upcloud', 'kamatera'])
         case _:
             return False
+
 
 @app.route('/get-statistics/<data_type>', methods=['GET'])
 def get_statistics_endpoint(data_type):
     with driver.session() as session:
         statistics = session.execute_read(get_statistics, data_type)
     return jsonify(statistics)
-
 
 
 if __name__ == '__main__':

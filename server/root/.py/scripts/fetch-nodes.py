@@ -5,10 +5,10 @@ import requests
 from bs4 import BeautifulSoup
 import schedule
 import time
-import asyncio
 from neo4j import GraphDatabase
+from datetime import datetime
+import subprocess
 
-# Define the headers and URL for web scraping
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
                   "AppleWebKit/537.36 (KHTML, Gecko) "
@@ -97,6 +97,26 @@ def node_exists(tx, node_id):
     return result.single() is not None
 
 
+def delete_nodes_with_empty_lat_lon():
+    with driver.session() as session:
+        query = """
+        MATCH (n:Node)
+        WHERE n.latitude IS NULL OR n.longitude IS NULL
+        DETACH DELETE n
+        """
+        session.run(query)
+        print("Latitude veya Longitude değeri boş olan düğümler silindi.")
+
+
+def delete_all_relationships():
+    with driver.session() as session:
+        session.run("MATCH ()-[r]->() DELETE r")
+
+
+def import_relationships():
+    subprocess.run(["python3", "/root/.py/import-relationships.py"])
+
+
 async def scrape_and_check_nodes(executor):
     response = requests.get(URL, headers=HEADERS)
     print("Sayfa durumu:", response.status_code)
@@ -139,13 +159,15 @@ async def scrape_and_check_nodes(executor):
 def job():
     executor = ThreadPoolExecutor()
     asyncio.run(scrape_and_check_nodes(executor))
+    # delete_all_relationships()
+    delete_nodes_with_empty_lat_lon()
+    import_relationships()
 
 
-schedule.every(24).minutes.do(job)
+schedule.every(25).minutes.do(job)
 
 
 if __name__ == "__main__":
     while True:
         schedule.run_pending()
         time.sleep(5)
-

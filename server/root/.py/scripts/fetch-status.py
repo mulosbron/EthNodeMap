@@ -66,7 +66,7 @@ def delete_nodes_with_empty_lat_lon():
 
 def delete_offline_nodes():
     with driver.session() as session:
-        session.run("MATCH (n:Node) WHERE n.status >= 24 DELETE n")
+        session.run("MATCH (n:Node) WHERE n.status >= 7 DELETE n")
 
 
 def delete_all_relationships():
@@ -75,10 +75,7 @@ def delete_all_relationships():
 
 
 def import_relationships():
-    subprocess.run(["python3", "/root/.py/import-relationships/clients.py"])
-    subprocess.run(["python3", "/root/.py/import-relationships/countries.py"])
-    subprocess.run(["python3", "/root/.py/import-relationships/isps.py"])
-    subprocess.run(["python3", "/root/.py/import-relationships/os_types.py"])
+    subprocess.run(["python3", "/root/.py/import-relationships.py"])
 
 
 def job():
