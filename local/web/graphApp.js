@@ -1,5 +1,5 @@
-const countriesUrl = "http://127.0.0.1:5001/get-countries";
-const nodeParentsUrl = "http://127.0.0.1:5001/nodes/";
+const countriesUrl = "http://127.0.0.1:5001/nodes/countries";
+const nodeParentsUrl = "http://127.0.0.1:5001/nodes/country/";
 
 async function fetchData(url) {
   const response = await fetch(url);
@@ -49,7 +49,7 @@ async function drawGraph() {
   const links = [];
   const nodeMap = {};
 
-  const rootNode = { id: "Countries", group: 1 };
+  const rootNode = { id: "Dünya", group: 1 };
   if (!nodeMap[rootNode.id]) {
     nodes.push(rootNode);
     nodeMap[rootNode.id] = rootNode;
@@ -58,11 +58,12 @@ async function drawGraph() {
   data.forEach(item => {
     const { root, c, isp, os, client, n } = item;
 
-    if (!nodeMap[c.name]) {
-      const countryNode = { id: c.name, group: 2 };
+    const countryNodeId = `${c.name}`
+    if (!nodeMap[countryNodeId]) {
+      const countryNode = { id: countryNodeId, group: 2 };
       nodes.push(countryNode);
       links.push({ source: rootNode.id, target: countryNode.id });
-      nodeMap[c.name] = countryNode;
+      nodeMap[countryNodeId] = countryNode;
     }
 
     const ispNodeId = `${c.name}-${isp.name}`;
@@ -89,11 +90,12 @@ async function drawGraph() {
       nodeMap[clientNodeId] = clientNode;
     }
 
-    if (!nodeMap[n.id]) {
-      const nNode = { id: n.id, group: 6 };
+    const nodeId = `${n.id}`;
+    if (!nodeMap[nodeId]) {
+      const nNode = { id: nodeId, group: 6 };
       nodes.push(nNode);
       links.push({ source: clientNodeId, target: nNode.id });
-      nodeMap[n.id] = nNode;
+      nodeMap[nodeId] = nNode;
     }
   });
 
@@ -111,10 +113,10 @@ async function drawGraph() {
     .append("g");
 
   const simulation = d3.forceSimulation(nodes)
-    .force("link", d3.forceLink(links).id(d => d.id).distance(100))
-    .force("charge", d3.forceManyBody().strength(-500))
+    .force("link", d3.forceLink(links).id(d => d.id).distance(300))
+    .force("charge", d3.forceManyBody().strength(-1000))
     .force("center", d3.forceCenter(width / 2, height / 2))
-    .force("collide", d3.forceCollide().radius(30))
+    .force("collide", d3.forceCollide().radius(15))
     .on("tick", () => {
       link
         .attr("x1", d => d.source.x)
@@ -132,7 +134,7 @@ async function drawGraph() {
     .selectAll("line")
     .data(links)
     .enter().append("line")
-    .attr("stroke-width", 3)
+    .attr("stroke-width", 10)
     .attr("stroke", "#999");
 
   const node = svg.append("g")
@@ -140,18 +142,23 @@ async function drawGraph() {
     .selectAll("circle")
     .data(nodes)
     .enter().append("circle")
-    .attr("r", 15)
-    .attr("fill", d => d3.schemeCategory10[d.group % 10]);
+    .attr("r", 30)
+    .attr("fill", d => d3.schemeCategory10[d.group % 10])
+    .call(d3.drag()
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended));
 
   node.append("title")
     .text(d => d.id);
 
   const legendData = [
-    { color: d3.schemeCategory10[2], text: "Country" },
-    { color: d3.schemeCategory10[3], text: "ISP" },
-    { color: d3.schemeCategory10[4], text: "OS" },
-    { color: d3.schemeCategory10[5], text: "Client" },
-    { color: d3.schemeCategory10[6], text: "Node" }
+    { color: d3.schemeCategory10[1], text: "Dünya" },
+    { color: d3.schemeCategory10[2], text: "Ülke" },
+    { color: d3.schemeCategory10[3], text: "İSS" },
+    { color: d3.schemeCategory10[4], text: "İşletim Sistemi" },
+    { color: d3.schemeCategory10[5], text: "İstemci" },
+    { color: d3.schemeCategory10[6], text: "Düğüm" }
   ];
 
   const legend = d3.select("#legend").selectAll(".legend-item")
@@ -172,8 +179,24 @@ async function drawGraph() {
     .text(d => d.text);
 
   simulation.alpha(1).restart();
-}
 
+  function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+  }
+
+  function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+  }
+
+  function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+  }
+}
 
 loadCountries();
 

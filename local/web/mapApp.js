@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function fetchAndPopulateData() {
         try {
-            const response = await fetch('http://127.0.0.1:5001/get-nodes');
+            const response = await fetch('http://127.0.0.1:5001/nodes');
             const data = await response.json();
 
             data.forEach(node => {
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const uptime = 100 - ((node.Status * 100) / 24);
     
         nodeDetailsContainer.innerHTML = `
-            <h3>Node Detayları</h3>
+            <h3>Düğüm Detayları</h3>
             <p><b>NodeId:</b> ${node.NodeId}</p>
             <p><b>Host:</b> ${node.Host}</p>
             <p><b>Port:</b> ${node.Port}</p>
@@ -65,44 +65,45 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function fetchFilters() {
         try {
-            let response = await fetch('http://127.0.0.1:5001/get-os-types');
+            let response = await fetch('http://127.0.0.1:5001/nodes/os-types');
             let data = await response.json();
             const osFilter = document.getElementById('os-filter');
-            const osOptions = ['Linux', 'Windows', 'MacOS', 'Android', 'FreeBSD', 'Darwin', 'Others'];
+            const osOptions = ['Linux', 'Windows', 'MacOS', 'Android', 'FreeBSD', 'Darwin', "Diğer İS'ler"];
             osOptions.forEach(osType => {
                 let option = document.createElement('option');
                 option.value = osType;
                 option.text = osType;
                 osFilter.add(option);
             });
-
-            response = await fetch('http://127.0.0.1:5001/get-isps');
+    
+            response = await fetch('http://127.0.0.1:5001/nodes/isps');
             data = await response.json();
             const ispFilter = document.getElementById('isp-filter');
             const ispOptions = ['Contabo', 'AWS', 'Azure', 'Google', 'Alibaba', 'Oracle', 'IBM', 'Tencent',
-                'OVHCloud', 'DO', 'Linode', 'Salesforce', 'Huawei', 'Dell', 'Vultr', 'Heroku', 'Hetzner', 'Scaleway', 'Upcloud', 'Kamatera', 'Others'];
+                'OVHCloud', 'DO', 'Linode', 'Salesforce', 'Huawei', 'Dell', 'Vultr', 'Heroku', 'Hetzner', 'Scaleway', 'Upcloud', 'Kamatera', "Diğer İSS'ler"];
             ispOptions.forEach(ispType => {
                 let option = document.createElement('option');
                 option.value = ispType;
                 option.text = ispType;
                 ispFilter.add(option);
             });
-
-            response = await fetch('http://127.0.0.1:5001/get-client-types');
+    
+            response = await fetch('http://127.0.0.1:5001/nodes/client-types');
             data = await response.json();
             const clientFilter = document.getElementById('client-filter');
-            const clientOptions = ['Geth', 'Nethermind', 'Besu', 'Erigon', 'Reth', 'EthereumJS', 'Others'];
+            const clientOptions = ['Geth', 'Nethermind', 'Besu', 'Erigon', 'Reth', 'EthereumJS', 'Diğer İstemciler'];
             clientOptions.forEach(clientType => {
                 let option = document.createElement('option');
                 option.value = clientType;
                 option.text = clientType;
                 clientFilter.add(option);
             });
-
-            response = await fetch('http://127.0.0.1:5001/get-countries');
+    
+            response = await fetch('http://127.0.0.1:5001/nodes/countries');
             data = await response.json();
             const countryFilter = document.getElementById('country-filter');
-            data.forEach(country => {
+            const countryOptions = data.concat(['Diğer Ülkeler']);
+            countryOptions.forEach(country => {
                 let option = document.createElement('option');
                 option.value = country;
                 option.text = country;
@@ -112,15 +113,15 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('Error fetching filters:', error);
         }
     }
+    
 
     async function fetchDynamicData() {
         try {
-            const response = await fetch('http://127.0.0.1:5001/get-node-count');
+            const response = await fetch('http://127.0.0.1:5001/nodes/count');
             const data = await response.json();
             document.getElementById('node-count').innerHTML = `
-                <ul class="list-group">
-                    <p><br>Toplam Node Sayısı: ${data.NumberOfNodes}<br><br></p>
-                </ul>`;
+            <p><br><b>Toplam Düğüm Sayısı: </b>${data.NumberOfNodes}<br><br></p>
+            `;
             await fetchLatestNodes();
         } catch (error) {
             console.error('Error fetching dynamic data:', error);
@@ -129,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function fetchLatestNodes() {
         try {
-            const response = await fetch('http://127.0.0.1:5001/get-latest-nodes');
+            const response = await fetch('http://127.0.0.1:5001/nodes/latest');
             const data = await response.json();
             const listGroup = document.querySelector('#latest-node .list-group');
             listGroup.innerHTML = '';
@@ -137,8 +138,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 const listItem = document.createElement('li');
                 listItem.className = 'list-group-item';
                 listItem.innerHTML = `
-                    <span>Ülke: ${node.Country}<br>İstemci: ${node.Client}<br>OS: ${node.OS}</span><br>
-                    <span>Enode: <button class="copy-button" data-enode="${node.Enode}">Kopyala</button></span><br><br>
+                    <span style="display: block; margin-bottom: 5px;"><b>Ülke: </b>${node.Country}<br></span>
+                    <span style="display: block; margin-bottom: 5px;"><b>İstemci: </b>${node.Client}<br></span>
+                    <span style="display: block; margin-bottom: 5px;"><b>İşletim Sistemi: </b>${node.OS}<br></span>
+                    <span style="display: block; margin-bottom: 5px;"><b>İSS: </b>${node.ISP}<br></span>
+                    <span><b>Enode: </b><button class="copy-button" data-enode="${node.Enode}">Kopyala</button></span><br><br>
                     <span>${node.MinutesAgo} dakika önce eklendi</span><br><br>
                 `;
                 listGroup.appendChild(listItem);
@@ -165,19 +169,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function fetchStatistics() {
         try {
-            const osResponse = await fetch('http://127.0.0.1:5001/get-statistics/os');
+            const osResponse = await fetch('http://127.0.0.1:5001/statistics/os');
             const osData = await osResponse.json();
             updateStatisticsTable('os-statistics', osData.os);
 
-            const clientResponse = await fetch('http://127.0.0.1:5001/get-statistics/client');
+            const clientResponse = await fetch('http://127.0.0.1:5001/statistics/client');
             const clientData = await clientResponse.json();
             updateStatisticsTable('client-statistics', clientData.client);
 
-            const ispResponse = await fetch('http://127.0.0.1:5001/get-statistics/isp');
+            const ispResponse = await fetch('http://127.0.0.1:5001/statistics/isp');
             const ispData = await ispResponse.json();
             updateStatisticsTable('isp-statistics', ispData.isp);
 
-            const countryResponse = await fetch('http://127.0.0.1:5001/get-statistics/country');
+            const countryResponse = await fetch('http://127.0.0.1:5001/statistics/country');
             const countryData = await countryResponse.json();
             updateStatisticsTable('country-statistics', countryData.country);
 
@@ -207,16 +211,16 @@ document.addEventListener('DOMContentLoaded', function () {
         var ispFilterValue = document.getElementById('isp-filter').value;
         var clientFilterValue = document.getElementById('client-filter').value;
         var countryFilterValue = document.getElementById('country-filter').value;
-
+    
         markers.clearLayers();
-
+    
         allMarkers.forEach(function (markerObj) {
             var marker = markerObj.circle;
             var markerOS = marker.options.os.toLowerCase();
             var markerISP = marker.options.isp.toLowerCase();
             var markerClient = marker.options.client.toLowerCase();
             var markerCountry = marker.options.country;
-
+    
             var osMatch = false;
             switch (osFilterValue) {
                 case 'Linux':
@@ -237,7 +241,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 case 'Darwin':
                     osMatch = markerOS.includes('darwin');
                     break;
-                case 'Others':
+                case "Diğer İS'ler":
                     osMatch = !markerOS.includes('linux') && !markerOS.includes('windows') &&
                         !markerOS.includes('macos') && !markerOS.includes('android') &&
                         !markerOS.includes('freebsd') && !markerOS.includes('darwin');
@@ -245,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 default:
                     osMatch = true;
             }
-
+    
             var clientMatch = false;
             switch (clientFilterValue) {
                 case 'Geth':
@@ -266,7 +270,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 case 'EthereumJS':
                     clientMatch = markerClient.includes('ethereumjs');
                     break;
-                case 'Others':
+                case 'Diğer İstemciler':
                     clientMatch = !markerClient.includes('geth') && !markerClient.includes('nethermind') &&
                         !markerClient.includes('besu') && !markerClient.includes('erigon') &&
                         !markerClient.includes('reth') && !markerClient.includes('ethereumjs');
@@ -274,7 +278,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 default:
                     clientMatch = true;
             }
-
+    
             var ispMatch = false;
             switch (ispFilterValue) {
                 case 'Contabo':
@@ -337,7 +341,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 case 'Kamatera':
                     ispMatch = markerISP.includes('kamatera');
                     break;
-                case 'Others':
+                case "Diğer İSS'ler":
                     ispMatch = !markerISP.includes('contabo') && !markerISP.includes('amazon') &&
                         !markerISP.includes('aws') && !markerISP.includes('microsoft') &&
                         !markerISP.includes('azure') && !markerISP.includes('google') &&
@@ -354,18 +358,24 @@ document.addEventListener('DOMContentLoaded', function () {
                 default:
                     ispMatch = true;
             }
-
-            if (osMatch &&
-                clientMatch &&
-                ispMatch &&
-                (countryFilterValue === 'all' || markerCountry === countryFilterValue)) {
+    
+            var countryMatch = false;
+            if (countryFilterValue === 'all') {
+                countryMatch = true;
+            } else if (countryFilterValue === 'Diğer Ülkeler') {
+                countryMatch = !data.includes(markerCountry);
+            } else {
+                countryMatch = markerCountry === countryFilterValue;
+            }
+    
+            if (osMatch && clientMatch && ispMatch && countryMatch) {
                 markers.addLayer(marker);
             }
         });
-
+    
         map.addLayer(markers);
     }
-
+    
     function getDynamicRadius(zoom) {
         return Math.min(250000 * Math.pow(2, 2 - zoom), 50000);
     }
@@ -389,7 +399,7 @@ document.addEventListener('DOMContentLoaded', function () {
         window.location.href = 'graph.html';
       });
 
-    setInterval(fetchDynamicData, 1500000);
-    setInterval(fetchLatestNodes, 1500000);
-    setInterval(fetchStatistics, 1500000);
+    setInterval(fetchDynamicData, 30000);
+    setInterval(fetchLatestNodes, 30000);
+    setInterval(fetchStatistics, 30000);
 });
