@@ -89,7 +89,7 @@ def get_latest_nodes(tx, limit):
     query = """
     MATCH (n:Node)
     RETURN n.id AS NodeId, n.host AS Host, n.port AS Port, n.created_at AS CreatedAt,
-           n.country_name AS Country, n.client AS Client, n.os AS OS
+           n.country_name AS Country, n.client AS Client, n.os AS OS, n.isp AS ISP
     ORDER BY n.created_at DESC
     LIMIT $limit
     """
@@ -106,88 +106,12 @@ def get_latest_nodes(tx, limit):
                 "Country": record["Country"],
                 "Client": record["Client"],
                 "OS": record["OS"],
+                "ISP": record["ISP"],
                 "Enode": enode,
                 "MinutesAgo": minutes_ago
             }
             nodes.append(node_data)
     return nodes
-
-
-@app.route('/get-nodes', methods=['GET'])
-def get_nodes_endpoint():
-    with driver.session() as session:
-        nodes = session.execute_read(get_nodes)
-    return jsonify(nodes)
-
-
-@app.route('/get-os-types', methods=['GET'])
-def get_os_types_endpoint():
-    with driver.session() as session:
-        os_types = session.execute_read(get_os_types)
-    return jsonify(os_types)
-
-
-@app.route('/get-client-types', methods=['GET'])
-def get_client_types_endpoint():
-    with driver.session() as session:
-        client_types = session.execute_read(get_clients)
-    return jsonify(client_types)
-
-
-@app.route('/get-countries', methods=['GET'])
-def get_countries_endpoint():
-    with driver.session() as session:
-        countries = session.execute_read(get_countries)
-    return jsonify(countries)
-
-
-@app.route('/get-isps', methods=['GET'])
-def get_isps_endpoint():
-    with driver.session() as session:
-        isps = session.execute_read(get_isps)
-    return jsonify(isps)
-
-
-@app.route('/get-node-ids', methods=['GET'])
-def get_node_ids_endpoint():
-    with driver.session() as session:
-        node_ids = session.execute_read(get_node_ids)
-    return jsonify(node_ids)
-
-
-@app.route('/get-node-count', methods=['GET'])
-def get_node_count_endpoint():
-    with driver.session() as session:
-        node_count = session.execute_read(get_node_count)
-    return jsonify({"NumberOfNodes": node_count})
-
-
-@app.route('/get-node-details/<node_id>', methods=['GET'])
-def get_node_details_endpoint(node_id):
-    with driver.session() as session:
-        node_details = session.execute_read(get_node_details, node_id)
-    return jsonify(node_details)
-
-
-@app.route('/get-latest-nodes', methods=['GET'])
-def get_latest_nodes_endpoint():
-    limit = request.args.get('limit', default=50, type=int)
-    with driver.session() as session:
-        latest_nodes = session.execute_read(get_latest_nodes, limit)
-    return jsonify(latest_nodes)
-
-
-@app.route('/nodes/<country_name>', methods=['GET'])
-def get_relationships(country_name):
-    with driver.session() as session:
-        query = """
-        MATCH (root:Root {name: 'Countries'})-[:HAS_COUNTRY]->(c:Country {name: $country_name})-[:HAS_ISP]->(isp:ISP)
-        -[:HAS_OS]->(os:OS)-[:HAS_CLIENT]->(client:Client)-[:HAS_NODE]->(n:Node) 
-        RETURN root, c, isp, os, client, n
-        """
-        result = session.run(query, {"country_name": country_name})
-        data = [record.data() for record in result]
-        return jsonify(data)
 
 
 def calculate_percentage(count, total):
@@ -244,6 +168,13 @@ def process_and_aggregate_data(result, data_type, total_nodes):
                 'scaleway', 'upcloud', 'kamatera']
     }
 
+    other_label = {
+        "os": "Diğer İS'ler",
+        "client": "Diğer İstemciler",
+        "isp": "Diğer İSS'ler",
+        "country": "Diğer Ülkeler"
+    }
+
     if data_type == "country":
         for record in result:
             filtered_data.append({
@@ -254,9 +185,9 @@ def process_and_aggregate_data(result, data_type, total_nodes):
         return filtered_data
 
     counts = {category: 0 for category in categories[data_type]}
-    counts["others"] = 0
+    counts["other"] = 0
     percentages = {category: 0 for category in categories[data_type]}
-    percentages["others"] = 0
+    percentages["other"] = 0
 
     for record in result:
         item_type = record["type"].lower()
@@ -275,8 +206,8 @@ def process_and_aggregate_data(result, data_type, total_nodes):
                     percentages[category] += calculate_percentage(record["count"], total_nodes)
                     break
         else:
-            counts["others"] += record["count"]
-            percentages["others"] += calculate_percentage(record["count"], total_nodes)
+            counts["other"] += record["count"]
+            percentages["other"] += calculate_percentage(record["count"], total_nodes)
 
     for category in categories[data_type]:
         if counts[category] > 0:
@@ -286,11 +217,11 @@ def process_and_aggregate_data(result, data_type, total_nodes):
                 "percentage": percentages[category]
             })
 
-    if counts["others"] > 0:
+    if counts["other"] > 0:
         filtered_data.append({
-            "type": "Others",
-            "count": counts["others"],
-            "percentage": percentages["others"]
+            "type": other_label[data_type],
+            "count": counts["other"],
+            "percentage": percentages["other"]
         })
 
     return filtered_data
@@ -310,7 +241,7 @@ def client_match(clientFilterValue, markerClient):
             return 'reth' in markerClient
         case 'ethereumjs':
             return 'ethereumjs' in markerClient
-        case 'others':
+        case 'other clients':
             return all(keyword not in markerClient for keyword in
                        ['geth', 'nethermind', 'besu', 'erigon', 'reth', 'ethereumjs'])
         case _:
@@ -331,7 +262,7 @@ def os_match(osFilterValue, markerOS):
             return 'freebsd' in markerOS
         case 'darwin':
             return 'darwin' in markerOS
-        case 'others':
+        case 'other oss':
             return all(
                 keyword not in markerOS for keyword in ['linux', 'windows', 'macos', 'android', 'freebsd', 'darwin'])
         case _:
@@ -380,7 +311,7 @@ def isp_match(ispFilterValue, markerISP):
             return 'upcloud' in markerISP
         case 'kamatera':
             return 'kamatera' in markerISP
-        case 'others':
+        case 'other isps':
             return all(keyword not in markerISP for keyword in
                        ['contabo', 'amazon', 'aws', 'microsoft', 'azure', 'google', 'alibaba', 'oracle', 'ibm',
                         'tencent', 'ovh', 'digitalocean', 'linode', 'akamai', 'salesforce', 'huawei', 'cloud', 'dell',
@@ -389,7 +320,84 @@ def isp_match(ispFilterValue, markerISP):
             return False
 
 
-@app.route('/get-statistics/<data_type>', methods=['GET'])
+@app.route('/nodes', methods=['GET'])
+def get_nodes_endpoint():
+    with driver.session() as session:
+        nodes = session.execute_read(get_nodes)
+    return jsonify(nodes)
+
+
+@app.route('/nodes/os-types', methods=['GET'])
+def get_os_types_endpoint():
+    with driver.session() as session:
+        os_types = session.execute_read(get_os_types)
+    return jsonify(os_types)
+
+
+@app.route('/nodes/client-types', methods=['GET'])
+def get_client_types_endpoint():
+    with driver.session() as session:
+        client_types = session.execute_read(get_clients)
+    return jsonify(client_types)
+
+
+@app.route('/nodes/countries', methods=['GET'])
+def get_countries_endpoint():
+    with driver.session() as session:
+        countries = session.execute_read(get_countries)
+    return jsonify(countries)
+
+
+@app.route('/nodes/isps', methods=['GET'])
+def get_isps_endpoint():
+    with driver.session() as session:
+        isps = session.execute_read(get_isps)
+    return jsonify(isps)
+
+
+@app.route('/nodes/ids', methods=['GET'])
+def get_node_ids_endpoint():
+    with driver.session() as session:
+        node_ids = session.execute_read(get_node_ids)
+    return jsonify(node_ids)
+
+
+@app.route('/nodes/count', methods=['GET'])
+def get_node_count_endpoint():
+    with driver.session() as session:
+        node_count = session.execute_read(get_node_count)
+    return jsonify({"NumberOfNodes": node_count})
+
+
+@app.route('/nodes/details/<node_id>', methods=['GET'])
+def get_node_details_endpoint(node_id):
+    with driver.session() as session:
+        node_details = session.execute_read(get_node_details, node_id)
+    return jsonify(node_details)
+
+
+@app.route('/nodes/latest', methods=['GET'])
+def get_latest_nodes_endpoint():
+    limit = request.args.get('limit', default=50, type=int)
+    with driver.session() as session:
+        latest_nodes = session.execute_read(get_latest_nodes, limit)
+    return jsonify(latest_nodes)
+
+
+@app.route('/nodes/country/<country_name>', methods=['GET'])
+def get_relationships(country_name):
+    with driver.session() as session:
+        query = """
+        MATCH (root:Root {name: 'World'})-[:HAS_COUNTRY]->(c:Country {name: $country_name})-[:HAS_ISP]->(isp:ISP)
+        -[:HAS_OS]->(os:OS)-[:HAS_CLIENT]->(client:Client)-[:HAS_NODE]->(n:Node) 
+        RETURN root, c, isp, os, client, n
+        """
+        result = session.run(query, {"country_name": country_name})
+        data = [record.data() for record in result]
+        return jsonify(data)
+
+
+@app.route('/statistics/<data_type>', methods=['GET'])
 def get_statistics_endpoint(data_type):
     with driver.session() as session:
         statistics = session.execute_read(get_statistics, data_type)

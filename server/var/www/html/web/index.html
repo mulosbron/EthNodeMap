@@ -3,18 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EthNodeMap</title>
+    <title>Ana Sayfa | EthNodeMap</title>
     <meta name="description" content="Ethereum node'larını dünya haritası üzerinde görüntüleyin. Harita üzerinde farklı ülkelerdeki ve bölgelerdeki Ethereum nodelerini keşfedin.">
+    <meta name="keywords" content="Ethereum, node, harita, blockchain, kripto">
     <link rel="stylesheet" href="pkg/leaflet.css" />
     <link rel="stylesheet" href="pkg/MarkerCluster.css" />
     <link rel="stylesheet" href="pkg/MarkerCluster.Default.css" />
     <link rel="stylesheet" href="mapStyles.css" />
     <link rel="icon" type="image/svg+xml" href="https://a7j7s5k4wcx3bgviln5wabf757f6udeizfv4ahxztpljxxqr36eq.arweave.net/B9P5dVywr7CaqFt7YAS_78vqDIjJa8Ae-ZvWm94R34k">
+    <!-- Robots.txt -->
+    <meta name="robots" content="index, follow">
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="EthNodeMap">
+    <meta property="og:description" content="Ethereum node'larını dünya haritası üzerinde görüntüleyin.">
+    <meta property="og:image" content="https://a7j7s5k4wcx3bgviln5wabf757f6udeizfv4ahxztpljxxqr36eq.arweave.net/B9P5dVywr7CaqFt7YAS_78vqDIjJa8Ae-ZvWm94R34k">
+    <meta property="og:url" content="https://eth-node-map.xyz">
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="EthNodeMap">
+    <meta name="twitter:description" content="Ethereum node'larını dünya haritası üzerinde görüntüleyin.">
+    <meta name="twitter:image" content="https://a7j7s5k4wcx3bgviln5wabf757f6udeizfv4ahxztpljxxqr36eq.arweave.net/B9P5dVywr7CaqFt7YAS_78vqDIjJa8Ae-ZvWm94R34k">
 </head>
 <body>
     <header>
         <div id="logo-container">
-            <img src="https://a7j7s5k4wcx3bgviln5wabf757f6udeizfv4ahxztpljxxqr36eq.arweave.net/B9P5dVywr7CaqFt7YAS_78vqDIjJa8Ae-ZvWm94R34k" alt="Logo" class="logo" loading="lazy">
+            <img src="https://a7j7s5k4wcx3bgviln5wabf757f6udeizfv4ahxztpljxxqr36eq.arweave.net/B9P5dVywr7CaqFt7YAS_78vqDIjJa8Ae-ZvWm94R34k" alt="Logo" class="logo" loading="lazy" width="50" height="50">
             <div class="header-title">EthNodeMap</div>
         </div>
         <p class="nav-link">Ağ Programlama dersinin projesidir.</p>
@@ -41,7 +54,7 @@
         <div id="dynamic-data">
             <div class="dynamic-table" id="node-count">
                 <ul class="list-group">
-                    <p><br>Toplam Node Sayısı: 0<br><br></p>
+                    <p><br>Toplam Düğüm Sayısı: 0<br><br></p>
                     <!-- veriler buraya gelecek -->
                 </ul>
             </div>
@@ -56,21 +69,25 @@
         </div>
         <div id="statistics">
             <div class="statistics-table" id="os-statistics">
+                <h3 style="text-align:center;">İşletim Sistemi İstatistikleri</h3>
                 <ul class="list-group">
                     <!-- veriler buraya gelecek -->
                 </ul>
             </div>
             <div class="statistics-table" id="client-statistics">
+                <h3 style="text-align:center;">İstemci Türü İstatistikleri</h3>
                 <ul class="list-group">
                     <!-- veriler buraya gelecek -->
                 </ul>
             </div>
             <div class="statistics-table" id="isp-statistics">
+                <h3 style="text-align:center;">İSS İstatistikleri</h3>
                 <ul class="list-group">
                     <!-- veriler buraya gelecek -->
                 </ul>
             </div>
             <div class="statistics-table" id="country-statistics">
+                <h3 style="text-align:center;">Ülke İstatistikleri</h3>
                 <ul class="list-group">
                     <!-- veriler buraya gelecek -->
                 </ul>
@@ -78,19 +95,17 @@
         </div>
     </div>
     <div id="node-details">
-        <h3>Node Detayları</h3>
+        <h3>Düğüm Detayları</h3>
         <!-- veriler buraya gelecek -->
     </div>
     <footer>
         <span>© Mulosbron</span>
         <a href="https://github.com/mulosbron">
-            <img id="github-logo" src="https://uoepgj37trvajg4a3aqv4daprlnr3azyq47o6iu76qlttssagj3a.arweave.net/o4jzJ3-cagSbgNghXgwPitsdgziHPu8in_QXOcpAMnY" alt="GitHub" class="github-logo" loading="lazy">
+            <img id="github-logo" src="https://uoepgj37trvajg4a3aqv4daprlnr3azyq47o6iu76qlttssagj3a.arweave.net/o4jzJ3-cagSbgNghXgwPitsdgziHPu8in_QXOcpAMnY" alt="GitHub" class="github-logo" loading="lazy" width="24" height="24">
         </a>
     </footer>
     <script src="pkg/leaflet.js"></script>
     <script src="pkg/leaflet.markercluster.js"></script>
-    <script src="pkg/d3.min.js"></script>
-    <script src="pkg/vis-network.min.js"></script>
     <script src="mapApp.js"></script>
 </body>
 </html>

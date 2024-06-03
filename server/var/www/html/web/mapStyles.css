@@ -34,6 +34,7 @@ header {
     align-items: center;
     background-color: #434976;
     padding: 5px 10px;
+    border: 1px solid #8B93B3;
     border-radius: 20px;
 }
 
@@ -55,6 +56,7 @@ header {
     font-size: 18px;
     background-color: #434976;
     padding: 5px 10px;
+    border: 1px solid #8B93B3;
     border-radius: 20px;
     margin-left: auto;
     margin-right: 40px;
@@ -157,9 +159,11 @@ footer span, footer a {
 }
 
 #dynamic-data p {
+    margin-top: 0px;
     background-color: #434976;
     padding: 5px;
-    border-radius: 10px;
+    border: 1px solid #8B93B3;
+    border-radius: 5px;
 }
 
 .dynamic-table {
@@ -199,6 +203,15 @@ footer span, footer a {
     overflow-y: auto;
     margin-bottom: 10px;
     border-radius: 5px;
+}
+
+.statistics-table h3 {
+    text-align: center;
+    background-color: #434976;
+    padding: 5px;
+    border: 1px solid #8B93B3;
+    border-radius: 5px;
+    margin: 0px 0px 10px 0px;
 }
 
 .list-group {
@@ -344,4 +357,3 @@ footer span, footer a {
     background-color: #8B93B3;
     color: #434976;
 }
-
