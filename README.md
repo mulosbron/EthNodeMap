@@ -120,7 +120,7 @@ python3 import-relationships.py
 
 `graph.html` dosyası, düğümleri ve ilişkilerini D3.js kullanarak grafiksel olarak görüntülemek için kullanılır.
 
-<iframe width="700" height="325" src="https://k3mbsd7bmqulelutmghutj7bwnz4a66qfwi6qiscdrmldz7wlgyq.arweave.net/VtgZD-FkKLIuk2GPSafhs3PAe9AtkegiQhxYsef2WbE" frameborder="0" allowfullscreen></iframe>
+![graph](https://github.com/mulosbron/EthNodeMap/assets/91866065/627157dd-71fd-43ee-9282-1e7040110b79)
 
 
 ## DATABASE
