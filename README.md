@@ -1,14 +1,18 @@
 # EthNodeMap
 
-EthNodeMap, Ethereum düğümlerinin bilgilerini Neo4j veritabanında yönetmek ve bu bilgileri çeşitli uç noktalardan sunmak için geliştirilmiş bir projedir. Bu proje, bir Flask API ve bu API'den elde edilen verileri görselleştirmek için bir frontend uygulaması içerir. Kullanıcılar, düğümlerin coğrafi konum bilgilerini, istemci türlerini, işletim sistemlerini ve daha fazlasını sorgulayabilir ve görselleştirebilir.
+EthNodeMap, Ethereum ağındaki düğüm verilerini harita üzerinde ve graf olarak görselleştirmek için geliştirilmiş bir projedir.
 
+## Link
+
+- [EthNodeMap](https://eth-node-map.xyz/)
+- [EthNodeMap API](https://api.eth-node-map.xyz/)
 
 ## ÖZELLİKLER
 
-- **Düğüm Filtreleme ve Görüntüleme:** Kullanıcılar, harita üzerinde görüntüledikleri Ethereum düğümlerini ülke, işletim sistemi (OS), internet servis sağlayıcı (ISP) ve istemci türüne göre filtreleyebilirler. Ayrıca harita üzerinde üzerine tıkladıkları düğümlerin verilerini haritanın altında görüntüleyebilirler.
-- **İstatistik Tabloları:** Haritanın sağında bulunan istatistik tablosunda çeşitli özelliklere göre düğümlerin dağılımını görebilirsiniz.
-- **Dinamik Veriler:** Haritanın solunda bulunan alanda yeni eklenen düğümleri ve bazı bilgileri (bkz. toplam düğüm sayısı) görüntüleyebiliriz.
-- **Graf Görünümü:** Graf görünümü butonuna basarak, seçilen ülke veya ülkelerin ağaç graf yapısını D3.js sayesinde görselleştirebilirsiniz.
+- **Düğüm Filtreleme ve Görüntüleme:** Kullanıcılar, harita üzerinde görüntüledikleri Ethereum düğümlerini ülke, işletim sistemi, internet servis sağlayıcı ve istemci türüne göre filtreleyebilirler. Ayrıca harita üzerinde üzerine tıkladıkları düğümlerin verilerini haritanın altında görüntüleyebilirler.
+- **İstatistik Tabloları:** Haritanın sağında bulunan istatistik tablosunda çeşitli özelliklere göre düğümlerin dağılımını görebilirler.
+- **Dinamik Veriler:** Haritanın solunda bulunan alanda yeni eklenen düğümleri ve bazı bilgileri (örn. toplam düğüm sayısı) görüntüleyebilirler.
+- **Graf Görünümü:** Graf görünümü için ilgili butona basarak, seçilen ülke veya ülkelerin ağaç graf yapısını D3.js sayesinde görselleştirebilirler.
 
 
 ## KURULUM
@@ -24,9 +28,9 @@ EthNodeMap, Ethereum düğümlerinin bilgilerini Neo4j veritabanında yönetmek 
 - Requests: HTTP istekleri yapmak için.
 - D3.js: Grafı görselleştirmek için.
 - Leaflet.js: Harita üzerinde düğümlerin konumunu göstermek için.
-- (Server) Nginx: Sunucumu web sunucusu olarak kullanmak için.
+- Nginx (Server): Sunucumu web sunucusu olarak kullanmak için.
 
-### Yükleme
+### Yükleme (Sunucu)
 
 1. Python bağımlılıklarını yükleyin:
 
@@ -37,12 +41,12 @@ pip install flask flask-cors neo4j beautifulsoup4 requests
 2. Neo4j veritabanını çalıştırın ve aşağıdaki gibi yapılandırın:
 
 ```
-neo4j start
+sudo systemctl start neo4j
 ```
 
 ### Ortam Değişkenleri
 
-- `API_KEY`: IP coğrafi konum bilgileri için gerekli olan ipgeolocation API anahtarı.
+- `API_KEY`: ipgeolocation'dan gerekli verileri almak için API anahtarı.
 - `NEO4J_URI`: Neo4j veritabanı URI'si (örneğin, `bolt://localhost:7687`).
 - `NEO4J_USERNAME`: Neo4j kullanıcı adı.
 - `NEO4J_PASSWORD`: Neo4j parolası.
@@ -52,17 +56,17 @@ neo4j start
 
 ### API Uç Noktaları
 
-- `/get-nodes`: Tüm düğümleri listele (Özellikleri ile birlikte).
-- `/get-os-types`: Tüm benzersiz işletim sistemi türlerini listele.
-- `/get-client-types`: Tüm benzersiz istemci türlerini listele.
-- `/get-countries`: Tüm benzersiz ülkeleri listele.
-- `/get-isps`: Tüm benzersiz internet servis sağlayıcılarını listele.
-- `/get-node-ids`: Tüm benzersiz düğüm id'lerini listele.
-- `/get-node-count`: Toplam düğüm sayısını al.
-- `/get-node-details/<node_id>`: Belirli bir düğümün detaylarını al.
-- `/get-latest-nodes`: En son eklenen düğümleri listele.
-- `/nodes/<country_name>`: Belirli bir ülkedeki düğüm ilişkilerini al.
-- `/get-statistics/<data_type>`: Belirtilen veri türü için istatistikleri al (os, client, isp, country).
+- `/nodes`: Tüm düğümleri listele (Özellikleri ile birlikte).
+- `/nodes/details/<node_id>`: Belirli bir düğümün detaylarını al.
+- `/nodes/count`: Toplam düğüm sayısını al.
+- `/nodes/ids`: Tüm benzersiz düğüm id'lerini listele.
+- `/nodes/os-types`: Tüm benzersiz işletim sistemi türlerini listele.
+- `/nodes/client-types`: Tüm benzersiz istemci türlerini listele.
+- `/nodes/countries`: Tüm benzersiz ülkeleri listele.
+- `/nodes/isps`: Tüm benzersiz internet servis sağlayıcılarını listele.
+- `/nodes/latest`: En son eklenen düğümleri listele.
+- `/nodes/country/<country_name>`: Belirli bir ülkedeki düğüm ilişkilerini al.
+- `/statistics/<data_type>`: Belirtilen veri türü için istatistikleri al (os, client, isp, country).
 
 ### Çalıştırma
 
@@ -79,7 +83,7 @@ Server API, `http://0.0.0.0:5001` adresinde çalışacaktır.
 
 #### Düğüm Verilerini Toplama
 
-`fetch-nodes.py` dosyasını çalıştırarak Ethereum düğümlerini toplayabilir ve Neo4j veritabanına ekleyebilirsiniz:
+`fetch-nodes.py` dosyasını çalıştırarak Ethereum düğümlerini toplanır ve Neo4j veritabanına eklenir:
 
 ```
 python3 fetch-nodes.py
@@ -87,7 +91,7 @@ python3 fetch-nodes.py
 
 #### Düğüm Uptime Bilgisini Elde Etme
 
-`fetch-status.py` dosyasını çalıştırarak düğüm durumlarını kontrol edebilir ve güncelleyebilirsiniz:
+`fetch-status.py` dosyasını çalıştırarak düğüm durumlarını kontrol edilir ve güncellenir:
 
 ```
 python3 fetch-status.py
@@ -95,7 +99,7 @@ python3 fetch-status.py
 
 #### İlişkileri İçe Aktarma
 
-Düğüm ilişkilerini içe aktarmak için `import-relationships.py` dosyasını çalıştırın (fetch-status.py ve fetch-nodes.py dosyalarının içinde otomatik olarak çalışıyor):
+Düğüm ilişkilerini içe aktarmak için `import-relationships.py` dosyasını çalıştırın (`fetch-status.py` ve `fetch-nodes.py` dosyalarının içinde otomatik olarak çalışıyor):
 
 ```
 python3 import-relationships.py
@@ -108,21 +112,22 @@ python3 import-relationships.py
 
 `index.html` dosyası, düğümleri Leaflet.js kullanarak dünya haritası üzerinde görüntülemek için kullanılır.
 
-![index1](https://fdateevmw3puhezrzfmigsrc5ggu57r5odqlbhp6hbts76s3ii2a.arweave.net/KMEyEqy230OTMclYg0oi6Y1O_j1w4LCd_jhnL_pbQjQ)
+![index1](https://3d55oj3b54lkqnmudprnnq3i7yue3vavavmx3gdwbi3dttpbhm2q.arweave.net/2PvXJ2HvFqg1lBvi1sNo_ihN1BUFWX2Ydgo2Oc3hOzU)
 
-![index2](https://5tlga24bfiqfuclhvaawurv73wnfdp6fh6xjkkg36w2xwam5xvaq.arweave.net/7NZga4EqIFoJZ6gBaka_3ZpRv8U_rpUo2_W1ewGdvUE)
+![index2](https://cmcyws4nvvczl6lr7g7p655fsf26pmsybffcnmlz2ppepppocexa.arweave.net/EwWLS42tRZX5cfm-_3elkXXnslgJSiaxedPeR73uES4)
 
 ### Ağaç Graf Görünümü
 
 `graph.html` dosyası, düğümleri ve ilişkilerini D3.js kullanarak grafiksel olarak görüntülemek için kullanılır.
 
-![graph](https://pz5mwdpog4cvbr55zslx5qumt5lu5xtjpblwcsrtpot2iu35unda.arweave.net/fnrLDe43BVDHvcyXfsKMn1dO3ml4V2FKM3unpFN9o0Y)
+<iframe width="700" height="325" src="https://k3mbsd7bmqulelutmghutj7bwnz4a66qfwi6qiscdrmldz7wlgyq.arweave.net/VtgZD-FkKLIuk2GPSafhs3PAe9AtkegiQhxYsef2WbE" frameborder="0" allowfullscreen></iframe>
+
 
 ## DATABASE
 
-![neo4j](https://svmn7f4pypvd5ablmcsngbx6bpjkbwsnmowirqa6juqcgpoielna.arweave.net/lVjfl4_D6j6AK2Ck0wb-C9Kg2k1jrIjAHk0gIz3IIto)
+![neo4j](https://234b3zkmc3johj4aywr2yiach7c6ybj4iku3kkxrmga4loy34xta.arweave.net/1vgd5UwW0uOngMWjrCACP8XsBTxCqbUq8WGBxbsb5eY)
 
-![neo4j2](https://paiqpil3yor2scueyboeeavx5ndnqvt3e7nm47s56lglxb7nqloq.arweave.net/eBEHoXvDo6kKhMBcQgK360bYVnsn2s5-XfLMu4ftgt0)
+![neo4j2](https://buluhqxejui35mvcts7d55ipbzlcpt2523yi5zo6flphqlidcbkq.arweave.net/DRdDwuRNEb6yopy-PvUPDlYnz13W8I7l3ireeC0DEFU)
 
 BeautifulSoup4 kullanılarak Etherscan sitesinden çekilen örnek bir düğüm yapısı:
 
@@ -134,7 +139,7 @@ os: linux-arm64
 port: 30303
 ```
 
-`fetch-nodes.py` betiği kullanılarak IPGeolocation API uç noktasına yollanan 'host' bilgisinin geri döndürdüğü bilgiler ile birlikte veri tabanına eklenen örnek bir düğüm yapısı:  
+`fetch-nodes.py` betiği kullanılarak IPGeolocation API enpointine yollanan 'host' bilgisinin geri döndürdüğü bilgiler ile birlikte veri tabanına eklenen örnek bir düğüm yapısı:  
 
 ```
 <elementId>: 4:574bd6e8-3b31-4b0f-ae15-03f2f836b8ff:658
@@ -152,10 +157,10 @@ port: 30303
 status: 1
 ```
 
-### Countries kök düğümünü oluşturma:
+### World kök düğümünü oluşturma:
 
 ```
-CREATE (root:Root {name: 'Countries'})
+CREATE (root:Root {name: 'Dünya'})
 ```
 
 ### Düğümlerden ülke bilgilerini çekip kök düğüme bağlı ülke düğümlerini yaratma::
@@ -165,7 +170,7 @@ MATCH (n)
 WITH DISTINCT n.country_name AS country_name 
 CREATE (c:Country {name: country_name}) 
 WITH c
-MATCH (root:Root {name: 'Countries'}) 
+MATCH (root:Root {name: 'Dünya'}) 
 MERGE (root)-[:HAS_COUNTRY]->(c)
 ```
 
@@ -173,7 +178,7 @@ MERGE (root)-[:HAS_COUNTRY]->(c)
 
 ```
 MATCH (c:Country)
-UNWIND ['Contabo', 'AWS', 'Azure', 'Google', 'Alibaba', 'Oracle', 'IBM', 'Tencent', 'OVHCloud', 'DO', 'Linode', 'Salesforce', 'Huawei', 'Dell', 'Vultr', 'Heroku', 'Hetzner', 'Scaleway', 'Upcloud', 'Kamatera', 'Others'] AS isp_name
+UNWIND ['Contabo', 'AWS', 'Azure', 'Google', 'Alibaba', 'Oracle', 'IBM', 'Tencent', 'OVHCloud', 'DigitalOcean', 'Linode', 'Salesforce', 'Huawei', 'Dell', 'Vultr', 'Heroku', 'Hetzner', 'Scaleway', 'Upcloud', 'Kamatera', "Diğer İSS'ler"] AS isp_name
 CREATE (isp:ISP {name: isp_name})
 MERGE (c)-[:HAS_ISP]->(isp)
 ```
@@ -182,7 +187,7 @@ MERGE (c)-[:HAS_ISP]->(isp)
 
 ```
 MATCH (isp:ISP)
-UNWIND ['Linux', 'Windows', 'MacOS', 'Android', 'FreeBSD', 'Darwin', 'Others'] AS os_name
+UNWIND ['Linux', 'Windows', 'MacOS', 'Android', 'FreeBSD', 'Darwin', "Diğer İS'ler"] AS os_name
 CREATE (os:OS {name: os_name})
 MERGE (isp)-[:HAS_OS]->(os)
 ```
@@ -191,7 +196,7 @@ MERGE (isp)-[:HAS_OS]->(os)
 
 ```
 MATCH (os:OS)
-UNWIND ['Geth', 'Nethermind', 'Besu', 'Erigon', 'Reth', 'EthereumJS', 'Others'] AS client_name
+UNWIND ['Geth', 'Nethermind', 'Besu', 'Erigon', 'Reth', 'EthereumJS', 'Diğer İstemciler'] AS client_name
 CREATE (client:Client {name: client_name})
 MERGE (os)-[:HAS_CLIENT]->(client)
 ```
@@ -201,49 +206,50 @@ MERGE (os)-[:HAS_CLIENT]->(client)
 ```
 MATCH (n:Node)
 WITH n,
-     COALESCE(n.country_name, 'Others') AS country_name,
-     CASE
-       WHEN toLower(n.isp) CONTAINS 'contabo' THEN 'Contabo'
-       WHEN toLower(n.isp) CONTAINS 'aws' THEN 'AWS'
-       WHEN toLower(n.isp) CONTAINS 'azure' THEN 'Azure'
-       WHEN toLower(n.isp) CONTAINS 'google' THEN 'Google'
-       WHEN toLower(n.isp) CONTAINS 'alibaba' THEN 'Alibaba'
-       WHEN toLower(n.isp) CONTAINS 'oracle' THEN 'Oracle'
-       WHEN toLower(n.isp) CONTAINS 'ibm' THEN 'IBM'
-       WHEN toLower(n.isp) CONTAINS 'tencent' THEN 'Tencent'
-       WHEN toLower(n.isp) CONTAINS 'ovhcloud' THEN 'OVHCloud'
-       WHEN toLower(n.isp) CONTAINS 'do' THEN 'DO'
-       WHEN toLower(n.isp) CONTAINS 'linode' THEN 'Linode'
-       WHEN toLower(n.isp) CONTAINS 'salesforce' THEN 'Salesforce'
-       WHEN toLower(n.isp) CONTAINS 'huawei' THEN 'Huawei'
-       WHEN toLower(n.isp) CONTAINS 'dell' THEN 'Dell'
-       WHEN toLower(n.isp) CONTAINS 'vultr' THEN 'Vultr'
-       WHEN toLower(n.isp) CONTAINS 'heroku' THEN 'Heroku'
-       WHEN toLower(n.isp) CONTAINS 'hetzner' THEN 'Hetzner'
-       WHEN toLower(n.isp) CONTAINS 'scaleway' THEN 'Scaleway'
-       WHEN toLower(n.isp) CONTAINS 'upcloud' THEN 'Upcloud'
-       WHEN toLower(n.isp) CONTAINS 'kamatera' THEN 'Kamatera'
-       ELSE 'Others'
-     END AS isp_name,
-     CASE
-       WHEN toLower(n.os) CONTAINS 'linux' THEN 'Linux'
-       WHEN toLower(n.os) CONTAINS 'windows' THEN 'Windows'
-       WHEN toLower(n.os) CONTAINS 'macos' THEN 'MacOS'
-       WHEN toLower(n.os) CONTAINS 'android' THEN 'Android'
-       WHEN toLower(n.os) CONTAINS 'freebsd' THEN 'FreeBSD'
-       WHEN toLower(n.os) CONTAINS 'darwin' THEN 'Darwin'
-       ELSE 'Others'
-     END AS os_name,
-     CASE
-       WHEN toLower(n.client) CONTAINS 'geth' THEN 'Geth'
-       WHEN toLower(n.client) CONTAINS 'nethermind' THEN 'Nethermind'
-       WHEN toLower(n.client) CONTAINS 'besu' THEN 'Besu'
-       WHEN toLower(n.client) CONTAINS 'erigon' THEN 'Erigon'
-       WHEN toLower(n.client) CONTAINS 'reth' THEN 'Reth'
-       WHEN toLower(n.client) CONTAINS 'ethereumjs' THEN 'EthereumJS'
-       ELSE 'Others'
-     END AS client_name
-MATCH (root:Root {name: 'Countries'})
+    COALESCE(n.country_name, 'Diğer Ülkeler') AS country_name,
+    CASE
+        WHEN toLower(n.isp) CONTAINS 'contabo' THEN 'Contabo'
+        WHEN toLower(n.isp) CONTAINS 'aws' OR toLower(n.isp) CONTAINS 'amazon' THEN 'AWS'
+        WHEN toLower(n.isp) CONTAINS 'azure' OR toLower(n.isp) CONTAINS 'microsoft' THEN 'Azure'
+        WHEN toLower(n.isp) CONTAINS 'google' THEN 'Google'
+        WHEN toLower(n.isp) CONTAINS 'alibaba' THEN 'Alibaba'
+        WHEN toLower(n.isp) CONTAINS 'oracle' THEN 'Oracle'
+        WHEN toLower(n.isp) CONTAINS 'ibm' THEN 'IBM'
+        WHEN toLower(n.isp) CONTAINS 'tencent' THEN 'Tencent'
+        WHEN toLower(n.isp) CONTAINS 'ovh' THEN 'OVHCloud'
+        WHEN toLower(n.isp) CONTAINS 'digitalocean' THEN 'DigitalOcean'
+        WHEN toLower(n.isp) CONTAINS 'linode' OR toLower(n.isp) CONTAINS 'akamai' THEN 'Linode'
+        WHEN toLower(n.isp) CONTAINS 'akamai' THEN 'Linode'
+        WHEN toLower(n.isp) CONTAINS 'salesforce' THEN 'Salesforce'
+        WHEN toLower(n.isp) CONTAINS 'huawei' AND toLower(n.isp) CONTAINS 'cloud' THEN 'Huawei'
+        WHEN toLower(n.isp) CONTAINS 'dell' AND toLower(n.isp) CONTAINS 'cloud' THEN 'Dell'
+        WHEN toLower(n.isp) CONTAINS 'vultr' THEN 'Vultr'
+        WHEN toLower(n.isp) CONTAINS 'heroku' THEN 'Heroku'
+        WHEN toLower(n.isp) CONTAINS 'hetzner' THEN 'Hetzner'
+        WHEN toLower(n.isp) CONTAINS 'scaleway' THEN 'Scaleway'
+        WHEN toLower(n.isp) CONTAINS 'upcloud' THEN 'Upcloud'
+        WHEN toLower(n.isp) CONTAINS 'kamatera' THEN 'Kamatera'
+        ELSE "Diğer İSS'ler"
+    END AS isp_name,
+    CASE
+        WHEN toLower(n.os) CONTAINS 'linux' THEN 'Linux'
+        WHEN toLower(n.os) CONTAINS 'windows' THEN 'Windows'
+        WHEN toLower(n.os) CONTAINS 'macos' THEN 'MacOS'
+        WHEN toLower(n.os) CONTAINS 'android' THEN 'Android'
+        WHEN toLower(n.os) CONTAINS 'freebsd' THEN 'FreeBSD'
+        WHEN toLower(n.os) CONTAINS 'darwin' THEN 'Darwin'
+        ELSE "Diğer İS'ler"
+    END AS os_name,
+    CASE
+        WHEN toLower(n.client) CONTAINS 'geth' THEN 'Geth'
+        WHEN toLower(n.client) CONTAINS 'nethermind' THEN 'Nethermind'
+        WHEN toLower(n.client) CONTAINS 'besu' THEN 'Besu'
+        WHEN toLower(n.client) CONTAINS 'erigon' THEN 'Erigon'
+        WHEN toLower(n.client) CONTAINS 'reth' THEN 'Reth'
+        WHEN toLower(n.client) CONTAINS 'ethereumjs' THEN 'EthereumJS'
+        ELSE 'Diğer İstemciler'
+    END AS client_name
+MATCH (root:Root {name: 'Dünya'})
 MERGE (country:Country {name: country_name})<-[:HAS_COUNTRY]-(root)
 MERGE (country)-[:HAS_ISP]->(isp:ISP {name: isp_name})
 MERGE (isp)-[:HAS_OS]->(os:OS {name: os_name})
@@ -254,7 +260,7 @@ MERGE (client)-[:HAS_NODE]->(n)
 ### Belirli Bir Ülkeye Bağlı Düğümleri Görselleştirme:
 
 ```
-MATCH (root:Root {name: 'Countries'})-[:HAS_COUNTRY]->(c:Country)-[:HAS_ISP]->(isp:ISP)-[:HAS_OS]->(os:OS)-[:HAS_CLIENT]->(client:Client)-[:HAS_NODE]->(n:Node {country_name : "Croatia"})
+MATCH (root:Root)-[:HAS_COUNTRY]->(c:Country)-[:HAS_ISP]->(isp:ISP)-[:HAS_OS]->(os:OS)-[:HAS_CLIENT]->(client:Client)-[:HAS_NODE]->(n:Node {country_name : "Croatia"})
 RETURN root, c, isp, os, client, n
 ```
 
@@ -265,7 +271,7 @@ MATCH ()-[r]->()
 DELETE r
 ```
 
-### Kök, Ülke, ISP, OS ve Client Düğümlerini Silme:
+### Kök, Ülke, İSS, İS ve İstemci Düğümlerini Silme:
 
 ```
 MATCH (n:Root) DELETE n
