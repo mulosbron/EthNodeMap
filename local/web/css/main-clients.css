@@ -1,0 +1,442 @@
+main {
+    display: grid;
+    grid-template-columns: 100%;
+    position: fixed;
+    top: 8rem;
+    bottom: 2rem;
+    left: 0;
+    right: 0;
+    padding: 0.5rem;
+    color: var(--text-color);   
+    transition: background-color 0.3s ease;
+    overflow: auto;
+    margin-right: 2rem;
+    margin-left: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+main section {
+    background-color: var(--secondary-bg-color);
+    border-radius: 1rem;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+    width: 100%;
+    margin: auto;
+    align-items: center;
+    padding: 1rem;
+}
+
+main section h1 {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+    text-align: center;
+    font-size: 2rem;
+}
+
+main section h2 {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+    font-size: 1.6rem;
+}
+
+main section h3 {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+    font-size: 1.4rem;
+}
+
+main section p, main section ul li {
+    margin-bottom: 1rem;
+    text-align: justify;
+    font-size: 1rem;
+}
+
+/* PHONE 320px */
+@media only screen and (max-width: 320px) {
+
+    main {
+        top: 2rem;
+        bottom: 0.5rem;
+        padding: 0.125rem;
+        margin-right: 0.5rem;
+        margin-left: 0.5rem;
+        margin-top: 0.25rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    main section {
+        border-radius: 0.25rem;
+        padding: 0.25rem;
+    }
+    
+    main section h1 {
+        margin-top: 0.25rem;
+        margin-bottom: 0.125rem;
+        font-size: 0.5rem;
+    }
+    
+    main section h2 {
+        margin-top: 0.25rem;
+        margin-bottom: 0.125rem;
+        font-size: 0.4rem;
+    }
+    
+    main section h3 {
+        margin-top: 0.25rem;
+        margin-bottom: 0.125rem;
+        font-size: 0.35rem;
+    }
+    
+    main section p, main section ul li {
+        margin-bottom: 0.25rem;
+        font-size: 0.25rem;
+    }
+
+}
+
+/* PHONE 375px */
+@media only screen and (max-width: 375px) {
+
+    main {
+        top: 2.9296875rem;
+        bottom: 0.5859375rem;
+        padding: 0.146484375rem;
+        margin-right: 0.5859375rem;
+        margin-left: 0.5859375rem;
+        margin-top: 0.29296875rem;
+        margin-bottom: 0.29296875rem;
+    }
+    
+    main section {
+        border-radius: 0.29296875rem;
+        padding: 0.29296875rem;
+    }
+    
+    main section h1 {
+        margin-top: 0.29296875rem;
+        margin-bottom: 0.146484375rem;
+        font-size: 0.5859375rem;
+    }
+    
+    main section h2 {
+        margin-top: 0.29296875rem;
+        margin-bottom: 0.146484375rem;
+        font-size: 0.46875rem;
+    }
+    
+    main section h3 {
+        margin-top: 0.29296875rem;
+        margin-bottom: 0.146484375rem;
+        font-size: 0.41015625rem;
+    }
+    
+    main section p, main section ul li {
+        margin-bottom: 0.29296875rem;
+        font-size: 0.29296875rem;
+    }
+
+}
+
+/* PHONE 428px */
+@media only screen and (max-width: 428px) {
+
+    main {
+        top: 2.6745rem;
+        bottom: 0.66875rem;
+        padding: 0.1671875rem;
+        margin-right: 0.66875rem;
+        margin-left: 0.66875rem;
+        margin-top: 0.334375rem;
+        margin-bottom: 0.334375rem;
+    }
+    
+    main section {
+        border-radius: 0.334375rem;
+        padding: 0.334375rem;
+    }
+    
+    main section h1 {
+        margin-top: 0.334375rem;
+        margin-bottom: 0.1671875rem;
+        font-size: 0.66875rem;
+    }
+    
+    main section h2 {
+        margin-top: 0.334375rem;
+        margin-bottom: 0.1671875rem;
+        font-size: 0.535375rem;
+    }
+    
+    main section h3 {
+        margin-top: 0.334375rem;
+        margin-bottom: 0.1671875rem;
+        font-size: 0.469375rem;
+    }
+    
+    main section p, main section ul li {
+        margin-bottom: 0.334375rem;
+        font-size: 0.334375rem;
+    }
+
+}
+
+/* TABLET & PHONE 584 */
+@media only screen and (max-width: 584px) {
+
+    main {
+        top: 3.6505rem;
+        bottom: 0.91125rem;
+        padding: 0.228125rem;
+        margin-right: 0.91125rem;
+        margin-left: 0.91125rem;
+        margin-top: 0.45625rem;
+        margin-bottom: 0.45625rem;
+    }
+    
+    main section {
+        border-radius: 0.207625rem;
+        padding: 0.45625rem;
+    }
+    
+    main section h1 {
+        margin-top: 0.45625rem;
+        margin-bottom: 0.228125rem;
+        font-size: 0.92875rem;
+    }
+    
+    main section h2 {
+        margin-top: 0.45625rem;
+        margin-bottom: 0.228125rem;
+        font-size: 0.72875rem;
+    }
+    
+    main section h3 {
+        margin-top: 0.45625rem;
+        margin-bottom: 0.228125rem;
+        font-size: 0.634rem;
+    }
+    
+    main section p, main section ul li {
+        margin-bottom: 0.45625rem;
+        font-size: 0.45625rem;
+    }
+    
+}
+
+/* TABLET & PHONE 1024 */
+@media only screen and (max-width: 1024px) {
+    
+    main {
+        top: 6.4rem;
+        bottom: 1.6rem;
+        padding: 0.4rem;
+        margin-right: 1.6rem;
+        margin-left: 1.6rem;
+        margin-top: 0.8rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    main section {
+        border-radius: 0.8rem;
+        padding: 0.8rem;
+    }
+    
+    main section h1 {
+        margin-top: 0.8rem;
+        margin-bottom: 0.4rem;
+        font-size: 1.6rem;
+    }
+    
+    main section h2 {
+        margin-top: 0.8rem;
+        margin-bottom: 0.4rem;
+        font-size: 1.28rem;
+    }
+    
+    main section h3 {
+        margin-top: 0.8rem;
+        margin-bottom: 0.4rem;
+        font-size: 1.12rem;
+    }
+    
+    main section p, main section ul li {
+        margin-bottom: 0.8rem;
+        font-size: 0.8rem;
+    }
+
+}
+
+/* DESKTOP LARGE */
+@media only screen and (min-width: 1920px) {
+    
+    main {
+        top: 12rem;
+        bottom: 3rem;
+        padding: 0.75rem;
+        margin-right: 3rem;
+        margin-left: 3rem;
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    main section {
+        border-radius: 1.5rem;
+        padding: 1.5rem;
+    }
+    
+    main section h1 {
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+        font-size: 3rem;
+    }
+    
+    main section h2 {
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+        font-size: 2.4rem;
+    }
+
+    main section h3 {
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+        font-size: 2.1rem;
+    }
+
+    main section p, main section ul li {
+        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+    }    
+
+}
+
+/* DESKTOP ULTRAWIDE */
+@media only screen and (min-width: 2560px) {
+
+    main {
+        top: 16rem;
+        bottom: 4rem;
+        padding: 1rem;
+        margin-right: 4rem;
+        margin-left: 4rem;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }    
+    
+    main section {
+        border-radius: 2rem;
+        padding: 2rem;
+    }
+    
+    main section h1 {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        font-size: 4rem;
+    }
+    
+    main section h2 {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        font-size: 2.8rem;
+    }
+
+    main section h3 {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        font-size: 2.8rem;
+    }
+    
+    main section p, main section ul li {
+        margin-bottom: 2rem;
+        font-size: 2rem;
+    }    
+
+}
+
+/* DESKTOP ULTRAWIDE (2K) */
+@media only screen and (min-width: 3440px) {
+
+    main {
+        top: 21.5rem;
+        bottom: 5.375rem;
+        padding: 1.34375rem;
+        margin-right: 5.375rem;
+        margin-left: 5.375rem;
+        margin-top: 2.6875rem;
+        margin-bottom: 2.6875rem;
+    }    
+    
+    main section {
+        border-radius: 2.671875rem;
+        padding: 2.671875rem;
+    }
+    
+    main section h1 {
+        margin-top: 2.6875rem;
+        margin-bottom: 1.296875rem;
+        font-size: 5.375rem;
+    }
+    
+    main section h2 {
+        margin-top: 2.6875rem;
+        margin-bottom: 1.296875rem;
+        font-size: 4.3rem;
+    }
+
+    main section h3 {
+        margin-top: 2.6875rem;
+        margin-bottom: 1.296875rem;
+        font-size: 3.7625rem;
+    }
+    
+    main section p, main section ul li {
+        margin-bottom: 2.6875rem;
+        font-size: 2.6875rem;
+    }    
+
+}
+
+/* DESKTOP 4K UHD */
+@media only screen and (min-width: 3840px) {
+    
+    main {
+        top: 24rem;
+        bottom: 6rem;
+        padding: 1.5rem;
+        margin-right: 6rem;
+        margin-left: 6rem;
+        margin-top: 3rem;
+        margin-bottom: 3rem;
+    }    
+    
+    main section {
+        border-radius: 3rem;
+        padding: 3rem;
+    }
+    
+    main section h1 {
+        margin-top: 3rem;
+        margin-bottom: 1.5rem;
+        font-size: 6rem;
+    }
+    
+    main section h2 {
+        margin-top: 3rem;
+        margin-bottom: 1.5rem;
+        font-size: 4.8rem;
+    }
+
+    main section h3 {
+        margin-top: 3rem;
+        margin-bottom: 1.5rem;
+        font-size: 4.2rem;
+    }
+    
+    main section p, main section ul li {
+        margin-bottom: 3rem;
+        font-size: 3rem;
+    }    
+
+}

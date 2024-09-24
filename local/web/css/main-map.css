@@ -1,0 +1,2194 @@
+main {
+    display: grid;
+    grid-template-columns: 15% 65% 20%;
+    grid-template-rows: 15% 85%;
+    gap: 0.5rem;
+    position: fixed;
+    top: 8rem;
+    bottom: 2rem;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+    margin-right: 2rem;
+    margin-left: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+main fieldset {
+    display: flex;
+    grid-column: 2;
+    grid-row: 1;
+    background-color: var(--secondary-bg-color);
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+    justify-content: space-around;
+    align-items: center;
+}
+
+main fieldset legend {
+    background-color: var(--secondary-bg-color);
+    border-radius: 0.5rem;
+    padding: 0.125rem 0.25rem;
+    font-weight: bold;
+}
+
+main fieldset .filter-group {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+main fieldset .filter-group label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0.125rem;
+}
+
+main fieldset select {
+    background-color: var(--main-bg-color);
+    border: 1px solid var(--border-color);
+    color: inherit;
+    border-radius: 0.5rem;
+    max-width: 16rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 1rem;
+}
+
+main aside#dynamic-data {
+    background-color: var(--secondary-bg-color);
+    border-radius: 1rem;
+    box-shadow: 0 0.25rem 0.5rem rgb(0 0 0 / 10%);
+    display: grid;
+    grid-column: 1;
+    grid-row: 1 / 3;
+    grid-template-columns: 1fr;
+    grid-template-rows: 4fr 10fr;
+    gap: 0.5rem;
+    padding: 0.5rem;
+}
+
+main aside#dynamic-data table {
+    display: table;
+    background-color: var(--secondary-bg-color);
+    border-collapse: separate;
+    border-spacing: 0;
+    box-shadow: 0 0.25rem 0.5rem rgb(0 0 0 / 10%);
+    height: 100%;
+    width: 100%;
+    overflow: visible;
+}
+
+main aside#dynamic-data table thead {
+    display: table-header-group;
+    background-color: var(--main-bg-color);
+    width: 100%;
+}
+
+main aside#dynamic-data table thead tr th {
+    border-top: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+
+main aside#dynamic-data table tbody {
+    display: block;
+    background-color: var(--main-bg-color);
+    border-bottom-right-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+    overflow-y: auto;
+    height: inherit;
+    width: inherit;
+}
+
+main aside#dynamic-data table tbody tr {
+    display: table;
+    table-layout: fixed;
+    width: inherit;
+}
+
+main aside#dynamic-data table tbody tr td:first-child {
+    display: table-cell;
+    border-top: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+    padding: 0.5rem;
+    position: relative;
+    overflow: hidden;
+    overflow-wrap: break-word;
+}
+
+main aside#dynamic-data table tbody tr td:last-child {
+    display: table-cell;
+    border-top: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+    padding: 0.5rem;
+    position: relative;
+    overflow: hidden;
+    overflow-wrap: break-word;
+}
+
+main aside#dynamic-data span.node-added-time {
+    display: block;
+    margin-bottom: 2rem;
+}
+
+main aside#dynamic-data button {
+    background-color: var(--main-bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    color: inherit;
+    padding: 0.25rem 0.5rem;
+    max-width: 16rem;
+    white-space: nowrap;
+    font-size: 1rem;
+    text-overflow: ellipsis;
+}
+
+main aside#dynamic-data button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+main aside#dynamic-data div.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+main aside#dynamic-data button:hover {
+    background-color: var(--secondary-bg-color);
+}
+
+main div#map {
+    border-radius: 1rem;
+    grid-column: 2;
+    grid-row: 2;
+    position: relative;
+}
+
+main div#map form {
+    position: absolute; 
+    top: 2rem;
+    right: 1rem;
+    z-index: 998;
+    background-color: var(--secondary-bg-color);
+}
+
+main div#map form input.radio-input {
+    display: none;
+}
+
+main div#map form input.radio-input:checked + .radio-label {
+    background-color: var(--secondary-bg-color);
+}
+
+main div#map form input.radio-input:disabled + .radio-label {
+    background-color: var(--main-bg-color);
+    cursor: not-allowed;
+}
+
+main div#map form label.radio-label {
+    border: 1px solid var(--border-color);
+    text-align: center;
+    cursor: pointer;
+    margin-right: -0.25rem;
+    transition: background-color 0.1s ease-in-out;
+    padding: 1rem;
+    background-color: var(--main-bg-color);
+}
+
+main div#map form label.radio-label:first-of-type {
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+}
+
+main div#map form label.radio-label:last-of-type {
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+}
+
+.leaflet-container {
+    background-color: var(--secondary-bg-color);
+}
+
+.leaflet-bar a {
+    background-color: var(--secondary-bg-color);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+.leaflet-bar a:hover {
+    background-color: var(--main-bg-color);
+}
+
+.leaflet-control-attribution {
+    background-color: var(--secondary-bg-color) !important;
+    color: var(--text-color) !important;
+}
+
+.marker-cluster-small,
+.marker-cluster-medium,
+.marker-cluster-large {
+    background-color: var(--main-bg-color);
+}
+
+.marker-cluster-small div,
+.marker-cluster-medium div,
+.marker-cluster-large div {
+    background-color: var(--secondary-bg-color);
+    color: var(--text-color);
+}
+
+.leaflet-overlay-pane svg path {
+    stroke: var(--main-bg-color);
+    fill-opacity: 0.8;
+    fill: var(--secondary-bg-color);
+}
+
+main aside#statistics {
+    display: grid;
+    grid-column: 3;
+    grid-row: 1 / 3;
+    grid-template-columns: 1fr; 
+    grid-template-rows: 1fr;
+    background-color: var(--secondary-bg-color);
+    border-radius: 1rem;
+    box-shadow: 0 0.25rem 0.5rem rgb(0 0 0 / 10%);
+    gap: 0.5rem;
+    padding: 0.5rem;
+    margin-right: 1rem;
+}
+
+main aside#statistics form {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: var(--main-bg-color);
+}
+
+main aside#statistics form label.radio-label {
+    flex: 1;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.1s ease-in-out;
+    padding: 0.25rem;
+    background-color: var(--main-bg-color);
+}
+
+main aside#statistics form input.radio-input {
+    display: none;
+}
+
+main aside#statistics form input.radio-input:checked + .radio-label {
+    background-color: var(--secondary-bg-color);
+}
+
+main aside#statistics table {
+    display: table;
+    background-color: var(--secondary-bg-color);
+    border-collapse: separate;
+    border-spacing: 0;
+    box-shadow: 0 0.25rem 0.5rem rgb(0 0 0 / 10%);
+    height: 100%;
+    width: 100%;
+    overflow: visible;
+}
+
+main aside#statistics table thead {
+    display: table-header-group;
+    background-color: var(--main-bg-color);
+    width: 100%;
+}
+
+main aside#statistics table thead tr th {
+    border-top: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+
+main aside#statistics table tbody {
+    display: block;
+    background-color: var(--main-bg-color);
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    overflow-y: auto;
+    height: inherit;
+    width: inherit;
+}
+
+main aside#statistics table tbody tr {
+    display: table;
+    table-layout: fixed;
+    width: inherit;
+}
+
+main aside#statistics table tbody tr td:first-child {
+    display: table-cell;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+    padding: 0.5rem;
+    position: relative;
+    overflow: hidden;
+    overflow-wrap: break-word;
+}
+
+main aside#statistics table tbody tr td:last-child {
+    display: table-cell;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+    padding: 0.5rem;
+    position: relative;
+    overflow: hidden;
+    overflow-wrap: break-word;
+}
+
+main aside#statistics .list-group-progress {
+    width: 100%;
+    height: 1rem;
+    appearance: none;
+}
+
+main aside#statistics .list-group-progress::-webkit-progress-bar {
+    background-color: transparent;
+}
+
+main aside#statistics .list-group-progress::-webkit-progress-value {
+    background-color: var(--progress);
+    transition: width 0.5s ease;
+}
+
+main aside#statistics .list-group-progress::-moz-progress-bar {
+    background-color: var(--progress);
+    transition: width 0.5s ease;
+}
+
+main aside#statistics table tbody tr td span.float-right {
+    float: right;
+}
+
+dialog {
+    border: none;
+    background: transparent;
+    width: 100%;
+    height: 100%;
+    color: var(--text-color);
+}
+
+dialog article.modal-content {
+    background-color: var(--main-bg-color);
+    margin: 16% auto;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    max-width: 512px;
+    border-radius: 1rem;
+    overflow-wrap: break-word;
+}
+
+dialog article.modal-content button.close {
+    background-color: var(--main-bg-color);
+    color: var(--text-color);
+    border: none;
+    float: right;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* PHONE 320px */
+@media only screen and (max-width: 320px) {
+
+    main {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        top: 2.030rem;
+        bottom: 0rem;
+        gap: 0.116rem;
+        font-size: 0.241rem;
+        margin-right: 0.499rem;
+        margin-left: 0.499rem;
+        margin-top: 0.250rem;
+        margin-bottom: 0.250rem;
+    }
+    
+    main fieldset,
+    main div#map,
+    main aside#dynamic-data,
+    main aside#statistics {
+        grid-column: 1;
+        grid-row: auto;
+        width: 100%;
+    }
+    
+    main aside#dynamic-data table tbody,
+    main aside#statistics table tbody {
+        max-height: 3.197rem;
+        overflow-y: auto;
+        display: table-row-group;
+    }
+    
+    main fieldset {
+        order: 1;
+        border-radius: 0.241rem;
+        min-height: 1.202rem;
+        height: auto;
+        grid-gap: 0.5rem;
+    }
+    
+    main fieldset legend {
+        border-radius: 0.116rem;
+        padding: 0.027rem 0.041rem;
+    }
+    
+    main fieldset .filter-group label {
+        margin-bottom: 0.027rem;
+    }
+    
+    main fieldset select {
+        border-radius: 0.116rem;
+        max-width: 5.033rem;
+        font-size: 0.241rem;
+    }
+    
+    main aside#dynamic-data {
+        order: 3;
+        border-radius: 0.241rem;
+        gap: 0.116rem;
+        padding: 0.116rem;
+    }
+    
+    main aside#dynamic-data table thead tr th {
+        border-top-left-radius: 0.116rem;
+        border-top-right-radius: 0.116rem;
+    }
+    
+    main aside#dynamic-data table tbody {
+        border-bottom-right-radius: 0.116rem;
+        border-bottom-left-radius: 0.116rem;
+    }
+    
+    main aside#dynamic-data table tbody tr td:first-child {
+        padding: 0.116rem;
+    }
+    
+    main aside#dynamic-data table tbody tr td:last-child {
+        padding: 0.116rem;
+    }
+    
+    main aside#dynamic-data span.node-added-time {
+        margin-bottom: 0.499rem;
+    }
+    
+    main aside#dynamic-data button {
+        border-radius: 0.116rem;
+        padding: 0.040rem 0.116rem;
+        max-width: 5.033rem;
+        font-size: 0.241rem;
+    }
+    
+    main aside#dynamic-data div.button-container {
+        gap: 0.241rem;
+    }
+    
+    main div#map {
+        order: 2;
+        border-radius: 0.241rem;
+        min-height: 6.358rem;
+        margin-top: 2.53125rem;
+    }
+    
+    main div#map form {
+        top: 0.497rem;
+        right: 0.249rem;
+    }
+    
+    main div#map form label.radio-label {
+        padding: 0.241rem;
+    }
+    
+    main div#map form label.radio-label:first-of-type {
+        border-top-left-radius: 0.241rem;
+        border-bottom-left-radius: 0.241rem;
+    }
+    
+    main div#map form label.radio-label:last-of-type {
+        border-top-right-radius: 0.241rem;
+        border-bottom-right-radius: 0.241rem;
+    }
+    
+    main aside#statistics {
+        order: 4;
+        border-radius: 0.241rem;
+        gap: 0.116rem;
+        padding: 0.116rem;
+        margin-right: 0.241rem;
+    }
+    
+    main aside#statistics form label.radio-label {
+        padding: 0.047rem;
+    }
+    
+    main aside#statistics table thead tr th {
+        border-top-left-radius: 0.116rem;
+        border-top-right-radius: 0.116rem;
+    }
+    
+    main aside#statistics table tbody {
+        border-bottom-left-radius: 0.116rem;
+        border-bottom-right-radius: 0.116rem;
+    }
+    
+    main aside#statistics table tbody tr td:first-child {
+        padding: 0.116rem;
+    }
+    
+    main aside#statistics table tbody tr td:last-child {
+        padding: 0.116rem;
+    }
+    
+    main aside#statistics .list-group-progress {
+        height: 0.241rem;
+    }
+    
+    dialog article.modal-content {
+        padding: 0.241rem;
+        max-width: 7.037rem;
+        border-radius: 0.241rem;
+    }
+    
+    dialog article.modal-content button.close {
+        font-size: 0.481rem;
+    }
+    
+}
+
+/* PHONE 375px */
+@media only screen and (max-width: 375px) {
+
+    main {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        top: 2.383rem;
+        bottom: 0rem;
+        gap: 0.138rem;
+        font-size: 0.284rem;
+        margin-right: 0.585rem;
+        margin-left: 0.585rem;
+        margin-top: 0.293rem;
+        margin-bottom: 0.293rem;
+    }
+    
+    main fieldset,
+    main div#map,
+    main aside#dynamic-data,
+    main aside#statistics {
+        grid-column: 1;
+        grid-row: auto;
+        width: 100%;
+    }
+    
+    main aside#dynamic-data table tbody,
+    main aside#statistics table tbody {
+        max-height: 3.755rem;
+        overflow-y: auto;
+        display: table-row-group;
+    }
+    
+    main fieldset {
+        order: 1;
+        border-radius: 0.25rem;
+        min-height: 1.2rem;
+        height: auto;
+        grid-gap: 0.25rem;
+        padding: 0.25rem;
+    }
+    
+    main fieldset legend {
+        border-radius: 0.137rem;
+        padding: 0.032rem 0.048rem;
+    }
+    
+    main fieldset .filter-group label {
+        margin-bottom: 0.032rem;
+    }
+    
+    main fieldset select {
+        border-radius: 0.137rem;
+        max-width: 5.928rem;
+        font-size: 0.284rem;
+    }
+    
+    main aside#dynamic-data {
+        order: 3;
+        border-radius: 0.284rem;
+        gap: 0.138rem;
+        padding: 0.138rem;
+    }
+    
+    main aside#dynamic-data table thead tr th {
+        border-top-left-radius: 0.137rem;
+        border-top-right-radius: 0.137rem;
+    }
+    
+    main aside#dynamic-data table tbody {
+        border-bottom-right-radius: 0.137rem;
+        border-bottom-left-radius: 0.137rem;
+    }
+    
+    main aside#dynamic-data table tbody tr td:first-child {
+        padding: 0.138rem;
+    }
+    
+    main aside#dynamic-data table tbody tr td:last-child {
+        padding: 0.138rem;
+    }
+    
+    main aside#dynamic-data span.node-added-time {
+        margin-bottom: 0.585rem;
+    }
+    
+    main aside#dynamic-data button {
+        border-radius: 0.137rem;
+        padding: 0.047rem 0.138rem;
+        max-width: 5.928rem;
+        font-size: 0.284rem;
+    }
+    
+    main aside#dynamic-data div.button-container {
+        gap: 0.284rem;
+    }
+    
+    main div#map {
+        order: 2;
+        border-radius: 0.284rem;
+        min-height: 7.473rem;
+    }
+    
+    main div#map form {
+        top: 0.582rem;
+        right: 0.293rem;
+    }
+    
+    main div#map form label.radio-label {
+        padding: 0.284rem;
+    }
+    
+    main div#map form label.radio-label:first-of-type {
+        border-top-left-radius: 0.284rem;
+        border-bottom-left-radius: 0.284rem;
+    }
+    
+    main div#map form label.radio-label:last-of-type {
+        border-top-right-radius: 0.284rem;
+        border-bottom-right-radius: 0.284rem;
+    }
+    
+    main aside#statistics {
+        order: 4;
+        border-radius: 0.284rem;
+        gap: 0.138rem;
+        padding: 0.138rem;
+        margin-right: 0.284rem;
+    }
+    
+    main aside#statistics form label.radio-label {
+        padding: 0.047rem;
+    }
+    
+    main aside#statistics table thead tr th {
+        border-top-left-radius: 0.137rem;
+        border-top-right-radius: 0.137rem;
+    }
+    
+    main aside#statistics table tbody {
+        border-bottom-left-radius: 0.137rem;
+        border-bottom-right-radius: 0.137rem;
+    }
+    
+    main aside#statistics table tbody tr td:first-child {
+        padding: 0.138rem;
+    }
+    
+    main aside#statistics table tbody tr td:last-child {
+        padding: 0.138rem;
+    }
+    
+    main aside#statistics .list-group-progress {
+        height: 0.284rem;
+    }
+    
+    dialog article.modal-content {
+        padding: 0.284rem;
+        max-width: 8.256rem;
+        border-radius: 0.284rem;
+    }
+    
+    dialog article.modal-content button.close {
+        font-size: 0.564rem;
+    }
+    
+}
+
+/* PHONE 428px */
+@media only screen and (max-width: 428px) {
+
+    main {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        top: 2.695rem;
+        bottom: 0rem;
+        gap: 0.158rem;
+        font-size: 0.377rem;
+        margin-right: 0.668rem;
+        margin-left: 0.668rem;
+        margin-top: 0.334rem;
+        margin-bottom: 0.334rem;
+    }
+    
+    main fieldset,
+    main div#map,
+    main aside#dynamic-data,
+    main aside#statistics {
+        grid-column: 1;
+        grid-row: auto;
+        width: 100%;
+    }
+    
+    main aside#dynamic-data table tbody,
+    main aside#statistics table tbody {
+        max-height: 4.287rem;
+        overflow-y: auto;
+        display: table-row-group;
+    }
+    
+    main fieldset {
+        order: 1;
+        border-radius: 0.3rem;
+        min-height: 1.5rem;
+        height: auto;
+        grid-gap: 0.25rem;
+        padding: 0.25rem;
+    }
+    
+    main fieldset legend {
+        border-radius: 0.158rem;
+        padding: 0.043rem 0.064rem;
+    }
+    
+    main fieldset .filter-group label {
+        margin-bottom: 0.043rem;
+    }
+    
+    main fieldset select {
+        border-radius: 0.158rem;
+        max-width: 6.783rem;
+        font-size: 0.377rem;
+    }
+    
+    main aside#dynamic-data {
+        order: 3;
+        border-radius: 0.377rem;
+        gap: 0.158rem;
+        padding: 0.158rem;
+    }
+    
+    main aside#dynamic-data table thead tr th {
+        border-top-left-radius: 0.158rem;
+        border-top-right-radius: 0.158rem;
+    }
+    
+    main aside#dynamic-data table tbody {
+        border-bottom-right-radius: 0.158rem;
+        border-bottom-left-radius: 0.158rem;
+    }
+    
+    main aside#dynamic-data table tbody tr td:first-child,
+    main aside#dynamic-data table tbody tr td:last-child {
+        padding: 0.158rem;
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+        overflow-wrap: break-word;
+    }
+    
+    main aside#dynamic-data span.node-added-time {
+        margin-bottom: 0.668rem;
+    }
+    
+    main aside#dynamic-data button {
+        border-radius: 0.158rem;
+        padding: 0.054rem 0.158rem;
+        max-width: 6.783rem;
+        font-size: 0.377rem;
+        background-color: var(--main-bg-color);
+        border: 1px solid var(--border-color);
+        color: inherit;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    
+    main aside#dynamic-data button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    
+    main aside#dynamic-data div.button-container {
+        display: flex;
+        justify-content: center;
+        gap: 0.377rem;
+    }
+    
+    main aside#dynamic-data table thead,
+    main aside#dynamic-data table tbody {
+        background-color: var(--main-bg-color);
+    }
+    
+    main aside#statistics {
+        order: 4;
+        grid-column: 1;
+        grid-row: 4;
+        border-radius: 0.377rem;
+        gap: 0.158rem;
+        padding: 0.158rem;
+        margin-right: 0.377rem;
+        background-color: var(--secondary-bg-color);
+        box-shadow: 0 0.25rem 0.5rem rgb(0 0 0 / 10%);
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+    }
+    
+    main aside#statistics form {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 0;
+        margin: 0;
+        background-color: var(--main-bg-color);
+        overflow: hidden;
+    }
+    
+    main aside#statistics form label.radio-label {
+        padding: 0.054rem;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color 0.1s ease-in-out;
+        background-color: var(--main-bg-color);
+        flex: 1;
+    }
+    
+    main aside#statistics form input.radio-input {
+        display: none;
+    }
+    
+    main aside#statistics form input.radio-input:checked + .radio-label {
+        background-color: var(--secondary-bg-color);
+    }
+    
+    main aside#statistics table thead tr th {
+        border-top-left-radius: 0.195rem;
+        border-top-right-radius: 0.195rem;
+    }
+    
+    main aside#statistics table tbody {
+        border-bottom-left-radius: 0.195rem;
+        border-bottom-right-radius: 0.195rem;
+        max-height: 5.292rem;
+        overflow-y: auto;
+        display: table-row-group;
+    }
+    
+    main aside#statistics table tbody tr td:first-child,
+    main aside#statistics table tbody tr td:last-child {
+        padding: 0.195rem;
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+        overflow-wrap: break-word;
+    }
+    
+    main aside#statistics .list-group-progress {
+        height: 0.377rem;
+        appearance: none;
+    }
+    
+    main aside#statistics .list-group-progress::-webkit-progress-bar {
+        background-color: transparent;
+    }
+    
+    main aside#statistics .list-group-progress::-webkit-progress-value {
+        background-color: var(--progress);
+        transition: width 0.5s ease;
+    }
+    
+    main aside#statistics .list-group-progress::-moz-progress-bar {
+        background-color: var(--progress);
+        transition: width 0.5s ease;
+    }
+    
+    dialog {
+        border: none;
+        background: transparent;
+        width: 100%;
+        height: 100%;
+        color: var(--text-color);
+    }
+    
+    dialog article.modal-content {
+        padding: 0.377rem;
+        max-width: 9.726rem;
+        border-radius: 0.377rem;
+        background-color: var(--main-bg-color);
+        margin: 16% auto;
+        border: 1px solid var(--border-color);
+        overflow-wrap: break-word;
+    }
+    
+    dialog article.modal-content button.close {
+        font-size: 0.763rem;
+        background-color: var(--main-bg-color);
+        color: var(--text-color);
+        border: none;
+        float: right;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    
+    main fieldset {
+        flex-shrink: 0;
+    }
+    
+    main div#map {
+        flex-shrink: 0;
+        margin-top: 1.125rem;
+    }
+    
+    main aside#dynamic-data,
+    main aside#statistics {
+        flex-shrink: 0;
+    }
+    
+}
+
+/* PHONE 528px */
+@media only screen and (max-width: 528px) {
+
+    main {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        top: 3.287rem;
+        bottom: 0rem;
+        gap: 0.195rem;
+        font-size: 0.471rem;
+        margin: 0.412rem 0.825rem; 
+        height: 100vh;
+        overflow: auto;
+    }
+    
+    main fieldset {
+        order: 1;
+        grid-column: 1;
+        grid-row: 1;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 0.25rem;
+        padding: 0.25rem;
+        min-height: auto;
+        height: auto;
+        overflow-y: auto;
+        background-color: var(--secondary-bg-color);
+        border: none;
+        border-radius: 0.471rem;
+        box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+        justify-content: space-around;
+        align-items: flex-start;
+    }
+
+    main fieldset legend {
+        grid-column: span 2;
+        text-align: center;
+        border-radius: 0.195rem;
+        padding: 0.052rem 0.078rem;
+    }
+
+    main fieldset .filter-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    main fieldset .filter-group label {
+        margin-bottom: 0.5rem;
+        text-align: left;
+    }
+
+    main fieldset select {
+        width: 100%;
+        max-width: none;
+        border-radius: 0.195rem;
+        font-size: 0.471rem;
+        background-color: var(--main-bg-color);
+        border: 1px solid var(--border-color);
+        color: inherit;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    main div#map {
+        order: 2;
+        grid-column: 1;
+        grid-row: 2;
+        border-radius: 0.471rem;
+        min-height: 12rem;
+        height: 12rem;
+        position: relative;
+        margin-top: 0.75rem;
+        background-color: var(--secondary-bg-color);
+        box-shadow: 0 0.25rem 0.5rem rgb(0 0 0 / 10%);
+    }
+
+    main div#map form {
+        position: absolute; 
+        top: 0.823rem;
+        right: 0.410rem;
+        z-index: 998;
+        background-color: var(--secondary-bg-color);
+    }
+
+    main div#map form label.radio-label {
+        padding: 0.471rem;
+        border: 1px solid var(--border-color);
+        text-align: center;
+        cursor: pointer;
+        transition: background-color 0.1s ease-in-out;
+        background-color: var(--main-bg-color);
+    }
+
+    main div#map form label.radio-label:first-of-type {
+        border-top-left-radius: 0.471rem;
+        border-bottom-left-radius: 0.471rem;
+    }
+
+    main div#map form label.radio-label:last-of-type {
+        border-top-right-radius: 0.471rem;
+        border-bottom-right-radius: 0.471rem;
+    }
+
+    main div#map form input.radio-input {
+        display: none;
+    }
+
+    main div#map form input.radio-input:checked + .radio-label {
+        background-color: var(--secondary-bg-color);
+    }
+
+    main div#map form input.radio-input:disabled + .radio-label {
+        background-color: var(--main-bg-color);
+        cursor: not-allowed;
+    }
+
+    main aside#dynamic-data {
+        order: 3;
+        grid-column: 1;
+        grid-row: 3;
+        border-radius: 0.471rem;
+        gap: 0.195rem;
+        padding: 0.195rem;
+        min-height: 24rem;
+        height: 24rem;
+        background-color: var(--secondary-bg-color);
+        box-shadow: 0 0.25rem 0.5rem rgb(0 0 0 / 10%);
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 4fr 10fr;
+    }
+
+    main aside#dynamic-data table thead tr th {
+        border-top-left-radius: 0.195rem;
+        border-top-right-radius: 0.195rem;
+    }
+
+    main aside#dynamic-data table tbody {
+        border-bottom-right-radius: 0.195rem;
+        border-bottom-left-radius: 0.195rem;
+        max-height: 5.292rem;
+        overflow-y: auto;
+        display: table-row-group;
+    }
+
+    main aside#dynamic-data table tbody tr td:first-child,
+    main aside#dynamic-data table tbody tr td:last-child {
+        padding: 0.195rem;
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+        overflow-wrap: break-word;
+    }
+
+    main aside#dynamic-data span.node-added-time {
+        margin-bottom: 0.825rem;
+    }
+
+    main aside#dynamic-data button {
+        border-radius: 0.195rem;
+        padding: 0.069rem 0.195rem;
+        max-width: 8.471rem;
+        font-size: 0.471rem;
+        background-color: var(--main-bg-color);
+        border: 1px solid var(--border-color);
+        color: inherit;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    main aside#dynamic-data button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    main aside#dynamic-data div.button-container {
+        display: flex;
+        justify-content: center;
+        gap: 0.471rem;
+    }
+
+    main aside#dynamic-data table thead,
+    main aside#dynamic-data table tbody {
+        background-color: var(--main-bg-color);
+    }
+
+    main aside#statistics {
+        order: 4;
+        grid-column: 1;
+        grid-row: 4;
+        border-radius: 0.471rem;
+        gap: 0.195rem;
+        padding: 0.195rem;
+        margin-right: 0.471rem;
+        min-height: 24rem;
+        height: 24rem;
+        background-color: var(--secondary-bg-color);
+        box-shadow: 0 0.25rem 0.5rem rgb(0 0 0 / 10%);
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+        overflow: scroll;
+    }
+
+    main aside#statistics form {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 0;
+        margin: 0;
+        background-color: var(--main-bg-color);
+        overflow: hidden;
+    }
+
+    main aside#statistics form label.radio-label {
+        padding: 0.069rem;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color 0.1s ease-in-out;
+        background-color: var(--main-bg-color);
+        flex: 1;
+    }
+
+    main aside#statistics form input.radio-input {
+        display: none;
+    }
+
+    main aside#statistics form input.radio-input:checked + .radio-label {
+        background-color: var(--secondary-bg-color);
+    }
+
+    main aside#statistics table thead tr th {
+        border-top-left-radius: 0.195rem;
+        border-top-right-radius: 0.195rem;
+    }
+
+    main aside#statistics table tbody {
+        border-bottom-left-radius: 0.195rem;
+        border-bottom-right-radius: 0.195rem;
+        max-height: 5.292rem;
+        overflow-y: auto;
+        display: table-row-group;
+    }
+
+    main aside#statistics table tbody tr td:first-child,
+    main aside#statistics table tbody tr td:last-child {
+        padding: 0.195rem;
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+        overflow-wrap: break-word;
+    }
+
+    main aside#statistics .list-group-progress {
+        height: 0.471rem;
+        appearance: none;
+    }
+
+    main aside#statistics .list-group-progress::-webkit-progress-bar {
+        background-color: transparent;
+    }
+
+    main aside#statistics .list-group-progress::-webkit-progress-value {
+        background-color: var(--progress);
+        transition: width 0.5s ease;
+    }
+
+    main aside#statistics .list-group-progress::-moz-progress-bar {
+        background-color: var(--progress);
+        transition: width 0.5s ease;
+    }
+
+    dialog {
+        border: none;
+        background: transparent;
+        width: 100%;
+        height: 100%;
+        color: var(--text-color);
+    }
+
+    dialog article.modal-content {
+        padding: 0.471rem;
+        max-width: 12.000rem;
+        border-radius: 0.471rem;
+        background-color: var(--main-bg-color);
+        margin: 16% auto;
+        border: 1px solid var(--border-color);
+        overflow-wrap: break-word;
+    }
+
+    dialog article.modal-content button.close {
+        font-size: 0.942rem;
+        background-color: var(--main-bg-color);
+        color: var(--text-color);
+        border: none;
+        float: right;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    main fieldset {
+        flex-shrink: 0;
+    }
+
+    main div#map {
+        flex-shrink: 0;
+    }
+
+    main aside#dynamic-data,
+    main aside#statistics {
+        flex-shrink: 0;
+    }
+
+}
+
+
+/* TABLET & PHONE 584 */
+@media only screen and (max-width: 584px) {
+
+    main {
+        grid-template-columns: 1fr;
+        grid-template-rows: 10% auto;
+        top: 3.648rem;
+        bottom: 0rem;
+        gap: 0.216rem;
+        font-size: 0.5184rem;
+        margin-right: 0.912rem;
+        margin-left: 0.912rem;
+        margin-top: 0.456rem;
+        margin-bottom: 0.456rem;
+    }
+    
+    main fieldset,
+    main div#map,
+    main aside#dynamic-data,
+    main aside#statistics {
+        grid-column: 1;
+        grid-row: auto;
+        width: 100%;
+    }
+    
+    main aside#dynamic-data table tbody,
+    main aside#statistics table tbody {
+        max-height: 5.856rem;
+        overflow-y: auto;
+        display: table-row-group;
+    }
+    
+    main fieldset {
+        order: 1;
+        border-radius: 0.5184rem;
+        min-height: 2.1888rem;
+    }
+    
+    main fieldset legend {
+        border-radius: 0.216rem;
+        padding: 0.0576rem 0.0864rem;
+    }
+    
+    main fieldset .filter-group label {
+        margin-bottom: 0.0576rem;
+    }
+    
+    main fieldset select {
+        border-radius: 0.216rem;
+        max-width: 9.216rem;
+        font-size: 0.5184rem;
+    }
+    
+    main aside#dynamic-data {
+        order: 3;
+        border-radius: 0.5184rem;
+        gap: 0.216rem;
+        padding: 0.216rem;
+    }
+    
+    main aside#dynamic-data table thead tr th {
+        border-top-left-radius: 0.216rem;
+        border-top-right-radius: 0.216rem;
+    }
+    
+    main aside#dynamic-data table tbody {
+        border-bottom-right-radius: 0.216rem;
+        border-bottom-left-radius: 0.216rem;
+    }
+    
+    main aside#dynamic-data table tbody tr td:first-child {
+        padding: 0.216rem;
+    }
+    
+    main aside#dynamic-data table tbody tr td:last-child {
+        padding: 0.216rem;
+    }
+    
+    main aside#dynamic-data span.node-added-time {
+        margin-bottom: 0.912rem;
+    }
+    
+    main aside#dynamic-data button {
+        border-radius: 0.216rem;
+        padding: 0.072rem 0.216rem;
+        max-width: 9.216rem;
+        font-size: 0.5184rem;
+    }
+    
+    main aside#dynamic-data div.button-container {
+        gap: 0.5184rem;
+    }
+    
+    main div#map {
+        order: 2;
+        border-radius: 0.5184rem;
+        min-height: 11.626rem;
+    }
+    
+    main div#map form {
+        top: 0.912rem;
+        right: 0.456rem;
+    }
+    
+    main div#map form label.radio-label {
+        padding: 0.5184rem;
+    }
+    
+    main div#map form label.radio-label:first-of-type {
+        border-top-left-radius: 0.5184rem;
+        border-bottom-left-radius: 0.5184rem;
+    }
+    
+    main div#map form label.radio-label:last-of-type {
+        border-top-right-radius: 0.5184rem;
+        border-bottom-right-radius: 0.5184rem;
+    }
+    
+    main aside#statistics {
+        order: 4;
+        border-radius: 0.5184rem;
+        gap: 0.216rem;
+        padding: 0.216rem;
+        margin-right: 0.5184rem;
+    }
+    
+    main aside#statistics form label.radio-label {
+        padding: 0.072rem;
+    }
+    
+    main aside#statistics table thead tr th {
+        border-top-left-radius: 0.216rem;
+        border-top-right-radius: 0.216rem;
+    }
+    
+    main aside#statistics table tbody {
+        border-bottom-left-radius: 0.216rem;
+        border-bottom-right-radius: 0.216rem;
+    }
+    
+    main aside#statistics table tbody tr td:first-child {
+        padding: 0.216rem;
+    }
+    
+    main aside#statistics table tbody tr td:last-child {
+        padding: 0.216rem;
+    }
+    
+    main aside#statistics .list-group-progress {
+        height: 0.5184rem;
+    }
+    
+    dialog article.modal-content {
+        padding: 0.5184rem;
+        max-width: 13.2288rem;
+        border-radius: 0.5184rem;
+    }
+    
+    dialog article.modal-content button.close {
+        font-size: 1.0368rem;
+    }
+    
+}
+
+/* TABLET 1024 */
+@media only screen and (max-width: 1024px) {
+
+    main {
+        grid-template-columns: 1fr;
+        grid-template-rows: 10% auto;
+        top: 6.4rem;
+        bottom: 0rem;
+        gap: 0.36rem;
+        font-size: 0.72rem;
+        margin-right: 1.6rem;
+        margin-left: 1.6rem;
+        margin-top: 0.8rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    main fieldset,
+    main div#map,
+    main aside#dynamic-data,
+    main aside#statistics {
+        grid-column: 1;
+        grid-row: auto;
+        width: 100%;
+    }
+    
+    main aside#dynamic-data table tbody,
+    main aside#statistics table tbody {
+        max-height: 10.24rem;
+        overflow-y: auto;
+        display: table-row-group;
+    }
+    
+    main fieldset {
+        order: 1;
+        border-radius: 0.72rem;
+        min-height: 3.84rem;
+    }
+    
+    main fieldset legend {
+        border-radius: 0.36rem;
+        padding: 0.1rem 0.18rem;
+    }
+    
+    main fieldset .filter-group label {
+        margin-bottom: 0.1rem;
+    }
+    
+    main fieldset select {
+        border-radius: 0.36rem;
+        max-width: 12.8rem;
+        font-size: 0.72rem;
+    }
+    
+    main aside#dynamic-data {
+        order: 3;
+        border-radius: 0.72rem;
+        gap: 0.36rem;
+        padding: 0.36rem;
+    }
+    
+    main aside#dynamic-data table thead tr th {
+        border-top-left-radius: 0.36rem;
+        border-top-right-radius: 0.36rem;
+    }
+    
+    main aside#dynamic-data table tbody {
+        border-bottom-right-radius: 0.36rem;
+        border-bottom-left-radius: 0.36rem;
+    }
+    
+    main aside#dynamic-data table tbody tr td:first-child {
+        padding: 0.36rem;
+    }
+    
+    main aside#dynamic-data table tbody tr td:last-child {
+        padding: 0.36rem;
+    }
+    
+    main aside#dynamic-data span.node-added-time {
+        margin-bottom: 1.6rem;
+    }
+    
+    main aside#dynamic-data button {
+        border-radius: 0.36rem;
+        padding: 0.18rem 0.36rem;
+        max-width: 12.8rem;
+        font-size: 0.72rem;
+    }
+    
+    main aside#dynamic-data div.button-container {
+        gap: 0.72rem;
+    }
+    
+    main div#map {
+        order: 2;
+        border-radius: 0.72rem;
+        min-height: 20.48rem;
+    }
+    
+    main div#map form {
+        top: 1.6rem;
+        right: 0.8rem;
+    }
+    
+    main div#map form label.radio-label {
+        padding: 0.72rem;
+    }
+    
+    main div#map form label.radio-label:first-of-type {
+        border-top-left-radius: 0.72rem;
+        border-bottom-left-radius: 0.72rem;
+    }
+    
+    main div#map form label.radio-label:last-of-type {
+        border-top-right-radius: 0.72rem;
+        border-bottom-right-radius: 0.72rem;
+    }
+    
+    main aside#statistics {
+        order: 4;
+        border-radius: 0.72rem;
+        gap: 0.36rem;
+        padding: 0.36rem;
+        margin-right: 0.72rem;
+    }
+    
+    main aside#statistics form label.radio-label {
+        padding: 0.1rem;
+    }
+    
+    main aside#statistics table thead tr th {
+        border-top-left-radius: 0.36rem;
+        border-top-right-radius: 0.36rem;
+    }
+    
+    main aside#statistics table tbody {
+        border-bottom-left-radius: 0.36rem;
+        border-bottom-right-radius: 0.36rem;
+    }
+    
+    main aside#statistics table tbody tr td:first-child {
+        padding: 0.36rem;
+    }
+    
+    main aside#statistics table tbody tr td:last-child {
+        padding: 0.36rem;
+    }
+    
+    main aside#statistics .list-group-progress {
+        height: 0.72rem;
+    }
+    
+    dialog article.modal-content {
+        padding: 0.72rem;
+        max-width: 23.04rem;
+        border-radius: 0.72rem;
+    }
+    
+    dialog article.modal-content button.close {
+        font-size: 1.44rem;
+    }    
+    
+}
+
+/* DESKTOP LARGE */
+@media only screen and (min-width: 1920px) {
+
+    main {
+        grid-template-rows: 22.5% 77.5%;
+        top: 12rem;
+        bottom: 3rem;
+        gap: 0.75rem;
+        font-size: 1.5rem;
+        margin-right: 3rem;
+        margin-left: 3rem;
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    main fieldset {
+        border-radius: 1.5rem;
+    }
+    
+    main fieldset legend {
+        border-radius: 0.75rem;
+        padding: 0.1875rem 0.375rem;
+    }
+    
+    main fieldset .filter-group label {
+        margin-bottom: 0.1875rem;
+    }
+    
+    main fieldset select {
+        border-radius: 0.75rem;
+        max-width: 24rem;
+        font-size: 1.5rem;
+    }
+
+    main aside#dynamic-data {
+        border-radius: 1.5rem;
+        gap: 0.75rem;
+        padding: 0.75rem;
+    }
+
+    main aside#dynamic-data table thead tr th {
+        border-top-left-radius: 0.75rem;
+        border-top-right-radius: 0.75rem;
+    }
+
+    main aside#dynamic-data table tbody {
+        border-bottom-right-radius: 0.75rem;
+        border-bottom-left-radius: 0.75rem;
+    }
+
+    main aside#dynamic-data table tbody tr td:first-child {
+        padding: 0.75rem;
+    }
+
+    main aside#dynamic-data table tbody tr td:last-child {
+        padding: 0.75rem;
+    }
+
+    main aside#dynamic-data span.node-added-time {
+        margin-bottom: 3rem;
+    }
+
+    main aside#dynamic-data button {
+        border-radius: 0.75rem;
+        padding: 0.375rem 0.75rem;
+        max-width: 24rem;
+        font-size: 1.5rem;
+    }
+
+    main aside#dynamic-data div.button-container {
+        gap: 1.5rem;
+    }
+
+    main div#map {
+        border-radius: 1.5rem;
+    }
+
+    main div#map form {
+        top: 3rem;
+        right: 1.5rem;
+    }
+
+    main div#map form label.radio-label {
+        margin-right: -0.375rem;
+        padding: 1.5rem;
+    }
+
+    main div#map form label.radio-label:first-of-type {
+        border-top-left-radius: 1.5rem;
+        border-bottom-left-radius: 1.5rem;
+    }
+    
+    main div#map form label.radio-label:last-of-type {
+        border-top-right-radius: 1.5rem;
+        border-bottom-right-radius: 1.5rem;
+    }
+
+    main aside#statistics {
+        border-radius: 1.5rem;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        margin-right: 1.5rem;
+    }
+
+    main aside#statistics form label.radio-label {
+        padding: 0.375rem;
+    }
+
+    main aside#statistics table thead tr th {
+        border-top-left-radius: 0.75rem;
+        border-top-right-radius: 0.75rem;
+    }
+
+    main aside#statistics table tbody {
+        border-bottom-left-radius: 0.75rem;
+        border-bottom-right-radius: 0.75rem;
+    }
+
+    main aside#statistics table tbody tr td:first-child {
+        padding: 0.75rem;
+    }
+
+    main aside#statistics table tbody tr td:last-child {
+        padding: 0.75rem;
+    }
+
+    main aside#statistics .list-group-progress {
+        height: 1.5rem;
+    }
+
+    dialog article.modal-content {
+        padding: 1.5rem;
+        max-width: 48rem;
+        border-radius: 1.5rem;
+    }
+
+    dialog article.modal-content button.close {
+        font-size: 3rem;
+    }
+
+}
+
+/* DESKTOP ULTRAWIDE */
+@media only screen and (min-width: 2560px) {
+    
+    main {
+        grid-template-rows: 30% 70%;
+        top: 16rem;
+        bottom: 4rem;
+        gap: 1rem;
+        font-size: 2rem;
+        margin-right: 4rem;
+        margin-left: 4rem;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    main fieldset {
+        border-radius: 2rem;
+    }
+    
+    main fieldset legend {
+        border-radius: 1rem;
+        padding: 0.25rem 0.5rem;
+    }
+    
+    main fieldset .filter-group label {
+        margin-bottom: 0.25rem;
+    }
+    
+    main fieldset select {
+        border-radius: 1rem;
+        max-width: 32rem;
+        font-size: 2rem;
+    }
+
+    main aside#dynamic-data {
+        border-radius: 2rem;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    
+    main aside#dynamic-data table thead tr th {
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
+    }
+    
+    main aside#dynamic-data table tbody {
+        border-bottom-right-radius: 1rem;
+        border-bottom-left-radius: 1rem;
+    }
+    
+    main aside#dynamic-data table tbody tr td:first-child {
+        padding: 1rem;
+    }
+    
+    main aside#dynamic-data table tbody tr td:last-child {
+        padding: 1rem;
+    }
+    
+    main aside#dynamic-data span.node-added-time {
+        margin-bottom: 4rem;
+    }
+    
+    main aside#dynamic-data button {
+        border-radius: 1rem;
+        padding: 0.5rem 1rem;
+        max-width: 32rem;
+        font-size: 2rem;
+    }
+
+    main aside#dynamic-data div.button-container {
+        gap: 2rem;
+    }
+    
+    main div#map {
+        border-radius: 2rem;
+    }
+    
+    main div#map form {
+        top: 4rem;
+        right: 2rem;
+    }
+    
+    main div#map form label.radio-label {
+        margin-right: -0.5rem;
+        padding: 2rem;
+    }
+    
+    main div#map form label.radio-label:first-of-type {
+        border-top-left-radius: 2rem;
+        border-bottom-left-radius: 2rem;
+    }
+    
+    main div#map form label.radio-label:last-of-type {
+        border-top-right-radius: 2rem;
+        border-bottom-right-radius: 2rem;
+    }
+    
+    main aside#statistics {
+        border-radius: 2rem;
+        gap: 1rem;
+        padding: 1rem;
+        margin-right: 2rem;
+    }
+    
+    main aside#statistics form label.radio-label {
+        padding: 0.5rem;
+    }
+    
+    main aside#statistics table thead tr th {
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
+    }
+    
+    main aside#statistics table tbody {
+        border-bottom-left-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+    }
+    
+    main aside#statistics table tbody tr td:first-child {
+        padding: 1rem;
+    }
+    
+    main aside#statistics table tbody tr td:last-child {
+        padding: 1rem;
+    }
+    
+    main aside#statistics .list-group-progress {
+        height: 2rem;
+    }
+    
+    dialog article.modal-content {
+        padding: 2rem;
+        max-width: 64rem;
+        border-radius: 2rem;
+    }
+    
+    dialog article.modal-content button.close {
+        font-size: 4rem;
+    }
+
+}
+
+/* DESKTOP ULTRAWIDE (2K) */
+@media only screen and (min-width: 3440px) {
+
+    main {
+        grid-template-rows: 30% 70%;
+        top: 21.5625rem;
+        bottom: 5.375rem;
+        gap: 1.34375rem;
+        font-size: 2.6875rem;
+        margin-right: 5.375rem;
+        margin-left: 5.375rem;
+        margin-top: 2.6875rem;
+        margin-bottom: 2.6875rem;
+    }
+
+    main fieldset {
+        border-radius: 2.6953125rem;
+    }
+    
+    main fieldset legend {
+        border-radius: 1.34765625rem;
+        padding: 0.337890625rem 0.673828125rem;
+    }
+    
+    main fieldset .filter-group label {
+        margin-bottom: 0.337890625rem;
+    }
+    
+    main fieldset select {
+        border-radius: 1.34765625rem;
+        max-width: 43.125rem;
+        font-size: 2.6953125rem;
+    }    
+
+    main aside#dynamic-data {
+        border-radius: 2.6875rem;
+        gap: 1.34375rem;
+        padding: 1.34375rem;
+    }
+
+    main aside#dynamic-data table thead tr th {
+        border-top-left-radius: 1.34375rem;
+        border-top-right-radius: 1.34375rem;
+    }
+
+    main aside#dynamic-data table tbody {
+        border-bottom-right-radius: 1.34375rem;
+        border-bottom-left-radius: 1.34375rem;
+    }
+
+    main aside#dynamic-data table tbody tr td:first-child {
+        padding: 1.34375rem;
+    }
+
+    main aside#dynamic-data table tbody tr td:last-child {
+        padding: 1.34375rem;
+    }
+
+    main aside#dynamic-data span.node-added-time {
+        margin-bottom: 5.375rem;
+    }
+
+    main aside#dynamic-data button {
+        border-radius: 1.34375rem;
+        padding: 0.671875rem 1.34375rem;
+        max-width: 43rem;
+        font-size: 2.6875rem;
+    }
+
+    main aside#dynamic-data div.button-container {
+        gap: 2.6875rem;
+    }
+
+    main div#map {
+        border-radius: 2.6875rem;
+    }
+
+    main div#map form {
+        top: 5.375rem;
+        right: 2.6875rem;
+    }
+
+    main div#map form label.radio-label {
+        margin-right: -0.671875rem;
+        padding: 2.6875rem;
+    }
+
+    main div#map form label.radio-label:first-of-type {
+        border-top-left-radius: 2.6875rem;
+        border-bottom-left-radius: 2.6875rem;
+    }
+
+    main div#map form label.radio-label:last-of-type {
+        border-top-right-radius: 2.6875rem;
+        border-bottom-right-radius: 2.6875rem;
+    }
+
+    main aside#statistics {
+        border-radius: 2.6875rem;
+        gap: 1.34375rem;
+        padding: 1.34375rem;
+        margin-right: 2.6875rem;
+    }
+
+    main aside#statistics form label.radio-label {
+        padding: 0.671875rem;
+    }
+
+    main aside#statistics table thead tr th {
+        border-top-left-radius: 1.34375rem;
+        border-top-right-radius: 1.34375rem;
+    }
+
+    main aside#statistics table tbody {
+        border-bottom-left-radius: 1.34375rem;
+        border-bottom-right-radius: 1.34375rem;
+    }
+
+    main aside#statistics table tbody tr td:first-child {
+        padding: 1.34375rem;
+    }
+
+    main aside#statistics table tbody tr td:last-child {
+        padding: 1.34375rem;
+    }
+
+    main aside#statistics .list-group-progress {
+        height: 2.6875rem;
+    }
+
+    dialog article.modal-content {
+        padding: 2.6875rem;
+        max-width: 86rem;
+        border-radius: 2.6875rem;
+    }
+
+    dialog article.modal-content button.close {
+        font-size: 5.375rem;
+    }
+
+}
+
+/* DESKTOP 4K UHD */
+@media only screen and (min-width: 3840px) {
+
+    main {
+        grid-template-rows: 22.5% 77.5%;
+        top: 24rem;
+        bottom: 6rem;
+        gap: 1.5rem;
+        font-size: 3rem;
+        margin-right: 6rem;
+        margin-left: 6rem;
+        margin-top: 3rem;
+        margin-bottom: 3rem;
+    }
+    
+    main fieldset {
+        border-radius: 3rem;
+    }
+    
+    main fieldset legend {
+        border-radius: 1.5rem;
+        padding: 0.375rem 0.75rem;
+    }
+    
+    main fieldset .filter-group label {
+        margin-bottom: 0.375rem;
+    }
+    
+    main fieldset select {
+        border-radius: 1.5rem;
+        max-width: 48rem;
+        font-size: 3rem;
+    }
+
+    main aside#dynamic-data {
+        border-radius: 3rem;
+        gap: 1.5rem;
+        padding: 1.5rem;
+    }
+    
+    main aside#dynamic-data table thead tr th {
+        border-top-left-radius: 1.5rem;
+        border-top-right-radius: 1.5rem;
+    }
+    
+    main aside#dynamic-data table tbody {
+        border-bottom-right-radius: 1.5rem;
+        border-bottom-left-radius: 1.5rem;
+    }
+    
+    main aside#dynamic-data table tbody tr td:first-child {
+        padding: 1.5rem;
+    }
+    
+    main aside#dynamic-data table tbody tr td:last-child {
+        padding: 1.5rem;
+    }
+    
+    main aside#dynamic-data span.node-added-time {
+        margin-bottom: 6rem;
+    }
+    
+    main aside#dynamic-data button {
+        border-radius: 1.5rem;
+        padding: 0.75rem 1.5rem;
+        max-width: 48rem;
+        font-size: 3rem;
+    }
+    
+    main aside#dynamic-data div.button-container {
+        gap: 3rem;
+    }
+    
+    main div#map {
+        border-radius: 3rem;
+    }
+    
+    main div#map form {
+        top: 6rem;
+        right: 3rem;
+    }
+    
+    main div#map form label.radio-label {
+        margin-right: -0.75rem;
+        padding: 3rem;
+    }
+    
+    main div#map form label.radio-label:first-of-type {
+        border-top-left-radius: 3rem;
+        border-bottom-left-radius: 3rem;
+    }
+    
+    main div#map form label.radio-label:last-of-type {
+        border-top-right-radius: 3rem;
+        border-bottom-right-radius: 3rem;
+    }
+    
+    main aside#statistics {
+        border-radius: 3rem;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        margin-right: 3rem;
+    }
+    
+    main aside#statistics form label.radio-label {
+        padding: 0.75rem;
+    }
+    
+    main aside#statistics table thead tr th {
+        border-top-left-radius: 1.5rem;
+        border-top-right-radius: 1.5rem;
+    }
+    
+    main aside#statistics table tbody {
+        border-bottom-left-radius: 1.5rem;
+        border-bottom-right-radius: 1.5rem;
+    }
+    
+    main aside#statistics table tbody tr td:first-child {
+        padding: 1.5rem;
+    }
+    
+    main aside#statistics table tbody tr td:last-child {
+        padding: 1.5rem;
+    }
+    
+    main aside#statistics .list-group-progress {
+        height: 3rem;
+    }
+    
+    dialog article.modal-content {
+        padding: 3rem;
+        max-width: 96rem;
+        border-radius: 3rem;
+    }
+    
+    dialog article.modal-content button.close {
+        font-size: 6rem;
+    }    
+
+}
