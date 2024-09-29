@@ -174,4 +174,3 @@ class NodeHelper:
             self.logger.critical(f"::get_valid_host_and_port:: Invalid port number in environment: {ve}")
             self.logger.debug("::Exiting get_valid_host_and_port:: with error due to invalid port")
             raise
-

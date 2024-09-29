@@ -216,8 +216,6 @@ class NodeService:
             self.logger.debug("::fetch_summary_counts:: Exiting fetch_summary_counts method with error.")
             raise e
 
-    @cached(ttl=300, cache=Cache.MEMORY,
-            key=lambda f, data_type: f"fetch_statistics:{data_type}")
     async def fetch_statistics(self, data_type):
         """
         Fetches statistics for a specific data type (OS, client, ISP, or country).
@@ -312,8 +310,6 @@ class NodeService:
             self.logger.debug("::fetch_statistics:: Exiting fetch_statistics method with error.")
             raise e
 
-    @cached(ttl=300, cache=Cache.MEMORY,
-            key=lambda f, node_id: f"fetch_node_details:{node_id}")
     async def fetch_node_details(self, node_id):
         """
         Fetches detailed information about a specific node by its ID.
@@ -343,7 +339,6 @@ class NodeService:
             self.logger.debug("::fetch_node_details:: Exiting fetch_node_details method with error.")
             raise e
 
-    @cached(ttl=300, cache=Cache.MEMORY, key=lambda f, limit: f"fetch_latest_nodes:{limit}")
     async def fetch_latest_nodes(self, limit):
         """
         Fetches the latest nodes up to a specified limit.
@@ -372,8 +367,6 @@ class NodeService:
             self.logger.debug("::fetch_latest_nodes:: Exiting fetch_latest_nodes method with error.")
             raise e
 
-    @cached(ttl=300, cache=Cache.MEMORY,
-            key=lambda f, country_name: f"fetch_relationships:{country_name}")
     async def fetch_relationships(self, country_name):
         """
         Fetches relationships for a given country, including ISP, OS, client, and node relationships.
@@ -428,8 +421,6 @@ class NodeService:
             self.logger.debug("::fetch_total_nodes:: Exiting fetch_total_nodes method with error.")
             raise e
 
-    @cached(ttl=300, cache=Cache.MEMORY,
-            key=lambda f, country, os, client, isp: f"fetch_filtered_nodes:{country}:{os}:{client}:{isp}")
     async def fetch_filtered_nodes(self, country=None, os=None, client=None, isp=None):
         """
         Fetches nodes that match the given filter criteria (country, OS, client, and ISP).
