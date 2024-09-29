@@ -1,1 +1,1 @@
-from .node_routes import NodeRoutes
+from api.routes.node_router import NodeRouter

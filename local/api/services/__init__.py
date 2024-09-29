@@ -1,2 +1,1 @@
-# You can import your models here if needed
-from .node_service import NodeService
+from api.services.node_service import NodeService

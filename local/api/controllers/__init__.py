@@ -1,1 +1,1 @@
-from .node_controller import NodeController
+from api.controllers.node_controller import NodeController
