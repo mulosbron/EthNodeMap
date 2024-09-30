@@ -1,0 +1,57 @@
+main {
+    display: grid;
+    grid-template-columns: 20% 60% 20%;
+    position: fixed;
+    top: 128px;
+    bottom: 32px;
+    height: auto;
+    padding: 8px;
+    box-sizing: border-box;
+    color: var(--text-color);   
+    transition: background-color 0.3s ease;
+    overflow: auto;
+}
+
+main section {
+    background-color: var(--secondary-bg-color);
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    grid-column: 2;
+    width: 100%;
+    margin: auto;
+    align-items: center;
+    padding: 16px;
+}
+
+main section h1 {
+    margin-top: 16px;
+    margin-bottom: 8px;
+    color: var(--text-color);
+    text-align: center;
+}
+
+main section h2,
+h3 {
+    margin-top: 16px;
+    margin-bottom: 8px;
+    color: var(--text-color);
+}
+
+main section p {
+    margin-bottom: 16px;
+    text-align: justify;
+}
+
+@media(max-width: 1024px) {
+    main {
+        top: 64px;
+        bottom: 0;
+        height: auto;
+    }
+}
+
+@media(min-width: 1025px) {
+    main {
+        overflow: auto;
+    }
+}

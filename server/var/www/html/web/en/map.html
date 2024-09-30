@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="mulosbron">
+    <!-- -->
+    <meta name="description"
+        content="View Ethereum nodes on a world map. Discover Ethereum nodes in different countries and regions on the map.">
+    <meta name="keywords" content="Ethereum, node, map, blockchain, crypto">
+    <!-- -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="ethernodesmap">
+    <meta property="og:description"
+        content="View Ethereum nodes on a world map. Discover Ethereum nodes in different countries and regions on the map.">
+    <meta property="og:url" content="https://ethernodesmap.org/index.html">
+    <meta property="og:image"
+        content="https://mbypvtc4vfnh76n53mnwt5uz7cqqp3pso54h24gaku7fl23wf2ta.arweave.net/YHD6zFypWn_5vdsbafaZ-KEH7fJ3eH1wwFU-Vet2LqY">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="ethernodesmap">
+    <meta property="og:updated_time" content="2024-08-29T12:00:00+0000">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="ethernodesmap">
+    <meta name="twitter:description"
+        content="View Ethereum nodes on a world map. Discover Ethereum nodes in different countries and regions on the map.">
+    <meta name="twitter:image"
+        content="https://mbypvtc4vfnh76n53mnwt5uz7cqqp3pso54h24gaku7fl23wf2ta.arweave.net/YHD6zFypWn_5vdsbafaZ-KEH7fJ3eH1wwFU-Vet2LqY">
+    <title>Map | ethernodesmap</title>
+    <link rel="stylesheet" href="../pkg/leaflet.css">
+    <link rel="stylesheet" href="../pkg/MarkerCluster.css">
+    <link rel="stylesheet" href="../pkg/MarkerCluster.Default.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/main-map.css">
+    <link rel="icon" type="image/svg+xml"
+        href="https://mz5qgsxffhzeicok2piuj2u43taoxgck6ddufzfnv4onqwrkscmq.arweave.net/ZnsDSuUp8kQJytPRROqc3MDrmErwx0Lkra8c2FoqkJk">
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <a href="../en/index.html" aria-label="Home">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                    id="Layer_1" x="0px" y="0px" viewBox="0 0 327.5 533.3" style="enable-background:new 0 0 327.5 533.3;"
+                    xml:space="preserve" aria-hidden="true">
+                    <style type="text/css">
+                        .st0 { fill: #8A92B2; }
+                        .st1 { fill: #62688F; }
+                        .st2 { fill: #454A75; }
+                    </style>
+                    <path class="st0" d="M163.7,197.2V0L0,271.6L163.7,197.2z" />
+                    <path class="st1" d="M163.7,368.4V197.2L0,271.6L163.7,368.4z M163.7,197.2l163.7,74.4L163.7,0V197.2z" />
+                    <path class="st2" d="M163.7,197.2v171.2l163.7-96.8L163.7,197.2z" />
+                    <path class="st0" d="M163.7,399.4L0,302.7l163.7,230.7V399.4z" />
+                    <path class="st1" d="M327.5,302.7l-163.8,96.7v134L327.5,302.7z" />
+                </svg>
+                <span>ethernodesmap</span>
+            </a>
+        </div>   
+        <nav aria-label="Main navigation">
+            <ul class="sidebar">
+                <li>
+                    <a href="#" aria-label="Close Sidebar">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="32px">
+                            <path
+                                d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"
+                                fill="#EDEDED" aria-hidden="true" />
+                        </svg>
+                    </a>
+                </li>
+                <li>
+                    <a href="../en/map.html" aria-label="Map View">Map View</a>
+                </li>
+                <li>
+                    <a href="../en/graph.html" aria-label="Tree Graph View">Graph View</a>
+                </li>
+                <li>
+                    <a href="../en/clients.html" aria-label="Types of Ethereum Clients">Types of Ethereum Clients</a>
+                </li>
+                <li>
+                    <a href="../en/about-us.html" aria-label="About Us">About Us</a>
+                </li>
+                <li>
+                    <button id="mode-toggle-sidebar">
+                        <svg id="mode-icon-sidebar" class="sun"></svg>
+                    </button>
+                </li>
+            </ul>
+            <ul>
+                <li class="hideOnMobile">
+                    <a href="../en/map.html" aria-label="Map View">Map View</a>
+                </li>
+                <li class="hideOnMobile">
+                    <a href="../en/graph.html" aria-label="Tree Graph View">Graph View</a>
+                </li>
+                <li class="hideOnMobile">
+                    <a href="../en/clients.html" aria-label="Types of Ethereum Clients">Types of Ethereum Clients</a>
+                </li>
+                <li class="hideOnMobile">
+                    <a href="../en/about-us.html" aria-label="About Us">About Us</a>
+                </li>
+                <li class="menu-button">
+                    <a href="#">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="32px">
+                            <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"
+                                fill="#EDEDED" aria-hidden="true" />
+                        </svg>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <button class="hideOnMobile" id="mode-toggle">
+            <svg id="mode-icon" class="sun"></svg>
+        </button>
+    </header>
+    <main>
+        <fieldset>
+            <legend>Filters</legend>
+            <form class="filter-group">
+                <label for="country-filter"><b>Countries</b></label>
+                <select id="country-filter" aria-label="Countries">
+                    <option value="all">All Countries</option>
+                </select>
+            </form>
+            <form class="filter-group">
+                <label for="os-filter"><b>Operating Systems</b></label>
+                <select id="os-filter" aria-label="Operating Systems">
+                    <option value="all">All Operating Systems</option>
+                    <option value="Linux">Linux</option>
+                    <option value="Windows">Windows</option>
+                    <option value="MacOS">MacOS</option>
+                    <option value="Other OSs">Other OSs</option>
+                </select>
+            </form>
+            <form class="filter-group">
+                <label for="client-filter"><b>Clients</b></label>
+                <select id="client-filter" aria-label="Clients">
+                    <option value="all">All Client Types</option>
+                    <option value="Geth">Geth</option>
+                    <option value="Nethermind">Nethermind</option>
+                    <option value="Besu">Besu</option>
+                    <option value="Erigon">Erigon</option>
+                    <option value="Reth">Reth</option>
+                    <option value="EthereumJS">EthereumJS</option>
+                    <option value="Other Clients">Other Clients</option>
+                </select>
+            </form>
+            <form class="filter-group">
+                <label for="isp-filter"><b><abbr title="Internet Service Providers">ISPs</abbr></b></label>
+                <select id="isp-filter" aria-label="ISPs">
+                    <option value="all">All ISPs</option>
+                    <option value="Contabo">Contabo</option>
+                    <option value="AWS">AWS</option>
+                    <option value="Azure">Azure</option>
+                    <option value="Google">Google</option>
+                    <option value="Alibaba">Alibaba</option>
+                    <option value="Oracle">Oracle</option>
+                    <option value="IBM">IBM</option>
+                    <option value="Tencent">Tencent</option>
+                    <option value="OVHCloud">OVHCloud</option>
+                    <option value="DO">DO</option>
+                    <option value="Linode">Linode</option>
+                    <option value="Salesforce">Salesforce</option>
+                    <option value="Huawei">Huawei</option>
+                    <option value="Dell">Dell</option>
+                    <option value="Vultr">Vultr</option>
+                    <option value="Heroku">Heroku</option>
+                    <option value="Hetzner">Hetzner</option>
+                    <option value="Scaleway">Scaleway</option>
+                    <option value="Upcloud">Upcloud</option>
+                    <option value="Kamatera">Kamatera</option>
+                    <option value="Other ISPs">Other ISPs</option>
+                </select>
+            </form>
+        </fieldset>
+        <aside id="dynamic-data">
+            <table id="node-count">
+                <thead>
+                    <tr>
+                        <th>
+                            <b>Datas</b>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <b>Total Node Count: </b><span id="total-node-count">0</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <template id="latest-node-template">
+                <tr>
+                    <td>
+                        <b>Country:</b>
+                    </td>
+                    <td>
+                        <span class="node-country"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Client:</b>
+                    </td>
+                    <td>
+                        <span class="node-client"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Operating System:</b>
+                    </td>
+                    <td>
+                        <span class="node-os"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b><abbr title="Internet Service Provider">ISP:</abbr></b>
+                    </td>
+                    <td>
+                        <span class="node-isp"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Enode:</b>
+                    </td>
+                    <td>
+                        <button class="copy-button" data-enode="">Copy</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <span class="node-added-time"></span>
+                    </td>
+                </tr>
+            </template>
+            <table id="latest-node">
+                <thead>
+                    <tr>
+                        <th>
+                            <b>Latest Nodes</b>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!---->
+                </tbody>
+            </table>
+            <div class="button-container">
+                <button id="left">&lt;</button>
+                <button id="right">&gt;</button>
+            </div>
+        </aside>
+
+        <div id="map">
+            <form>
+                <input class="radio-input" type="radio" id="toggleMarkers" name="mapView" value="markers" checked>
+                <label class="radio-label" for="toggleMarkers">Markers</label>
+                <input class="radio-input" type="radio" id="toggleHeatmap" name="mapView" value="heatmap" disabled>
+                <label class="radio-label" for="toggleHeatmap">Heatmap</label>
+                <input class="radio-input" type="radio" id="toggleChoroplethmap" name="mapView" value="choroplethmap" disabled>
+                <label class="radio-label" for="toggleChoroplethmap">Choropleth</label>
+            </form>
+            <!---->
+        </div>
+        <aside id="statistics">
+            <template id="statistics-row-template">
+                <tr>
+                    <td></td>
+                    <td>
+                        <span class="float-right text-muted"></span>
+                    </td>
+                </tr>
+                <tr colspan="2">
+                    <progress class="list-group-progress" value="0" max="100"></progress>
+                </tr>
+            </template>
+            <table id="statistics-table">
+                <thead>
+                    <tr>
+                        <th colspan="2">
+                            <form>
+                                <input class="radio-input" value="client" type="radio" name="selection" id="client">
+                                <label class="radio-label" for="client">Client</label>
+                                <input class="radio-input" value="country" type="radio" name="selection" id="country">
+                                <label class="radio-label" for="country">Country</label>
+                                <input class="radio-input" value="os" type="radio" name="selection" id="os">
+                                <label class="radio-label" for="os">OS</label>
+                                <input class="radio-input" value="isp" type="radio" name="selection" id="isp">
+                                <label class="radio-label" for="isp">ISP</label>
+                            </form>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Row 1, Cell 1</td>
+                        <td>Row 1, Cell 2</td>
+                    </tr>
+                    <!-- Other rows -->
+                </tbody>
+            </table>
+        </aside>
+    </main>
+    <dialog id="node-details-modal">
+        <article class="modal-content">
+            <button class="close" aria-label="Close Modal">&times;</button>
+            <h3>Node Details</h3>
+            <p><b>NodeId:</b> <span id="node-id"></span></p>
+            <p><b>Host:</b> <span id="node-host"></span></p>
+            <p><b>Port:</b> <span id="node-port"></span></p>
+            <p><b>Client:</b> <span id="node-client"></span></p>
+            <p><b>Operating System:</b> <span id="node-os"></span></p>
+            <p><b>Internet Service Provider:</b> <span id="node-isp"></span></p>
+            <p><b>Country:</b> <span id="node-country"></span></p>
+            <p><b>Coordinates:</b> <span id="node-coordinates"></span></p>
+            <p><b>Uptime:</b> <span id="node-uptime"></span>%</p>
+            <p><b>Database Entry Date (Local):</b> <span id="node-created-at"></span></p>
+        </article>
+    </dialog>
+    <footer>
+        <span>Made by mulosbron | ethernodesmap.org - The source of nodes information is
+            <a href='https://ethernodes.org/' aria-label="Ethernodes" target="_blank"
+                rel="noopener noreferrer">ethernodes.org</a>
+        </span>
+        <ul>
+            <li>
+                <a href="https://github.com/mulosbron" aria-label="GitHub" target="_blank"
+                    rel="noopener noreferrer">Github</a>
+            </li>
+            <li>
+                <a href="#" aria-label="Twitter" target="_blank" rel="noopener noreferrer">Twitter</a>
+            </li>
+            <li>
+                <a href="#" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            </li>
+            <li>
+                <a href="#" aria-label="Discord" target="_blank" rel="noopener noreferrer">Discord</a>
+            </li>
+        </ul>
+    </footer>
+    <script src="../pkg/leaflet.js" defer></script>
+    <script src="../pkg/leaflet.markercluster.js" defer></script>
+    <script src="../pkg/leaflet-heat.js" defer></script>
+    <script src="../pkg/leaflet-choropleth.js" defer></script>
+    <script src="../js/map.js" defer></script>
+    <script src="../js/app.js" defer></script>
+</body>
+
+</html>

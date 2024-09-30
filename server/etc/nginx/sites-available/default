@@ -1,51 +1,55 @@
-# Ana domain için HTTP'den HTTPS'e yönlendirme
+# Redirect all HTTP requests for the main domain to HTTPS
 server {
     listen 80;
-    server_name eth-node-map.xyz;
+    server_name ethernodesmap.org;
 
-    # Tüm HTTP isteklerini HTTPS'e yönlendir
+    # Redirect to HTTPS
     return 301 https://$host$request_uri;
 }
 
-# Ana domain için HTTPS ayarları
+# Main domain HTTPS configuration
 server {
     listen 443 ssl;
-    server_name eth-node-map.xyz;
+    server_name ethernodesmap.org;
 
-    ssl_certificate /etc/letsencrypt/live/eth-node-map.xyz/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/eth-node-map.xyz/privkey.pem;
+    # SSL Certificate Configuration
+    ssl_certificate /etc/letsencrypt/live/ethernodesmap.org/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/ethernodesmap.org/privkey.pem;
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
-    root /var/www/html/web; # Web dosyalarının konumu
-    index index.html;       # Ana sayfa dosyası
+    root /var/www/html/web;
+    index index.html;
 
-    set $mobile_rewrite $is_mobile;
-
+    # Serve the main application
     location / {
-        if ($mobile_rewrite) {
-            return 403; # 403 Forbidden status code
-        }
         try_files $uri $uri/ =404;
     }
 
-    location /graph.html {
-        if ($mobile_rewrite) {
-            return 403; # 403 Forbidden status code
-        }
-        try_files /graph.html =404;
-    }  
-
-    error_page 403 /error.html;
-    location = /error.html {
-        root /var/www/html/web;
-        internal;
+    # HTML files location
+    location /en {
+        alias /var/www/html/web/en;
+        try_files $uri $uri/ =404;
     }
-    
+
+    # Static CSS and JS assets
+    location /css {
+        alias /var/www/html/web/css;
+        try_files $uri $uri/ =404;
+    }
+
+    location /js {
+        alias /var/www/html/web/js;
+        try_files $uri $uri/ =404;
+    }
+
+    # Packages (leaflet, d3, etc.)
     location /pkg {
         alias /var/www/html/web/pkg;
+        try_files $uri $uri/ =404;
     }
 
+    # Robots.txt and sitemap.xml
     location /robots.txt {
         allow all;
         log_not_found off;
@@ -58,71 +62,56 @@ server {
         access_log off;
     }
 
-    # CSS dosyaları için Expires headers
-    location ~* \.css$ {
-        expires 1y;
-        add_header Cache-Control "public";
+    # Error handling
+    error_page 403 /error.html;
+    location = /error.html {
+        root /var/www/html/web;
+        internal;
     }
 
-    # JS dosyaları için Expires headers
-    location ~* \.js$ {
-        expires 1y;
-        add_header Cache-Control "public";
-    }
-
-    # Görüntü dosyaları için Expires headers
-    location ~* \.(png|jpg|jpeg|gif|ico)$ {
-        expires 1y;
+    # Caching for static files
+    location ~* \.(css|js|png|jpg|jpeg|gif|ico)$ {
+        expires 15m;
         add_header Cache-Control "public";
     }
 }
 
-# Subdomain için HTTP'den HTTPS'e yönlendirme
+# Redirect all HTTP requests for the API subdomain to HTTPS
 server {
     listen 80;
-    server_name api.eth-node-map.xyz;
+    server_name api.ethernodesmap.org;
 
-    # Tüm HTTP isteklerini HTTPS'e yönlendir
+    # Redirect to HTTPS
     return 301 https://$host$request_uri;
 }
 
-# Subdomain için HTTPS ayarları
+# API subdomain HTTPS configuration
 server {
     listen 443 ssl;
-    server_name api.eth-node-map.xyz;
+    server_name api.ethernodesmap.org;
 
-    ssl_certificate /etc/letsencrypt/live/eth-node-map.xyz/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/eth-node-map.xyz/privkey.pem;
+    # SSL Certificate Configuration
+    ssl_certificate /etc/letsencrypt/live/ethernodesmap.org/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/ethernodesmap.org/privkey.pem;
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
-    root /var/www/html; # Subdomain için kök dizin
-    index index.html;   # Ana sayfa dosyası
+    root /var/www/html; # API subdomain root directory
+    index index.html;
 
+    # Serve the API application
     location / {
-        try_files $uri $uri/ =404; # Dosyaları doğrudan bulamazsa 404 döner
+        try_files $uri $uri/ =404;
     }
 
-    # CSS dosyaları için Expires headers
-    location ~* \.css$ {
+    # Caching for static files
+    location ~* \.(css|js|png|jpg|jpeg|gif|ico)$ {
         expires 1y;
         add_header Cache-Control "public";
     }
 
-    # JS dosyaları için Expires headers
-    location ~* \.js$ {
-        expires 1y;
-        add_header Cache-Control "public";
-    }
-
-    # Görüntü dosyaları için Expires headers
-    location ~* \.(png|jpg|jpeg|gif|ico)$ {
-        expires 1y;
-        add_header Cache-Control "public";
-    }
-
-    # API yönlendirmeleri
-location /nodes {
+    # API Endpoint Proxying
+    location /nodes {
         proxy_pass http://127.0.0.1:5001/nodes;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -130,40 +119,16 @@ location /nodes {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
-    location /nodes/details/ {
-        proxy_pass http://127.0.0.1:5001/nodes/details/;
+    location /nodes/operating-systems {
+        proxy_pass http://127.0.0.1:5001/nodes/operating-systems;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
-    location /nodes/count {
-        proxy_pass http://127.0.0.1:5001/nodes/count;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-
-    location /nodes/ids {
-        proxy_pass http://127.0.0.1:5001/nodes/ids;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-
-    location /nodes/os-types {
-        proxy_pass http://127.0.0.1:5001/nodes/os-types;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-
-    location /nodes/client-types {
-        proxy_pass http://127.0.0.1:5001/nodes/client-types;
+    location /nodes/clients {
+        proxy_pass http://127.0.0.1:5001/nodes/clients;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -186,6 +151,38 @@ location /nodes {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
+    location /nodes/ids {
+        proxy_pass http://127.0.0.1:5001/nodes/ids;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /nodes/details/ {
+        proxy_pass http://127.0.0.1:5001/nodes/details/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /nodes/relationships/ {
+        proxy_pass http://127.0.0.1:5001/nodes/relationships/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /nodes/count {
+        proxy_pass http://127.0.0.1:5001/nodes/count;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
     location /nodes/latest {
         proxy_pass http://127.0.0.1:5001/nodes/latest;
         proxy_set_header Host $host;
@@ -194,40 +191,16 @@ location /nodes {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
-    location /nodes/country/ {
-        proxy_pass http://127.0.0.1:5001/nodes/country/;
+    location /nodes/filter {
+        proxy_pass http://127.0.0.1:5001/nodes/filter;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
-    location /statistics/os {
-        proxy_pass http://127.0.0.1:5001/statistics/os;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-
-    location /statistics/client {
-        proxy_pass http://127.0.0.1:5001/statistics/client;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-
-    location /statistics/isp {
-        proxy_pass http://127.0.0.1:5001/statistics/isp;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-
-    location /statistics/country {
-        proxy_pass http://127.0.0.1:5001/statistics/country;
+    location /statistics/ {
+        proxy_pass http://127.0.0.1:5001/statistics/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
