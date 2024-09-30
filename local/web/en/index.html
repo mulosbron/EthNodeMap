@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="mulosbron">
+    <!-- -->
     <meta name="description"
-        content="Discover Ethereum nodes on a world map with ethernodesmap. Explore Ethereum nodes in various countries and regions using detailed filtering options and visually analyze the network structure.">
-    <meta name="keywords" content="Ethereum, node, map, blockchain, crypto, node map, network analysis">
+        content="View Ethereum nodes on a world map. Discover Ethereum nodes in different countries and regions on the map.">
+    <meta name="keywords" content="Ethereum, node, map, blockchain, crypto">
+    <!-- -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="ethernodesmap">
     <meta property="og:description"
         content="View Ethereum nodes on a world map. Discover Ethereum nodes in different countries and regions on the map.">
-    <meta property="og:url" content="https://ethernodesmap.org/en/index.html">
+    <meta property="og:url" content="https://ethernodesmap.org/index.html">
     <meta property="og:image"
         content="https://mbypvtc4vfnh76n53mnwt5uz7cqqp3pso54h24gaku7fl23wf2ta.arweave.net/YHD6zFypWn_5vdsbafaZ-KEH7fJ3eH1wwFU-Vet2LqY">
     <meta property="og:image:type" content="image/jpeg">
@@ -25,41 +28,36 @@
     <meta name="twitter:image"
         content="https://mbypvtc4vfnh76n53mnwt5uz7cqqp3pso54h24gaku7fl23wf2ta.arweave.net/YHD6zFypWn_5vdsbafaZ-KEH7fJ3eH1wwFU-Vet2LqY">
     <title>Home | ethernodesmap</title>
+    <link rel="stylesheet" href="../pkg/leaflet.css">
+    <link rel="stylesheet" href="../pkg/MarkerCluster.css">
+    <link rel="stylesheet" href="../pkg/MarkerCluster.Default.css">
     <link rel="stylesheet" href="../css/index.css">
     <link rel="stylesheet" href="../css/main-index.css">
     <link rel="icon" type="image/svg+xml"
         href="https://mz5qgsxffhzeicok2piuj2u43taoxgck6ddufzfnv4onqwrkscmq.arweave.net/ZnsDSuUp8kQJytPRROqc3MDrmErwx0Lkra8c2FoqkJk">
 </head>
+
 <body>
     <header>
         <div class="logo">
             <a href="../en/index.html" aria-label="Home">
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
-                    id="Layer_1" x="0px" y="0px" viewBox="0 0 327.5 533.3"
-                    style="enable-background:new 0 0 327.5 533.3;" xml:space="preserve" aria-hidden="true">
+                    id="Layer_1" x="0px" y="0px" viewBox="0 0 327.5 533.3" style="enable-background:new 0 0 327.5 533.3;"
+                    xml:space="preserve" aria-hidden="true">
                     <style type="text/css">
-                        .st0 {
-                            fill: #8A92B2;
-                        }
-
-                        .st1 {
-                            fill: #62688F;
-                        }
-
-                        .st2 {
-                            fill: #454A75;
-                        }
+                        .st0 { fill: #8A92B2; }
+                        .st1 { fill: #62688F; }
+                        .st2 { fill: #454A75; }
                     </style>
                     <path class="st0" d="M163.7,197.2V0L0,271.6L163.7,197.2z" />
-                    <path class="st1"
-                        d="M163.7,368.4V197.2L0,271.6L163.7,368.4z M163.7,197.2l163.7,74.4L163.7,0V197.2z" />
+                    <path class="st1" d="M163.7,368.4V197.2L0,271.6L163.7,368.4z M163.7,197.2l163.7,74.4L163.7,0V197.2z" />
                     <path class="st2" d="M163.7,197.2v171.2l163.7-96.8L163.7,197.2z" />
                     <path class="st0" d="M163.7,399.4L0,302.7l163.7,230.7V399.4z" />
                     <path class="st1" d="M327.5,302.7l-163.8,96.7v134L327.5,302.7z" />
                 </svg>
                 <span>ethernodesmap</span>
             </a>
-        </div>
+        </div>        
         <nav aria-label="Main navigation">
             <ul class="sidebar">
                 <li>
@@ -104,7 +102,7 @@
                 </li>
                 <li class="menu-button">
                     <a href="#">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="32px">
                             <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"
                                 fill="#EDEDED" aria-hidden="true" />
                         </svg>
@@ -117,33 +115,21 @@
         </button>
     </header>
     <main>
-        <section id="section1">
-            <article class="hero-article">
-                <h1>Discover</h1>
-                <p>
-                    Easily view the geographical distribution of nodes on the map or switch to the graph view to
-                    explore node clusters in more detail.
-                </p>
-            </article>
-            <article class="hero-image">
-                <img src="https://y6snssgdj5emkcmizd533b7xxff4tj4e4coiewg4aq7lfrdyo5xq.arweave.net/x6TZSMNPSMUJiMj7vYf3uUvJp4TgnIJY3AQ-ssR4d28"
-                    alt="Blockchain Network" width="450px" height="450px">
-            </article>
-            <article class="stats-row">
-                <div class="stat-item">
-                    <h2 id="nodes-count">5.1K</h2>
-                    <p>NODES</p>
-                </div>
-                <div class="stat-item">
-                    <h2 id="countries-count">77</h2>
-                    <p>COUNTRIES</p>
-                </div>
-                <div class="stat-item">
-                    <h2 id="isps-count">1.0K</h2>
-                    <p>ISPs</p>
-                </div>
-            </article>
+        <section class="row1">
+            <h1>Discover</h1>
+            <p>Easily view the geographical distribution of nodes on the map or switch to the graph view to explore node clusters in more detail.</p>
         </section>
+        <section class="row2" id="column1">
+            <h2>5.5K+<h2>
+            <p>NODES</p>
+        </section>
+        <section class="row2" id="column1">
+            <h2>77</h2>
+            <p>COUNTRIES</p>
+        </section>
+        <aside>
+            <img src="https://www.corhio.org/library/images/Blog_Images/Cryptocurrency-Virtual-Blockchain-Currency-Network-3277335.png" alt="">
+        </aside>
     </main>
     <footer>
         <span>Made by mulosbron | ethernodesmap.org - The source of nodes information is
@@ -156,15 +142,18 @@
                     rel="noopener noreferrer">Github</a>
             </li>
             <li>
-                <a href="https://x.com/tuyluyilan" aria-label="Twitter" target="_blank"
-                    rel="noopener noreferrer">Twitter</a>
+                <a href="#" aria-label="Twitter" target="_blank" rel="noopener noreferrer">Twitter</a>
             </li>
             <li>
-                <a href="https://discordapp.com/users/643428003329867787" aria-label="Discord" target="_blank"
-                    rel="noopener noreferrer">Discord</a>
+                <a href="#" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            </li>
+            <li>
+                <a href="#" aria-label="Discord" target="_blank" rel="noopener noreferrer">Discord</a>
             </li>
         </ul>
     </footer>
     <script src="../js/app.js" defer></script>
+
 </body>
+
 </html>

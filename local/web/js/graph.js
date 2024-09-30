@@ -52,7 +52,7 @@ const graphApp = (() => {
 
     const getSelectedCountryNodes = async () => {
         const countries = getSelectedValues('#country-select input[type="checkbox"]:checked');
-        const dataPromises = countries.map(country => fetchData(`${API_URL}/nodes/relationships/${country}`));
+        const dataPromises = countries.map(country => fetchData(`${API_URL}/nodes/country/${country}`));
         const allData = await Promise.all(dataPromises);
         return allData.flat();
     };
@@ -133,9 +133,9 @@ const graphApp = (() => {
 
         const simulation = d3.forceSimulation(nodes)
             .force("link", d3.forceLink(links).id(d => d.id).distance(d => {
-                if (d.source.group === 1 || d.target.group === 1) return 600;
-                if (d.source.group === 2 || d.target.group === 2) return 500;
-                return 300;
+                if (d.source.group === 1 || d.target.group === 1) return 600; // World için daha uzun mesafe
+                if (d.source.group === 2 || d.target.group === 2) return 500; // Country için orta mesafe
+                return 300; // Diğerleri için varsayılan mesafe
             }))
             .force("charge", d3.forceManyBody().strength(-1000))
             .force("center", d3.forceCenter(width / 2, height / 2))
@@ -167,12 +167,12 @@ const graphApp = (() => {
             .enter().append("circle")
             .attr("r", d => {
                 switch (d.group) {
-                    case 1: return 6 * 30;
-                    case 2: return 5 * 30;
-                    case 3: return 4 * 30;
-                    case 4: return 3 * 30;
-                    case 5: return 2 * 30;
-                    default: return 30;
+                    case 1: return 6 * 30;  // World, node'un 6 katı
+                    case 2: return 5 * 30;  // Country, node'un 5 katı
+                    case 3: return 4 * 30;  // ISP, node'un 4 katı
+                    case 4: return 3 * 30;  // OS, node'un 3 katı
+                    case 5: return 2 * 30;  // Client, node'un 2 katı
+                    default: return 30;     // Node
                 }
             })
             .attr("fill", d => d3.schemeCategory10[d.group % 10])
