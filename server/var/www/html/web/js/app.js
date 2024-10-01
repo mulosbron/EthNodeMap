@@ -1,9 +1,9 @@
 const app = (() => {
+    const API_URL = 'https://api.ethernodesmap.org';
     const darkMode = (() => {
         let themeState = {
             isDarkMode: false
         };
-
         const getStoredTheme = () => {
             try {
                 return localStorage.getItem('dark-mode');
@@ -12,7 +12,6 @@ const app = (() => {
                 return null;
             }
         };
-
         const saveThemeToLocalStorage = (theme) => {
             try {
                 localStorage.setItem('dark-mode', theme ? 'enabled' : 'disabled');
@@ -20,7 +19,6 @@ const app = (() => {
                 console.error('Error saving to localStorage:', error);
             }
         };
-
         const addDarkModeClass = () => {
             try {
                 document.documentElement.classList.add('dark-mode');
@@ -28,7 +26,6 @@ const app = (() => {
                 console.error('Error adding dark-mode class:', error);
             }
         };
-
         const removeDarkModeClass = () => {
             try {
                 document.documentElement.classList.remove('dark-mode');
@@ -36,7 +33,6 @@ const app = (() => {
                 console.error('Error removing dark-mode class:', error);
             }
         };
-
         const updateIconToMoon = () => {
             const iconSidebar = document.getElementById('mode-icon-sidebar');
             if (iconSidebar) {
@@ -45,7 +41,6 @@ const app = (() => {
             } else {
                 console.error('Icon element not found');
             }
-
             const icon = document.getElementById('mode-icon');
             if (icon) {
                 icon.classList.remove('sun');
@@ -54,7 +49,6 @@ const app = (() => {
                 console.error('Icon element not found');
             }
         };
-
         const updateIconToSun = () => {
             const iconSidebar = document.getElementById('mode-icon-sidebar');
             if (iconSidebar) {
@@ -63,7 +57,6 @@ const app = (() => {
             } else {
                 console.error('Icon element not found');
             }
-
             const icon = document.getElementById('mode-icon');
             if (icon) {
                 icon.classList.remove('moon');
@@ -72,7 +65,6 @@ const app = (() => {
                 console.error('Icon element not found');
             }
         };
-
         const updateLogoForDarkMode = () => {
             const logoContainer = document.querySelector('header div.logo svg');
             if (logoContainer) {
@@ -95,12 +87,10 @@ const app = (() => {
                 console.error('Logo element not found');
             }
         };
-
         const updateLogoForLightMode = () => {
             const logoContainer = document.querySelector('header div.logo svg');
             if (logoContainer) {
                 logoContainer.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 327.5 533.3" style="enable-background:new 0 0 327.5 533.3;" xml:space="preserve">
-                    <!-- Light Mode SVG İçeriği -->
                     <style type="text/css">
                         .st0{fill:#8A92B2;}
                         .st1{fill:#62688F;}
@@ -116,7 +106,16 @@ const app = (() => {
                 console.error('Logo element not found');
             }
         };
-
+        const updateHeroImage = () => {
+            const heroImage = document.querySelector('#section1 .hero-image img');
+            if (heroImage) {
+                if (themeState.isDarkMode) {
+                    heroImage.src = 'https://2srz7klk3i5auvyna7q33yqjovdaun5hdmwf64coymucsqmyfxba.arweave.net/1KOfqWraOgpXDQfhveIJdUYKN6cbLF9wTsMoKUGYLcI';
+                } else {
+                    heroImage.src = 'https://y6snssgdj5emkcmizd533b7xxff4tj4e4coiewg4aq7lfrdyo5xq.arweave.net/x6TZSMNPSMUJiMj7vYf3uUvJp4TgnIJY3AQ-ssR4d28';
+                }
+            }
+        };
         const applyTheme = (themeState) => {
             if (themeState.isDarkMode) {
                 addDarkModeClass();
@@ -127,20 +126,18 @@ const app = (() => {
                 updateIconToSun();
                 updateLogoForLightMode();
             }
+            updateHeroImage();
         };
-
         const initializeTheme = (themeState) => {
             const storedTheme = getStoredTheme();
             themeState.isDarkMode = storedTheme === 'enabled';
             applyTheme(themeState);
         };
-
         const toggleTheme = (themeState) => {
             themeState.isDarkMode = !themeState.isDarkMode;
             applyTheme(themeState);
             saveThemeToLocalStorage(themeState.isDarkMode);
         };
-
         const initializeEventListeners = (themeState) => {
             const toggleButtonSidebar = document.getElementById('mode-toggle-sidebar');
             if (toggleButtonSidebar) {
@@ -148,7 +145,6 @@ const app = (() => {
             } else {
                 console.error('Mode toggle button not found');
             }
-
             const toggleButton = document.getElementById('mode-toggle');
             if (toggleButton) {
                 toggleButton.addEventListener('click', () => toggleTheme(themeState));
@@ -156,15 +152,12 @@ const app = (() => {
                 console.error('Mode toggle button not found');
             }
         };
-
         const init = () => {
             initializeTheme(themeState);
             initializeEventListeners(themeState);
         };
-
         return { init };
     })();
-
     const sidebarManager = (() => {
         const showSidebar = () => {
             try {
@@ -178,7 +171,6 @@ const app = (() => {
                 console.error('Error showing sidebar:', error);
             }
         };
-
         const hideSidebar = () => {
             try {
                 const sidebar = document.querySelector('.sidebar');
@@ -191,7 +183,6 @@ const app = (() => {
                 console.error('Error hiding sidebar:', error);
             }
         };
-
         const initializeEventListeners = () => {
             const showButton = document.querySelector('.menu-button');
             if (showButton) {
@@ -199,7 +190,6 @@ const app = (() => {
             } else {
                 console.error('Menu button for showing sidebar not found');
             }
-
             const hideButton = document.querySelector('.sidebar li a');
             if (hideButton) {
                 hideButton.addEventListener('click', hideSidebar);
@@ -207,20 +197,72 @@ const app = (() => {
                 console.error('Menu button for hiding sidebar not found');
             }
         };
-
         const init = () => {
             initializeEventListeners();
         };
-
         return { init };
     })();
-
+    const mainPageStatistics = (() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${API_URL}/nodes/count`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                updateStatistics(data);
+            } catch (error) {
+                console.error('Data fetching error:', error);
+            }
+        };        
+        const formatNumber = (num) => {
+            if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        };
+        const updateStatistics = (data) => {
+            const nodesElement = document.getElementById('nodes-count');
+            const countriesElement = document.getElementById('countries-count');
+            const ispsElement = document.getElementById('isps-count');
+            if (nodesElement) nodesElement.textContent = formatNumber(data.NumberOfNodes);
+            if (countriesElement) countriesElement.textContent = formatNumber(data.NumberOfCountries);
+            if (ispsElement) ispsElement.textContent = formatNumber(data.NumberOfISPs);
+        };
+        const init = () => {
+            fetchData();
+        };
+        return { init };
+    })();
+    const scrollManager = (() => {
+        const init = () => {
+            const main = document.querySelector('main');
+    
+            if (main) {
+                main.style.opacity = 0;
+                main.style.transform = 'translateY(20px)';
+    
+                setTimeout(() => {
+                    main.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                    main.style.opacity = 1;
+                    main.style.transform = 'translateY(0)';
+                }, 100);
+            }
+        };
+    
+        return { init };
+    })();
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        scrollManager.init();
+    });
+    
     const init = () => {
         darkMode.init();
         sidebarManager.init();
+        mainPageStatistics.init();
+        scrollManager.init();
     };
-
     return { init };
 })();
-
 document.addEventListener('DOMContentLoaded', app.init);

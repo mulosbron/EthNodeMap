@@ -35,18 +35,15 @@ const mapApp = (() => {
             map.addLayer(markers);
         }
     };
-
     const initalizeTileLayer = () => {
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors',
             noWrap: true
         }).addTo(map);      
     };
-
     const attachZoomEndListener = () => {
         map.on('zoomend', () => updateCircleRadius());
     };
-
     const initializeMap = () => {
         initalizeTileLayer();
         attachZoomEndListener();
@@ -54,16 +51,13 @@ const mapApp = (() => {
             input.addEventListener('change', toggleMapLayers);
         });
     };
-
     const calculateDynamicRadius = (zoom) => Math.min(400000 * Math.pow(2, 2 - zoom), 50000);
-
     const updateCircleRadius = () => {
         allMarkers.forEach(markerObj => {
             const radius = calculateDynamicRadius(map.getZoom());
             markerObj.circle.setRadius(radius);
         });
     };
-
     const fetchData = async (endpoint) => {
         try {
             const response = await fetch(`${API_URL}${endpoint}`);
@@ -73,7 +67,6 @@ const mapApp = (() => {
             return [];
         }
     };
-
     const createMarker = (node) => {
         const circle = L.circle([node.Latitude, node.Longitude], {
             radius: calculateDynamicRadius(map.getZoom()),
@@ -83,12 +76,10 @@ const mapApp = (() => {
             isp: node.ISP,
             nodeId: node.NodeId
         });
-
         circle.nodeData = node;
         circle.on('click', () => fetchNodeDetails(node));
         return { circle, nodeId: node.NodeId };
     };
-
     const populateMarkers = (nodes) => {
         nodes.forEach(node => {
             const markerObj = createMarker(node);
@@ -102,7 +93,6 @@ const mapApp = (() => {
         const nodes = await fetchData('/nodes');
         populateMarkers(nodes);
     };
-
     const populateFilters = (filterElement, options) => {
         options.forEach(option => {
             const optionElement = document.createElement('option');
@@ -111,13 +101,11 @@ const mapApp = (() => {
             filterElement.add(optionElement);
         });
     };
-
     const fetchAndPopulateFilters = async () => {
         const countryData = await fetchData('/nodes/countries');
         const countryOptions = countryData;
         populateFilters(document.getElementById('country-filter'), countryOptions);
     };
-
     const fetchNodeDetails = (node) => {
         const modal = document.getElementById('node-details-modal');
         const span = modal.getElementsByClassName('close')[0];
@@ -149,17 +137,14 @@ const mapApp = (() => {
             }
         }
     };    
-
     const updateDynamicData = (data) => {
         document.getElementById('total-node-count').textContent = data.NumberOfNodes;
     };
-
     const fetchAndPopulateDynamicData = async () => {
         const data = await fetchData('/nodes/count');
         updateDynamicData(data);
         await fetchAndPopulateLatestNodes();
     };
-
     const fetchAndPopulateLatestNodes = async () => {
         try {
             const data = await fetchData('/nodes/latest');
@@ -168,44 +153,34 @@ const mapApp = (() => {
             console.error('Error fetching data:', error);
         }
     };
-
     const populateLatestNodes = (nodes, index) => {
         renderTable(nodes[index]);
-
         addCopyButtonListeners(nodes[index]);
-
         document.getElementById('left').onclick = () => {
             if (index > 0) {
                 populateLatestNodes(nodes, index - 1);
             }
         };
-
         document.getElementById('right').onclick = () => {
             if (index < nodes.length - 1) {
                 populateLatestNodes(nodes, index + 1);
             }
         };
-
         updateButtons(nodes, index);
     };
-
     const renderTable = (node) => {
         const latestNodeTable = document.querySelector('#latest-node tbody');
         latestNodeTable.innerHTML = '';
-
         const template = document.getElementById('latest-node-template').content;
         const row = template.cloneNode(true);
-
         row.querySelector('.node-country').textContent = ` ${node.Country}`;
         row.querySelector('.node-client').textContent = ` ${node.Client}`;
         row.querySelector('.node-os').textContent = ` ${node.OS}`;
         row.querySelector('.node-isp').textContent = ` ${node.ISP}`;
         row.querySelector('.copy-button').setAttribute('data-enode', node.Enode);
         row.querySelector('.node-added-time').textContent = `${node.MinutesAgo} minutes ago added`;
-
         latestNodeTable.appendChild(row);
     };
-
     const addCopyButtonListeners = (node) => {
         document.querySelectorAll('.copy-button').forEach(button => {
             button.onclick = () => {
@@ -221,15 +196,12 @@ const mapApp = (() => {
             };
         });
     };
-
     const updateButtons = (nodes, index) => {
         const leftButton = document.getElementById('left');
         const rightButton = document.getElementById('right');
-
         leftButton.disabled = index === 0;
         rightButton.disabled = index >= nodes.length - 1;
     };
-
     const fetchStatisticsByCategory = async (category) => {
         let data;
         switch (category) {
@@ -249,26 +221,22 @@ const mapApp = (() => {
                 return [];
         }
     };
-
     const handleRadioChange = async (event) => {
         const selectedCategory = event.target.value;
         const data = await fetchStatisticsByCategory(selectedCategory);
         updateStatisticsTable('statistics-table', data);
     };
-
     const initializeRadioButtons = () => {
         const radioButtons = document.querySelectorAll('.radio-input');
         radioButtons.forEach(radio => {
             radio.addEventListener('change', handleRadioChange);
         });
-
         const defaultRadio = document.getElementById('client');
         if (defaultRadio) {
             defaultRadio.checked = true;
             handleRadioChange({ target: { value: 'client' } });
         }
     };
-
     const updateStatisticsTable = (tableId, data) => {
         const table = document.querySelector(`#${tableId}`);
         const tbody = table.querySelector('tbody');
@@ -283,7 +251,6 @@ const mapApp = (() => {
             tbody.appendChild(row);
         });
     };
-
     const filterMarkers = () => {
         const osFilterValue = document.getElementById('os-filter').value.toLowerCase();
         const ispFilterValue = document.getElementById('isp-filter').value.toLowerCase();
@@ -306,7 +273,6 @@ const mapApp = (() => {
         });
         map.addLayer(markers);
     };
-
     const initializeEventListeners = () => {
         const filters = ['country-filter', 'os-filter', 'client-filter', 'isp-filter'];
         filters.forEach(filterId => {
@@ -318,12 +284,10 @@ const mapApp = (() => {
             }
         });
     };
-
     const startIntervals = () => {
         setInterval(fetchAndPopulateDynamicData, 900000);
         setInterval(fetchAndPopulateLatestNodes, 900000);
     };
-
     const init = () => {
         initializeMap();
         initializeRadioButtons();
@@ -333,7 +297,6 @@ const mapApp = (() => {
         initializeEventListeners();
         startIntervals();
     };
-
     return { init };        
 })();
 
