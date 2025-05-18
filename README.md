@@ -10,29 +10,15 @@ EthNodeMap is a visualization project designed to display Ethereum network nodes
 ## Purpose
 To create a comprehensive visualization tool for Ethereum network nodes that provides real-time insights into the network's geographical distribution and infrastructure. The project aims to help users understand the Ethereum network's decentralization through interactive maps and graph visualizations.
 
-### Key Objectives:
-- Visualize Ethereum nodes geographically on a world map
-- Display node relationships through tree graph structures
-- Provide filtering capabilities by country, OS, ISP, and client type
-- Collect and maintain up-to-date Ethereum node data
-
 ## Scope
 
 ### Technology Stack:
-- **Backend**: Python 3.7+, Flask, Flask-CORS
+- **Backend**: Python 3.7+, Flask/Quart, Flask/Quart-CORS
 - **Database**: Neo4j
 - **Data Collection**: BeautifulSoup4, Requests
 - **Frontend**: HTML, CSS, JavaScript
 - **Visualization**: D3.js (graphs), Leaflet.js (maps)
 - **Server**: Nginx
-
-### Project Features:
-- Node filtering by country, OS, ISP, and client type
-- Interactive map with clickable node details
-- Real-time statistics dashboard
-- Tree graph visualization for selected countries
-- Automated data collection from Etherscan
-- RESTful API for accessing node data
 
 ## Implementation
 
@@ -52,13 +38,6 @@ To create a comprehensive visualization tool for Ethereum network nodes that pro
 - `/statistics/client` - Get client statistics
 - `/statistics/isp` - Get ISP statistics
 - `/statistics/country` - Get country statistics
-
-### Development Process:
-1. **Data Collection**: Web scraping from Ethernodes.org
-2. **Data Processing**: IPGeolocation API for location data
-3. **Database Management**: Neo4j for storing nodes and relationships
-4. **Visualization**: Interactive maps and graph structures
-5. **API Development**: RESTful endpoints for frontend integration
 
 ## Screenshots
 
