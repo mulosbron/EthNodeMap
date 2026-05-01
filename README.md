@@ -3,10 +3,6 @@
 ## Overview
 EthNodeMap is a visualization project designed to display Ethereum network nodes on an interactive map and as a graph structure. The platform allows users to explore node distribution and relationships across the globe.
 
-## Links
-- [ethernodesmap](https://ethernodesmap.org/en/index.html)
-- [ethernodesmap API](https://api.ethernodesmap.org/)
-
 ## Purpose
 To create a comprehensive visualization tool for Ethereum network nodes that provides real-time insights into the network's geographical distribution and infrastructure. The project aims to help users understand the Ethereum network's decentralization through interactive maps and graph visualizations.
 
